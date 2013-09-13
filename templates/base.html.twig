@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    {% block head %}
+        <meta charset="utf-8">
+        <title>Hon Hero Counters</title>
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+        <!-- Normalize -->
+        <link href="/a/css/normalize.css" rel="stylesheet" media="screen">
+
+        <!-- Styles -->
+        <link href="/a/css/style.css" rel="stylesheet" media="screen">
+        <link href="/a/css/responsive.css" rel="stylesheet" media="screen">
+        <!--[if IE]>
+            <link href="/a/css/ie.css" rel="stylesheet" media="screen">
+        <![endif]-->
+        
+        <!-- jQuery -->
+        <script src="/a/js/jquery.min.js"></script>
+
+        <!-- Scripts -->
+        <!--<script src="/a/js/core.js"></script>-->
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if IE]>
+             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    {% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% block footer %}
+        <footer>
+            <nav>
+                <ul class="center">
+                    <li><a href="/">/</a></li>
+                    <li><a href="/load">LOAD HEROES</a></li>
+                    <li><a href="/hero">HERO LIST</a></li>
+                    <li><a href="/login">LOGIN</a></li>
+                </ul>
+            </nav>
+        </footer>
+        <!--<script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', '']);
+          _gaq.push(['_trackPageview']);
+          _gaq.push(['_trackPageLoadTime']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>-->
+    
+    {% endblock %}
+</body>
+</html>

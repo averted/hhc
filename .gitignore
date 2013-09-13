@@ -1,0 +1,16 @@
+# private
+config/build.properties
+config/build.sh
+config/hhc-conf.php
+config/runtime.conf
+config/schema.sql
+
+# other
+composer.phar
+.composer.phar
+
+# OS stuff
+.DS_Store
+Thumbs.db
+Desktop.ini
+.*.sw[a-z]

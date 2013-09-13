@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="hhc" defaultIdMethod="native" namespace="hhc\DB">
+  <table name="hero" phpName="Hero">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="name" type="varchar" size="50" required="true" />
+    <column name="hp" type="integer" required="true" phpName="HP" />
+    <column name="role" type="varchar" size="200" required="true" />
+    <column name="str" type="integer" required="true" />
+    <column name="int" type="integer" required="true" />
+    <column name="dex" type="integer" required="true" />
+    <column name="range" type="integer" required="true" />
+    <column name="speed" type="integer" required="true" />
+    <column name="difficulty" type="float" size="3" scale="1" required="true" />
+  </table>
+  <table name="user" phpName="User">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="username" type="varchar" size="255" required="true" />
+    <column name="email" type="varchar" size="255" required="true" />
+    <column name="password" type="varchar" size="255" />
+    <column name="roles" type="varchar" size="255" default="USER_ROLE" />
+    <unique name="unique_username">
+        <unique-column name="username" />
+    </unique>
+    <validator column="username">
+        <rule name="unique" message="Username already exists!" />
+    </validator>
+    <validator column="email">
+        <rule name="unique" message="E-mail already exists!" />
+        <rule name="match"
+            value="/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9])+(\.[a-zA-Z0-9_-]+)+$/"
+            message="Please enter a valid email address." />
+    </validator>
+  </table>
+</database>

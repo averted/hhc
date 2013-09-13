@@ -2,7 +2,7 @@
 config/build.properties
 config/build.sh
 config/hhc-conf.php
-config/runtime.conf
+config/runtime-conf.xml
 config/schema.sql
 
 # other

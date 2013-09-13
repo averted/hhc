@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% block content %} 
+<div class="hero">
+    <p><a href="{{ link }}">{{ message }}</a></p>
+</div>
+{% endblock %}
+
+{% block footer parent() %}
+

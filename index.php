@@ -8,9 +8,40 @@ use hhc\DB\Votes;
 use hhc\DB\VotesQuery;
 use hhc\DB\UserVotes;
 use hhc\DB\UserVotesQuery;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__.'/autoload.php';
 
-// hon-hero-counter
+/**
+ * ---------------------
+ * init
+ * ---------------------
+ */
+$app = new Silex\Application();
+$app['debug'] = true;
+
+/**
+ * ---------------------
+ * Service Providers
+ * ---------------------
+ */
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __FILE__.'/templates',
+    'twig.options' => array(
+        'cache' => false
+    ),
+));
+
+/**
+ * ----------------------
+ * route /
+ * ----------------------
+ */
+$app->get('/', function() use($app) {
+    return $app['twig']->render('index.html.twig');
+});
 
 ?>

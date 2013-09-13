@@ -1,0 +1,17 @@
+/* @media queries */
+@media screen and (min-width:320px) and (max-width:480px) {
+    body { width:100%; min-width:320px; font-size:10px; background:#444; }
+
+    .title, .link { font-size:12px; }
+    .max { font-size:50px; }
+    .small { font-size:6px; }
+    .big { font-size:17px; }
+
+    .hero .hero-counters ul li .button { margin:4px 4px 0 0; }
+    form { width:100%; }
+    form textarea { width:100%; }
+
+    nav { font-size:8px; height:30px; width:100%; }
+    nav ul li { line-height:30px; }
+    nav ul li a { padding:0 3px; }
+}

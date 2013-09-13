@@ -1,0 +1,129 @@
+/* -- fonts -- */
+    @font-face {
+        font-family: 'SansumiBold';
+        src: url('/a/f/Sansumi-ExtraBold-webfont.eot');
+        src: url('/a/f/Sansumi-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),
+             url('/a/f/Sansumi-ExtraBold-webfont.woff') format('woff'),
+             url('/a/f/Sansumi-ExtraBold-webfont.ttf') format('truetype'),
+             url('/a/f/Sansumi-ExtraBold-webfont.svg#SansumiExtraBoldRegular') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'PlayRegular';
+        src: url('/a/f/Play-Regular-webfont.eot');
+        src: url('/a/f/Play-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+             url('/a/f/Play-Regular-webfont.woff') format('woff'),
+             url('/a/f/Play-Regular-webfont.ttf') format('truetype'),
+             url('/a/f/Play-Regular-webfont.svg#PlayRegular') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+/* ------ GENERAL ------ */
+::selection { color:#000; background:#ffa500; }
+::-webkit-scrollbar { display:none; }
+html::selection { background:rgba(0,0,0,0.0);}
+body {
+    min-width:1024px;
+    font-family:'PlayRegular';
+    font-size:15px;
+    color:#e5e5e5;
+    background:#444 no-repeat center center fixed; 
+}
+
+.max    { font-size:70px; }
+.huge   { font-size:40px; }
+.big    { font-size:25px; }
+.normal { font-size:18px; }
+.small  { font-size:12px; }
+.title  { font-size:25px; color:#ffa500; }
+.link   { font-size:17px; }
+.caps   { font-variant:small-caps; }
+.oj     { color:#ffa500; }
+.center { text-align:center; }
+.clear  { clear:both; }
+.left   { float:left; }
+.right  { float:right; }
+
+h1 { font-size:20px; font-weight:normal; color:#ffa500; } 
+hr { width:85%; height:2px; background:#ffa500; border:none; padding:0; margin:0 auto 30px auto; }
+
+a { color:#ffa500; }
+a:hover { text-decoration:none; }
+/* ---- end GENERAL ---- */
+
+/* ------ BODY ------ */
+/* ---- hero ---- */
+.hero { width:80%; border:1px solid #555; background:#1b1b1b; padding:20px; margin:100px auto; }
+.hero p { padding:0; margin:0; }
+.hero img.hero-icon-70px { width:70px; height:70px; border:1px solid #ffa500; }
+.hero img.hero-icon-100px { width:100px; height:100px; border:2px solid #ffa500; float:left; margin-right:10px; }
+
+.hero .hero-info { font-size:12px; padding:0; margin:0; }
+.hero .name, .hero .role { font-size:18px; line-height:14px; }
+.hero .name { color:#ffa500; }
+.hero .role { color:#666; }
+.hero .bar, .hero .bar-max { height:16px; display:inline-block; border-radius:2px; }
+.hero .bar { background:#000; margin:0; padding:0 0 0 5px; color:#ffa500; }
+.hero .bar-max { background:#555; margin:4px 0 0 0; font-size:12px; padding:1px; }
+
+.hero .hero-counters { width:30%; border:1px solid #555; background:#0b0b0b; padding:20px; margin:20px 0 0 0; }
+.hero .hero-counters ul { list-style:none; padding:0; margin:0; }
+.hero .hero-counters ul li { margin:4px 0; }
+.hero .hero-counters ul li .button { padding:4px 6px; margin:0 0 0 4px; display:block; color:#ffa500; border:1px solid #555; cursor:pointer; text-decoration:none; }
+.hero .hero-counters ul li .button:hover { background:#ffa500; color:#000; border:1px solid #ffa000; }
+.hero .hero-counters ul li .add { margin:10px 0 0 0; text-decoration:none; }
+
+.hero .hero-list { list-style:none; padding:0; margin:0; }
+.hero .hero-list a { color:#ffa500; }
+.hero .hero-list a:hover { color:#ffa500; }
+.hero .hero-list li { display:inline-block; margin:5px; }
+.hero .hero-list li .overlay { position:absolute; top:0; bottom:0; left:0; right:0; font-size:8px; background:rgba(0,0,0,0.2); transition:all 0s ease-out; }
+.hero .hero-list li .overlay-dark { position:absolute; top:0; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); }
+.hero .hero-list li .overlay span { font-size:14px; width:75px; height:75px; }
+.hero .hero-list li .overlay:hover { background:rgba(0,0,0,0.0); }
+/* -- end hero -- */
+
+/* ---- login form ---- */
+.login { width:80%; border:1px solid #555; background:#1b1b1b; padding:20px; margin:100px auto; }
+/* -- end login form -- */
+
+/* ---- contact form ---- */
+form { width:400px; padding:10px 10px 10px 0; font-size:15px; }
+form input { width:46%; margin:0; padding:3px; border:1px solid #555; background:rgba(0,0,0,0.4); color:#f2f2f2; }
+form input:focus { outline-color:#ffa500; }
+form input.button { color:#ffa500; width:auto; padding:5px 15px; }
+form input.button:hover { color:#000; background:#ffa500; }
+form input:after { content:''; clear:both; }
+form textarea { width:392px; margin:5px 0; padding:3px; resize:none; border:1px solid #555; background:rgba(0,0,0,0.4); color:#f2f2f2; }
+form textarea:focus { outline-color:#ffa500; }
+
+.notice { position:fixed; top:0; left:40%; width:auto; margin:0; padding:10px 20px; color:#000; border:1px solid #555; border-top:none; display:none; z-index:900;}
+.success { background:green; color:#fff; }
+.fail { background:#ffa500; }
+/* -- end contact form -- */
+
+/* ------ FOOTER ------ */
+nav { height:50px; width:100%; position:fixed; top:0; font-size:12px; border-bottom:1px solid #555; background:#0e0e0e; }
+nav ul { list-style:none; margin:0 auto; padding:0; }
+nav ul li { display:inline; line-height:50px; }
+nav ul li a { 
+    height:100%; 
+    display:inline-block; 
+    font-family:'SansumiBold'; 
+    color:#ffa500; 
+    text-decoration:none; 
+    padding:0 30px; 
+    -webkit-transition:all 0.2s ease-out; 
+    -moz-transition:all 0.2s ease-out; 
+    -o-transition:all 0.2s ease-out; 
+    -ms-transition:all 0.2s ease-out; 
+    transition:all 0.2s ease-out; 
+}
+nav ul li a:hover { color:#000; background:#ffa500; }
+nav ul::selection,
+nav ul li::selection,
+nav ul li a::selection { color:#ffa500; background:rgba(0,0,0,0.0); }
+nav ul li a:hover { text-decoration:none; }
+/* ---- end FOOTER ---- */

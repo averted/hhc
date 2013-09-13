@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% block content %} 
+<div class="hero">
+    <h1>Choose Wisely:</h1>
+    <ul class='hero-list'>
+    {% for hero in heroes %}
+        <li style='position:relative;'>
+            <a href="/hero/{{ hero.getName|replace({' ':'+'}) }}">
+                <img class='hero-icon-70px' src="" />
+                <div class="overlay"></div>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block footer parent() %}
+

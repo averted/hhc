@@ -1,0 +1,5 @@
+/* ------ OVERLAY ------ */
+.ie-overlay { width:90%; background:#444; position:fixed; top:50px; left:50px; z-index:9999; padding:20px; border:1px solid #ffa500; } 
+/* ------ BODY ------ */
+nav { background:url('/a/img/transparent.png'); }
+/* ---- end BODY ---- */

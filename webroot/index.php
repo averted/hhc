@@ -41,7 +41,23 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
  * ----------------------
  */
 $app->get('/', function() use($app) {
-    return $app['twig']->render('index.html.twig');
+    return $app['twig']->render('index.html.twig', array(
+        'link' => '/hero',
+        'message' => 'Hero list'
+    ));
+});
+
+/**
+ * ----------------------
+ * route /hero
+ * ----------------------
+ */
+$app->get('/hero', function() use ($app) {
+    $heroes = HeroQuery::create()->orderByName()->find();
+    
+    return $app['twig']->render('hero-list.html.twig', array(
+        'heroes' => $heroes
+    ));
 });
 
 $app->run();

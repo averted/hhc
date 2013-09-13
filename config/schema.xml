@@ -12,6 +12,20 @@
     <column name="speed" type="integer" required="true" />
     <column name="difficulty" type="float" size="3" scale="1" required="true" />
   </table>
+  <table name="votes" phpName="Votes">
+    <column name="hero_name" type="varchar" size="50" required="true" primaryKey="true" phpName="HeroName" />
+    <column name="counter_name" type="varchar" size="50" required="true" primaryKey="true" phpName="CounterName" />
+    <column name="votes" type="integer" required="false" default="0" />
+  </table>
+  <table name="user_votes" phpName="UserVotes">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="user_id" type="integer" required="true" />
+    <column name="hero_name" type="varchar" size="50" required="true" phpName="HeroName" />
+    <column name="counter_name" type="varchar" size="50" required="true" phpName="CounterName" />
+    <foreign-key foreignTable="user" phpName="User" refPhpName="UserVotes">
+      <reference local="user_id" foreign="id" />
+    </foreign-key>
+  </table>
   <table name="user" phpName="User">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="username" type="varchar" size="255" required="true" />

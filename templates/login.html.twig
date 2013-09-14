@@ -7,13 +7,17 @@
     <h1>Login</h1>
     <p class="error">{{ error }}</p>
     <form class="form" action="/login" method="post">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="_username" value=""></input><br/>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="_password" value=""></input><br/>
+        <div class="controls">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="_username" value=""></input>
+        </div>
+        <div class="controls">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password" value=""></input>
+        </div>
         <input type="submit" class="button"></input>
+        <a href="/register" class="button">Register</a>
     </form>
-    <a href="/register" class="button">Register</a>
 </div>
 {% endblock %}
 

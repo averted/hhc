@@ -54,7 +54,7 @@ $app->get('/', function() use($app) {
  * ----------------------
  */
 $app->get('/load', function() use($app) {
-    include_once __DIR__.'/../load-heroes.php';
+    include_once dirname(__DIR__).'/load-heroes.php';
     return $app['twig']->render('index.html.twig', array(
         'link' => '/hero',
         'message' => 'Everything loaded fine.'

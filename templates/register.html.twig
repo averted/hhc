@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% block content %} 
+<div class="login">
+    <h1>Register a new account:</h1>
+    <p class="error">{{ error }}</p>
+    <form class="form" action="/register" method="post">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="_email" value=""></input><br/>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="_username" value=""></input><br/>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="_password" value=""></input><br/>
+        <label for="password">Repeat Password</label>
+        <input type="password" id="password2" name="_password2" value=""></input><br/>
+        <input type="submit" class="button"></input>
+    </form>
+</div>
+{% endblock %}
+
+{% block footer parent() %}
+

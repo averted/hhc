@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% block content %} 
+{% set img = '/a/img/heroes/' %}
+{% set ext = '.jpg' %}
+<div class="hero">
+    <h1>Choose a Counter for {{ hero.getName }}:</h1>
+    <ul class='hero-list'>
+    {% for counter in heroes %}
+        {% set c = counter.getName %}
+        {% set h = hero.getName %}
+        <li style='position:relative;'>
+            {% if c == h %}
+            <div class="overlay-dark"></div>
+            {% endif %}
+            <a href="/counter/{{ h|replace({' ':'+'}) }}/add/{{ c|replace({' ':'+'}) }}">
+                <img class='hero-icon-70px' src="{{ img ~ c|replace({' ':''})|lower ~ ext }}" />
+                {% if c != h %}
+                <div class="overlay"></div>
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block footer parent() %}
+

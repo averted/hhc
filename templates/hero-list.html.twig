@@ -3,13 +3,15 @@
 {% block head parent() %}
 
 {% block content %} 
+{% set img = '/a/img/heroes/' %}
+{% set ext = '.jpg' %}
 <div class="hero">
     <h1>Choose Wisely:</h1>
     <ul class='hero-list'>
     {% for hero in heroes %}
         <li style='position:relative;'>
             <a href="/hero/{{ hero.getName|replace({' ':'+'}) }}">
-                <img class='hero-icon-70px' src="" />
+                <img class='hero-icon-70px' src="{{ img ~ hero.getName|replace({' ':''})|lower ~ ext }}" />
                 <div class="overlay"></div>
             </a>
         </li>

@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% set img = '/a/img/heroes/' %}
+{% set ext = '.jpg' %}
+{% block content %} 
+<div class="hero">
+    <img class="hero-icon-100px" src='{{ img ~ hero.getName|replace({'+':''})|lower ~ ext }}' />
+        <span class="name">{{ hero.getName|replace({'+':' '}) }}</span><span class="role"> - {{ hero.getRole }}</span><br/>
+        <span class="bar-max hp"><span class="bar" style="width:{{ hero.getHP/3.5 }}px;">hp - {{ hero.getHP }}</span></span><br/> 
+        <span class="bar-max"><span class="bar" style="width:{{ hero.getStr*5 }}px;">str - {{ hero.getStr }}</span></span><br/> 
+        <span class="bar-max"><span class="bar" style="width:{{ hero.getInt*5 }}px;">int - {{ hero.getInt }}</span></span><br/> 
+        <span class="bar-max"><span class="bar" style="width:{{ hero.getDex*5 }}px;">dex - {{ hero.getDex }}</span></span><br/> 
+    <div class="clear"></div>
+    <div class="hero-counters">
+        <ul>
+        {% for counter in counters %}
+            <li style="position:relative;">
+                <a href="/hero/{{ counter.name }}"><img class="hero-icon-70px left" src="{{ img ~ counter.name|replace({'+':''})|lower ~ ext }}" /></a>
+                <div class="left"><a href="{{ counter.voteup }}" class="button">up</a></div>
+                <div class="left"><a href="{{ counter.votedown }}" class="button">down</a></div>
+                <div class="button" style="position:absolute; bottom:0; left:72px;">{{ counter.votes }}</div>
+                <div class="clear"></div>
+            </li>
+        {% endfor %}
+            <li>
+                <a href="{{ url.new }}" class="button center add">add a counter</a>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+</div>
+<script type="text/javascript">
+$('.bar').each(function() {
+    $(this).on('mouseenter', function() {
+        var a = $(this).parent();
+        a.css('background', '#ffa500');
+        a.hasClass('hp') ? a.css('width', '184px'): a.css('width', '135px');
+    });
+    $(this).on('mouseleave', function() {
+        $(this).parent().css('background', '#555');
+        $(this).parent().css('width', 'auto');
+    });
+});
+</script>
+{% endblock %}
+
+{% block footer parent() %}
+

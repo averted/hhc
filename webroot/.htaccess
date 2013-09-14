@@ -1,0 +1,9 @@
+FallbackResource /index.php
+
+RewriteEngine on
+
+ErrorDocument 404 /404.php
+
+RewriteRule ^index.php / [R=301,L]
+
+RewriteRule ^hero/$ /hero [R=301,L]

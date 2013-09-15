@@ -85,7 +85,6 @@ $app->get('/hero/{name}', function($name) use ($app) {
     );
 
     $hero = HeroQuery::create()->filterByName(deslug($name))->findOne();
-    $hero->setName($name);
     $votes = VotesQuery::create()->filterByHeroName(deslug($name))->orderByVotes('desc')->limit(3)->find();
 
     foreach ($votes as $counter) {
@@ -284,10 +283,15 @@ $app->match('/register', function (Request $request) use ($app) {
 $app->post('/search', function (Request $request) use ($app) {
     $name = $request->get('_search');
 
+    if (valid($name)) {
+        return 'VALID NAME';
+        //return $app->redirect('/hero/'.slug($name));
+    }
     if (strlen($name) <= 3) {
         // abreviations
-        return $app->redirect('/hero/'.slug(getHeroNameFromAbbr($name)));
+        //return $app->redirect('/hero/'.slug(getHeroNameFromAbbr($name)));
     }
+    return 'INVALID NAME';
 });
 
 $app->run();

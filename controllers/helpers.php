@@ -39,7 +39,7 @@ function valid($name) {
     $heroes = HeroQuery::create()->find();
 
     foreach($heroes as $hero) {
-        if (deslug($name) == $hero->getName())
+        if (strtoupper(deslug($name)) == strtoupper($hero->getName()))
             return true;
     }
 
@@ -75,11 +75,11 @@ function isLoggedIn($user) {
 }
 
 function slug($name) {
-    return str_replace(' ','+',$name);
+    return (strpos($name,' ') === true) ? str_replace(' ','+',$name) : str_replace('+','',$name);
 }
 
 function deslug($name) {
-    return str_replace('+',' ',$name);
+    return ucwords(strtolower(str_replace('+',' ',$name)));
 }
 
 

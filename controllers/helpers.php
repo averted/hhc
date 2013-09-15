@@ -7,6 +7,34 @@ use hhc\DB\UserQuery;
 use hhc\DB\UserVotes;
 use hhc\DB\UserVotesQuery;
 
+function getHeroNameFromAbbr($name) {
+    $list = getAbbr();
+    for ($i = 0; $i < sizeof($list); $i++) {
+        if ($name == $list[$i]['abbr']) 
+            return $list[$i]['name'];
+    }
+}
+
+function getAbbr() {
+    $heroes = HeroQuery::create()->find();
+    $abbr = Array();
+    foreach ($heroes as $hero) {
+        if (strpos($hero->getName(), ' ')) {
+            $ab = '';
+
+            foreach (explode(' ', $hero->getName()) as $name)
+                $ab .= strtolower($name[0]);
+
+            $abbr[] = array(
+                'name' => $hero->getName(),
+                'abbr' => $ab
+            );
+        }
+    }
+
+    return $abbr;
+}
+
 function valid($name) {
     $heroes = HeroQuery::create()->find();
 

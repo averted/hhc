@@ -276,6 +276,20 @@ $app->match('/register', function (Request $request) use ($app) {
     ));
 });
 
+/**
+ * ----------------------
+ * route /search
+ * ----------------------
+ */
+$app->post('/search', function (Request $request) use ($app) {
+    $name = $request->get('_search');
+
+    if (strlen($name) <= 3) {
+        // abreviations
+        return $app->redirect('/hero/'.slug(getHeroNameFromAbbr($name)));
+    }
+});
+
 $app->run();
 
 ?>

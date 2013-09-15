@@ -6,7 +6,13 @@
 {% set img = '/a/img/heroes/' %}
 {% set ext = '.jpg' %}
 <div class="hero">
-    <h1>Choose Wisely:</h1>
+    <h1 class="left">Choose Wisely:</h1>
+    <div class="right search">
+        <form action="/search" method="post">
+            <input type="text" id="search" name="_search" value="" />
+        </form>
+    </div>
+    <div class="clear"></div>
     <ul class='hero-list'>
     {% for hero in heroes %}
         <li style='position:relative;'>

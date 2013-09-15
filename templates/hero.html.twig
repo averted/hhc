@@ -6,8 +6,8 @@
 {% set ext = '.jpg' %}
 {% block content %} 
 <div class="hero">
-    <img class="hero-icon-100px" src='{{ img ~ hero.getName|replace({'+':''})|lower ~ ext }}' />
-        <span class="name">{{ hero.getName|replace({'+':' '}) }}</span><span class="role"> - {{ hero.getRole }}</span><br/>
+    <img class="hero-icon-100px" src='{{ img ~ hero.getName|replace({' ':''})|lower ~ ext }}' />
+        <span class="name">{{ hero.getName }}</span><span class="role"> - {{ hero.getRole }}</span><br/>
         <span class="bar-max hp"><span class="bar" style="width:{{ hero.getHP/3.5 }}px;">hp - {{ hero.getHP }}</span></span><br/> 
         <span class="bar-max"><span class="bar" style="width:{{ hero.getStr*5 }}px;">str - {{ hero.getStr }}</span></span><br/> 
         <span class="bar-max"><span class="bar" style="width:{{ hero.getInt*5 }}px;">int - {{ hero.getInt }}</span></span><br/> 

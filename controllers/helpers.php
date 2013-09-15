@@ -7,17 +7,22 @@ use hhc\DB\UserQuery;
 use hhc\DB\UserVotes;
 use hhc\DB\UserVotesQuery;
 
+/**
+ * -----------------
+ * search
+ * -----------------
+ */
 function getHeroNameFromAbbr($name) {
     $list = getAbbr();
-    for ($i = 0; $i < sizeof($list); $i++) {
-        if ($name == $list[$i]['abbr']) 
+    for ($i = 0; $i < sizeof($list); $i++)
+        if (strtolower($name) == $list[$i]['abbr']) 
             return $list[$i]['name'];
-    }
 }
 
 function getAbbr() {
     $heroes = HeroQuery::create()->find();
     $abbr = Array();
+
     foreach ($heroes as $hero) {
         if (strpos($hero->getName(), ' ')) {
             $ab = '';
@@ -35,17 +40,24 @@ function getAbbr() {
     return $abbr;
 }
 
-function valid($name) {
+function guessHeroName($input) {
     $heroes = HeroQuery::create()->find();
 
     foreach($heroes as $hero) {
-        if (strtoupper(deslug($name)) == strtoupper($hero->getName()))
-            return true;
+        $name = $hero->getName();
+        
+        if (stripos($name, $input) !== false)
+            $possibleMatch = $name;
     }
 
-    return false;
+    return $possibleMatch;
 }
 
+/**
+ * -----------------
+ * votes / user
+ * -----------------
+ */
 function voted($user, $name, $counter) {
     // find if user exists
     $q = UserQuery::create()->filterById(getUserId($user))->find()->count();
@@ -74,13 +86,30 @@ function isLoggedIn($user) {
     return $user == null ? false : true;
 }
 
+/**
+ * -----------------
+ * general
+ * -----------------
+ */
+function valid($name) {
+    $heroes = HeroQuery::create()->find();
+
+    foreach($heroes as $hero) {
+        if (strtoupper(deslug($name)) == strtoupper($hero->getName()))
+            return true;
+    }
+
+    return false;
+}
+
 function slug($name) {
-    return (strpos($name,' ') === true) ? str_replace(' ','+',$name) : str_replace('+','',$name);
+    //return (strpos($name,' ') === true) ? str_replace(' ','+',$name) : str_replace('+','',$name);
+    return str_replace(' ','+',ucwords($name));
 }
 
 function deslug($name) {
-    return ucwords(strtolower(str_replace('+',' ',$name)));
+    //return ucwords(strtolower(str_replace('+',' ',$name)));
+    return str_replace('+',' ',$name);
 }
-
 
 ?>

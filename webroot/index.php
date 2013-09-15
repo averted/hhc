@@ -111,11 +111,12 @@ $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use
 
     if (isLoggedIn($user)) { 
         if (!voted($user, $name, $counter)) {
-            // increate total votes
+            //increase total votes
             $votes = VotesQuery::create()->filterByHeroName(deslug($name))->filterByCounterName(deslug($counter))->findOne();
             $votes->setVotes($votes->getVotes() + 1);
             $votes->save();
             
+            //register vote for current user
             registerVote($user, $name, $counter);
         } else {
             return 'You may only vote once';
@@ -283,15 +284,15 @@ $app->match('/register', function (Request $request) use ($app) {
 $app->post('/search', function (Request $request) use ($app) {
     $name = $request->get('_search');
 
-    if (valid($name)) {
-        return 'VALID NAME';
-        //return $app->redirect('/hero/'.slug($name));
+    if (strlen($name) <= 3) {       //search by abbreviation
+        $url = '/hero/'.slug(getHeroNameFromAbbr($name));
+    } else if (valid($name)) {      //seach by hero name
+        $url = '/hero/'.slug($name);
+    } else {                        //search by closest match
+        $url = guessHeroName($name) ? '/hero/'.guessHeroName($name) : '/hero';
     }
-    if (strlen($name) <= 3) {
-        // abreviations
-        //return $app->redirect('/hero/'.slug(getHeroNameFromAbbr($name)));
-    }
-    return 'INVALID NAME';
+
+    return $app->redirect($url);
 });
 
 $app->run();

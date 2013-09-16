@@ -6,13 +6,11 @@
 {% set img = '/a/img/heroes/' %}
 {% set ext = '.jpg' %}
 <div class="hero">
-    <div class="sort">
-        <a href="/hero?filter=HP" class="button">HP</a>
-        <a href="/hero?filter=DMG" class="button">DMG</a>
-        <a href="/hero?filter=ARMOR" class="button">ARMOR</a>
-        <a href="/hero?filter=DIFFICULTY" class="button">DIFFICULTY</a>
+    <div class="sort left">
+        <a href="/hero?filter={{ url.hp }}" class="button {% if 'HP' in filters %}selected{% endif %}">HP</a>
+        <a href="/hero?filter={{ url.dmg }}" class="button {% if 'DMG' in filters %}selected{% endif %}">DMG</a>
+        <a href="/hero?filter={{ url.armor }}" class="button {% if 'ARMOR' in filters %}selected{% endif %}">ARMOR</a>
     </div>
-    <h1 class="left">Choose Wisely:</h1>
     <div class="right search">
         <form action="/search" method="post">
             <input type="text" id="search" name="_search" placeholder="Search Hero" value="" />

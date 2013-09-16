@@ -67,21 +67,62 @@ $app->get('/load', function() use($app) {
  * ----------------------
  */
 $app->get('/hero', function(Request $request) use ($app) {
-    $filter = $request->get('filter');
-    if (isset($filter)) {
-        if ($filter == 'HP') 
-            $heroes = HeroQuery::create()->orderByHP('desc')->find();
-        else if ($filter == 'DMG')
-            $heroes = HeroQuery::create()->orderByDmg('desc')->find();
-        else if ($filter == 'ARMOR')
-            $heroes = HeroQuery::create()->orderByArmor('desc')->find();
-        else if ($filter == 'DIFFICULTY')
-            $heroes = HeroQuery::create()->orderByDifficulty('desc')->find();
+    $value = $request->get('filter');
+    $filters = explode(' ', $value);
+
+    if (isset($value) && $value != null) {
+        if (!in_array('HP', $filters)) {
+            $urlHP = '+'.slug($value).'+HP';
+        } else {
+            foreach($filters as $filter) {
+                if ($filter != 'HP') $urlHP .= '+'.$filter;
+            }
+        }
+
+        if (!in_array('ARMOR', $filters)) {
+            $urlARMOR = '+'.slug($value) . '+ARMOR';
+        } else {
+            foreach($filters as $filter) {
+                if ($filter != 'ARMOR') $urlARMOR .= '+'.$filter;
+            }
+        }
+
+        if (!in_array('DMG', $filters)) {
+            $urlDMG = '+'.slug($value) . '+DMG';
+        } else {
+            foreach($filters as $filter) {
+                if ($filter != 'DMG') $urlDMG .= '+'.$filter;
+            }
+        }
+
+        $url = array(
+            'hp' => substr($urlHP,1),
+            'armor' => substr($urlARMOR,1),
+            'dmg' => substr($urlDMG,1)
+        );
+        
+        $heroes = HeroQuery::create();
+
+        foreach($filters as $filter) {
+            if ($filter == 'HP') $heroes = $heroes->orderByHP('desc');
+            if ($filter == 'ARMOR') $heroes = $heroes->orderByArmor('desc');
+            if ($filter == 'DMG') $heroes = $heroes->orderByDmg('desc');
+            if ($filter == 'DIFF') $heroes = $heroes->orderByDifficulty('desc');
+        }
+
+        $heroes = $heroes->find();
     } else {
         $heroes = HeroQuery::create()->orderByName()->find();
+        $url = array(
+            'hp' => 'HP',
+            'armor' => 'ARMOR',
+            'dmg' => 'DMG'
+        );
     }
     
     return $app['twig']->render('hero-list.html.twig', array(
+        'filters' => $filters,
+        'url' => $url,
         'heroes' => $heroes
     ));
 });

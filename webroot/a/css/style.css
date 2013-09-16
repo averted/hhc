@@ -69,8 +69,11 @@ a:hover { text-decoration:none; }
 .hero .button { padding:4px 6px; margin:0 0 0 4px; background:#0b0b0b; display:block; color:#ffa500; border:1px solid #555; cursor:pointer; text-decoration:none; }
 .hero .button:hover { background:#ffa500; color:#000; border:1px solid #ffa000; }
 
-.hero .sort { }
+.hero .sort { margin:5px 0 0 0; padding:0; }
+.hero .sort .selected { background:#ffa500; color:#000; }
 .hero .sort .button { display:inline; }
+
+.hero .search { margin:0 10px 10px 0; }
 
 .hero .hero-counters { width:30%; border:1px solid #555; background:#0b0b0b; padding:20px; margin:0; }
 .hero .hero-counters .name { font-size:15px; margin-left:5px; }
@@ -88,7 +91,6 @@ a:hover { text-decoration:none; }
 .hero .hero-list li .overlay span { font-size:14px; width:75px; height:75px; }
 .hero .hero-list li .overlay:hover { background:rgba(0,0,0,0.0); }
 
-.hero .search { margin:10px 10px 0 0; }
 /* -- end hero -- */
 
 /* ---- form ---- */

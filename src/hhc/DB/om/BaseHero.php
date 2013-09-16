@@ -56,34 +56,34 @@ abstract class BaseHero extends BaseObject implements Persistent
     protected $name;
 
     /**
-     * The value for the hp field.
-     * @var        int
-     */
-    protected $hp;
-
-    /**
      * The value for the role field.
      * @var        string
      */
     protected $role;
 
     /**
-     * The value for the str field.
+     * The value for the hp field.
      * @var        int
      */
-    protected $str;
+    protected $hp;
 
     /**
-     * The value for the int field.
-     * @var        int
+     * The value for the dmg field.
+     * @var        string
      */
-    protected $int;
+    protected $dmg;
 
     /**
-     * The value for the dex field.
-     * @var        int
+     * The value for the armor field.
+     * @var        double
      */
-    protected $dex;
+    protected $armor;
+
+    /**
+     * The value for the difficulty field.
+     * @var        double
+     */
+    protected $difficulty;
 
     /**
      * The value for the range field.
@@ -98,10 +98,10 @@ abstract class BaseHero extends BaseObject implements Persistent
     protected $speed;
 
     /**
-     * The value for the difficulty field.
-     * @var        double
+     * The value for the stuns field.
+     * @var        int
      */
-    protected $difficulty;
+    protected $stuns;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -146,17 +146,6 @@ abstract class BaseHero extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [hp] column value.
-     *
-     * @return int
-     */
-    public function getHP()
-    {
-
-        return $this->hp;
-    }
-
-    /**
      * Get the [role] column value.
      *
      * @return string
@@ -168,36 +157,47 @@ abstract class BaseHero extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [str] column value.
+     * Get the [hp] column value.
      *
      * @return int
      */
-    public function getStr()
+    public function getHP()
     {
 
-        return $this->str;
+        return $this->hp;
     }
 
     /**
-     * Get the [int] column value.
+     * Get the [dmg] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getInt()
+    public function getDmg()
     {
 
-        return $this->int;
+        return $this->dmg;
     }
 
     /**
-     * Get the [dex] column value.
+     * Get the [armor] column value.
      *
-     * @return int
+     * @return double
      */
-    public function getDex()
+    public function getArmor()
     {
 
-        return $this->dex;
+        return $this->armor;
+    }
+
+    /**
+     * Get the [difficulty] column value.
+     *
+     * @return double
+     */
+    public function getDifficulty()
+    {
+
+        return $this->difficulty;
     }
 
     /**
@@ -223,14 +223,14 @@ abstract class BaseHero extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [difficulty] column value.
+     * Get the [stuns] column value.
      *
-     * @return double
+     * @return int
      */
-    public function getDifficulty()
+    public function getStuns()
     {
 
-        return $this->difficulty;
+        return $this->stuns;
     }
 
     /**
@@ -276,27 +276,6 @@ abstract class BaseHero extends BaseObject implements Persistent
     } // setName()
 
     /**
-     * Set the value of [hp] column.
-     *
-     * @param  int $v new value
-     * @return Hero The current object (for fluent API support)
-     */
-    public function setHP($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->hp !== $v) {
-            $this->hp = $v;
-            $this->modifiedColumns[] = HeroPeer::HP;
-        }
-
-
-        return $this;
-    } // setHP()
-
-    /**
      * Set the value of [role] column.
      *
      * @param  string $v new value
@@ -318,67 +297,88 @@ abstract class BaseHero extends BaseObject implements Persistent
     } // setRole()
 
     /**
-     * Set the value of [str] column.
+     * Set the value of [hp] column.
      *
      * @param  int $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setStr($v)
+    public function setHP($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->str !== $v) {
-            $this->str = $v;
-            $this->modifiedColumns[] = HeroPeer::STR;
+        if ($this->hp !== $v) {
+            $this->hp = $v;
+            $this->modifiedColumns[] = HeroPeer::HP;
         }
 
 
         return $this;
-    } // setStr()
+    } // setHP()
 
     /**
-     * Set the value of [int] column.
+     * Set the value of [dmg] column.
      *
-     * @param  int $v new value
+     * @param  string $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setInt($v)
+    public function setDmg($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+            $v = (string) $v;
         }
 
-        if ($this->int !== $v) {
-            $this->int = $v;
-            $this->modifiedColumns[] = HeroPeer::INT;
+        if ($this->dmg !== $v) {
+            $this->dmg = $v;
+            $this->modifiedColumns[] = HeroPeer::DMG;
         }
 
 
         return $this;
-    } // setInt()
+    } // setDmg()
 
     /**
-     * Set the value of [dex] column.
+     * Set the value of [armor] column.
      *
-     * @param  int $v new value
+     * @param  double $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setDex($v)
+    public function setArmor($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+            $v = (double) $v;
         }
 
-        if ($this->dex !== $v) {
-            $this->dex = $v;
-            $this->modifiedColumns[] = HeroPeer::DEX;
+        if ($this->armor !== $v) {
+            $this->armor = $v;
+            $this->modifiedColumns[] = HeroPeer::ARMOR;
         }
 
 
         return $this;
-    } // setDex()
+    } // setArmor()
+
+    /**
+     * Set the value of [difficulty] column.
+     *
+     * @param  double $v new value
+     * @return Hero The current object (for fluent API support)
+     */
+    public function setDifficulty($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->difficulty !== $v) {
+            $this->difficulty = $v;
+            $this->modifiedColumns[] = HeroPeer::DIFFICULTY;
+        }
+
+
+        return $this;
+    } // setDifficulty()
 
     /**
      * Set the value of [range] column.
@@ -423,25 +423,25 @@ abstract class BaseHero extends BaseObject implements Persistent
     } // setSpeed()
 
     /**
-     * Set the value of [difficulty] column.
+     * Set the value of [stuns] column.
      *
-     * @param  double $v new value
+     * @param  int $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setDifficulty($v)
+    public function setStuns($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
+            $v = (int) $v;
         }
 
-        if ($this->difficulty !== $v) {
-            $this->difficulty = $v;
-            $this->modifiedColumns[] = HeroPeer::DIFFICULTY;
+        if ($this->stuns !== $v) {
+            $this->stuns = $v;
+            $this->modifiedColumns[] = HeroPeer::STUNS;
         }
 
 
         return $this;
-    } // setDifficulty()
+    } // setStuns()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -477,14 +477,14 @@ abstract class BaseHero extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->hp = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->role = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->str = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->int = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->dex = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->role = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->hp = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->dmg = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->armor = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+            $this->difficulty = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
             $this->range = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->speed = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-            $this->difficulty = ($row[$startcol + 9] !== null) ? (double) $row[$startcol + 9] : null;
+            $this->stuns = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -712,20 +712,20 @@ abstract class BaseHero extends BaseObject implements Persistent
         if ($this->isColumnModified(HeroPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
-        if ($this->isColumnModified(HeroPeer::HP)) {
-            $modifiedColumns[':p' . $index++]  = '`hp`';
-        }
         if ($this->isColumnModified(HeroPeer::ROLE)) {
             $modifiedColumns[':p' . $index++]  = '`role`';
         }
-        if ($this->isColumnModified(HeroPeer::STR)) {
-            $modifiedColumns[':p' . $index++]  = '`str`';
+        if ($this->isColumnModified(HeroPeer::HP)) {
+            $modifiedColumns[':p' . $index++]  = '`hp`';
         }
-        if ($this->isColumnModified(HeroPeer::INT)) {
-            $modifiedColumns[':p' . $index++]  = '`int`';
+        if ($this->isColumnModified(HeroPeer::DMG)) {
+            $modifiedColumns[':p' . $index++]  = '`dmg`';
         }
-        if ($this->isColumnModified(HeroPeer::DEX)) {
-            $modifiedColumns[':p' . $index++]  = '`dex`';
+        if ($this->isColumnModified(HeroPeer::ARMOR)) {
+            $modifiedColumns[':p' . $index++]  = '`armor`';
+        }
+        if ($this->isColumnModified(HeroPeer::DIFFICULTY)) {
+            $modifiedColumns[':p' . $index++]  = '`difficulty`';
         }
         if ($this->isColumnModified(HeroPeer::RANGE)) {
             $modifiedColumns[':p' . $index++]  = '`range`';
@@ -733,8 +733,8 @@ abstract class BaseHero extends BaseObject implements Persistent
         if ($this->isColumnModified(HeroPeer::SPEED)) {
             $modifiedColumns[':p' . $index++]  = '`speed`';
         }
-        if ($this->isColumnModified(HeroPeer::DIFFICULTY)) {
-            $modifiedColumns[':p' . $index++]  = '`difficulty`';
+        if ($this->isColumnModified(HeroPeer::STUNS)) {
+            $modifiedColumns[':p' . $index++]  = '`stuns`';
         }
 
         $sql = sprintf(
@@ -753,20 +753,20 @@ abstract class BaseHero extends BaseObject implements Persistent
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case '`hp`':
-                        $stmt->bindValue($identifier, $this->hp, PDO::PARAM_INT);
-                        break;
                     case '`role`':
                         $stmt->bindValue($identifier, $this->role, PDO::PARAM_STR);
                         break;
-                    case '`str`':
-                        $stmt->bindValue($identifier, $this->str, PDO::PARAM_INT);
+                    case '`hp`':
+                        $stmt->bindValue($identifier, $this->hp, PDO::PARAM_INT);
                         break;
-                    case '`int`':
-                        $stmt->bindValue($identifier, $this->int, PDO::PARAM_INT);
+                    case '`dmg`':
+                        $stmt->bindValue($identifier, $this->dmg, PDO::PARAM_STR);
                         break;
-                    case '`dex`':
-                        $stmt->bindValue($identifier, $this->dex, PDO::PARAM_INT);
+                    case '`armor`':
+                        $stmt->bindValue($identifier, $this->armor, PDO::PARAM_STR);
+                        break;
+                    case '`difficulty`':
+                        $stmt->bindValue($identifier, $this->difficulty, PDO::PARAM_STR);
                         break;
                     case '`range`':
                         $stmt->bindValue($identifier, $this->range, PDO::PARAM_INT);
@@ -774,8 +774,8 @@ abstract class BaseHero extends BaseObject implements Persistent
                     case '`speed`':
                         $stmt->bindValue($identifier, $this->speed, PDO::PARAM_INT);
                         break;
-                    case '`difficulty`':
-                        $stmt->bindValue($identifier, $this->difficulty, PDO::PARAM_STR);
+                    case '`stuns`':
+                        $stmt->bindValue($identifier, $this->stuns, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -918,19 +918,19 @@ abstract class BaseHero extends BaseObject implements Persistent
                 return $this->getName();
                 break;
             case 2:
-                return $this->getHP();
-                break;
-            case 3:
                 return $this->getRole();
                 break;
+            case 3:
+                return $this->getHP();
+                break;
             case 4:
-                return $this->getStr();
+                return $this->getDmg();
                 break;
             case 5:
-                return $this->getInt();
+                return $this->getArmor();
                 break;
             case 6:
-                return $this->getDex();
+                return $this->getDifficulty();
                 break;
             case 7:
                 return $this->getRange();
@@ -939,7 +939,7 @@ abstract class BaseHero extends BaseObject implements Persistent
                 return $this->getSpeed();
                 break;
             case 9:
-                return $this->getDifficulty();
+                return $this->getStuns();
                 break;
             default:
                 return null;
@@ -971,14 +971,14 @@ abstract class BaseHero extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
-            $keys[2] => $this->getHP(),
-            $keys[3] => $this->getRole(),
-            $keys[4] => $this->getStr(),
-            $keys[5] => $this->getInt(),
-            $keys[6] => $this->getDex(),
+            $keys[2] => $this->getRole(),
+            $keys[3] => $this->getHP(),
+            $keys[4] => $this->getDmg(),
+            $keys[5] => $this->getArmor(),
+            $keys[6] => $this->getDifficulty(),
             $keys[7] => $this->getRange(),
             $keys[8] => $this->getSpeed(),
-            $keys[9] => $this->getDifficulty(),
+            $keys[9] => $this->getStuns(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach($virtualColumns as $key => $virtualColumn)
@@ -1026,19 +1026,19 @@ abstract class BaseHero extends BaseObject implements Persistent
                 $this->setName($value);
                 break;
             case 2:
-                $this->setHP($value);
-                break;
-            case 3:
                 $this->setRole($value);
                 break;
+            case 3:
+                $this->setHP($value);
+                break;
             case 4:
-                $this->setStr($value);
+                $this->setDmg($value);
                 break;
             case 5:
-                $this->setInt($value);
+                $this->setArmor($value);
                 break;
             case 6:
-                $this->setDex($value);
+                $this->setDifficulty($value);
                 break;
             case 7:
                 $this->setRange($value);
@@ -1047,7 +1047,7 @@ abstract class BaseHero extends BaseObject implements Persistent
                 $this->setSpeed($value);
                 break;
             case 9:
-                $this->setDifficulty($value);
+                $this->setStuns($value);
                 break;
         } // switch()
     }
@@ -1075,14 +1075,14 @@ abstract class BaseHero extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setHP($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setRole($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setStr($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setInt($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setDex($arr[$keys[6]]);
+        if (array_key_exists($keys[2], $arr)) $this->setRole($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setHP($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setDmg($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setArmor($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setDifficulty($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setRange($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setSpeed($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setDifficulty($arr[$keys[9]]);
+        if (array_key_exists($keys[9], $arr)) $this->setStuns($arr[$keys[9]]);
     }
 
     /**
@@ -1096,14 +1096,14 @@ abstract class BaseHero extends BaseObject implements Persistent
 
         if ($this->isColumnModified(HeroPeer::ID)) $criteria->add(HeroPeer::ID, $this->id);
         if ($this->isColumnModified(HeroPeer::NAME)) $criteria->add(HeroPeer::NAME, $this->name);
-        if ($this->isColumnModified(HeroPeer::HP)) $criteria->add(HeroPeer::HP, $this->hp);
         if ($this->isColumnModified(HeroPeer::ROLE)) $criteria->add(HeroPeer::ROLE, $this->role);
-        if ($this->isColumnModified(HeroPeer::STR)) $criteria->add(HeroPeer::STR, $this->str);
-        if ($this->isColumnModified(HeroPeer::INT)) $criteria->add(HeroPeer::INT, $this->int);
-        if ($this->isColumnModified(HeroPeer::DEX)) $criteria->add(HeroPeer::DEX, $this->dex);
+        if ($this->isColumnModified(HeroPeer::HP)) $criteria->add(HeroPeer::HP, $this->hp);
+        if ($this->isColumnModified(HeroPeer::DMG)) $criteria->add(HeroPeer::DMG, $this->dmg);
+        if ($this->isColumnModified(HeroPeer::ARMOR)) $criteria->add(HeroPeer::ARMOR, $this->armor);
+        if ($this->isColumnModified(HeroPeer::DIFFICULTY)) $criteria->add(HeroPeer::DIFFICULTY, $this->difficulty);
         if ($this->isColumnModified(HeroPeer::RANGE)) $criteria->add(HeroPeer::RANGE, $this->range);
         if ($this->isColumnModified(HeroPeer::SPEED)) $criteria->add(HeroPeer::SPEED, $this->speed);
-        if ($this->isColumnModified(HeroPeer::DIFFICULTY)) $criteria->add(HeroPeer::DIFFICULTY, $this->difficulty);
+        if ($this->isColumnModified(HeroPeer::STUNS)) $criteria->add(HeroPeer::STUNS, $this->stuns);
 
         return $criteria;
     }
@@ -1168,14 +1168,14 @@ abstract class BaseHero extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setName($this->getName());
-        $copyObj->setHP($this->getHP());
         $copyObj->setRole($this->getRole());
-        $copyObj->setStr($this->getStr());
-        $copyObj->setInt($this->getInt());
-        $copyObj->setDex($this->getDex());
+        $copyObj->setHP($this->getHP());
+        $copyObj->setDmg($this->getDmg());
+        $copyObj->setArmor($this->getArmor());
+        $copyObj->setDifficulty($this->getDifficulty());
         $copyObj->setRange($this->getRange());
         $copyObj->setSpeed($this->getSpeed());
-        $copyObj->setDifficulty($this->getDifficulty());
+        $copyObj->setStuns($this->getStuns());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1229,14 +1229,14 @@ abstract class BaseHero extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->name = null;
-        $this->hp = null;
         $this->role = null;
-        $this->str = null;
-        $this->int = null;
-        $this->dex = null;
+        $this->hp = null;
+        $this->dmg = null;
+        $this->armor = null;
+        $this->difficulty = null;
         $this->range = null;
         $this->speed = null;
-        $this->difficulty = null;
+        $this->stuns = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

@@ -44,14 +44,14 @@ class HeroTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
-        $this->addColumn('hp', 'HP', 'INTEGER', true, null, null);
         $this->addColumn('role', 'Role', 'VARCHAR', true, 200, null);
-        $this->addColumn('str', 'Str', 'INTEGER', true, null, null);
-        $this->addColumn('int', 'Int', 'INTEGER', true, null, null);
-        $this->addColumn('dex', 'Dex', 'INTEGER', true, null, null);
+        $this->addColumn('hp', 'HP', 'INTEGER', true, null, null);
+        $this->addColumn('dmg', 'Dmg', 'VARCHAR', true, 20, null);
+        $this->addColumn('armor', 'Armor', 'FLOAT', true, 4, null);
+        $this->addColumn('difficulty', 'Difficulty', 'FLOAT', true, 3, null);
         $this->addColumn('range', 'Range', 'INTEGER', true, null, null);
         $this->addColumn('speed', 'Speed', 'INTEGER', true, null, null);
-        $this->addColumn('difficulty', 'Difficulty', 'FLOAT', true, 3, null);
+        $this->addColumn('stuns', 'Stuns', 'INTEGER', false, null, null);
         // validators
     } // initialize()
 

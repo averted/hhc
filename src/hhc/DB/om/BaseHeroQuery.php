@@ -21,25 +21,25 @@ use hhc\DB\HeroQuery;
  *
  * @method HeroQuery orderById($order = Criteria::ASC) Order by the id column
  * @method HeroQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method HeroQuery orderByHP($order = Criteria::ASC) Order by the hp column
  * @method HeroQuery orderByRole($order = Criteria::ASC) Order by the role column
- * @method HeroQuery orderByStr($order = Criteria::ASC) Order by the str column
- * @method HeroQuery orderByInt($order = Criteria::ASC) Order by the int column
- * @method HeroQuery orderByDex($order = Criteria::ASC) Order by the dex column
+ * @method HeroQuery orderByHP($order = Criteria::ASC) Order by the hp column
+ * @method HeroQuery orderByDmg($order = Criteria::ASC) Order by the dmg column
+ * @method HeroQuery orderByArmor($order = Criteria::ASC) Order by the armor column
+ * @method HeroQuery orderByDifficulty($order = Criteria::ASC) Order by the difficulty column
  * @method HeroQuery orderByRange($order = Criteria::ASC) Order by the range column
  * @method HeroQuery orderBySpeed($order = Criteria::ASC) Order by the speed column
- * @method HeroQuery orderByDifficulty($order = Criteria::ASC) Order by the difficulty column
+ * @method HeroQuery orderByStuns($order = Criteria::ASC) Order by the stuns column
  *
  * @method HeroQuery groupById() Group by the id column
  * @method HeroQuery groupByName() Group by the name column
- * @method HeroQuery groupByHP() Group by the hp column
  * @method HeroQuery groupByRole() Group by the role column
- * @method HeroQuery groupByStr() Group by the str column
- * @method HeroQuery groupByInt() Group by the int column
- * @method HeroQuery groupByDex() Group by the dex column
+ * @method HeroQuery groupByHP() Group by the hp column
+ * @method HeroQuery groupByDmg() Group by the dmg column
+ * @method HeroQuery groupByArmor() Group by the armor column
+ * @method HeroQuery groupByDifficulty() Group by the difficulty column
  * @method HeroQuery groupByRange() Group by the range column
  * @method HeroQuery groupBySpeed() Group by the speed column
- * @method HeroQuery groupByDifficulty() Group by the difficulty column
+ * @method HeroQuery groupByStuns() Group by the stuns column
  *
  * @method HeroQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method HeroQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -49,25 +49,25 @@ use hhc\DB\HeroQuery;
  * @method Hero findOneOrCreate(PropelPDO $con = null) Return the first Hero matching the query, or a new Hero object populated from the query conditions when no match is found
  *
  * @method Hero findOneByName(string $name) Return the first Hero filtered by the name column
- * @method Hero findOneByHP(int $hp) Return the first Hero filtered by the hp column
  * @method Hero findOneByRole(string $role) Return the first Hero filtered by the role column
- * @method Hero findOneByStr(int $str) Return the first Hero filtered by the str column
- * @method Hero findOneByInt(int $int) Return the first Hero filtered by the int column
- * @method Hero findOneByDex(int $dex) Return the first Hero filtered by the dex column
+ * @method Hero findOneByHP(int $hp) Return the first Hero filtered by the hp column
+ * @method Hero findOneByDmg(string $dmg) Return the first Hero filtered by the dmg column
+ * @method Hero findOneByArmor(double $armor) Return the first Hero filtered by the armor column
+ * @method Hero findOneByDifficulty(double $difficulty) Return the first Hero filtered by the difficulty column
  * @method Hero findOneByRange(int $range) Return the first Hero filtered by the range column
  * @method Hero findOneBySpeed(int $speed) Return the first Hero filtered by the speed column
- * @method Hero findOneByDifficulty(double $difficulty) Return the first Hero filtered by the difficulty column
+ * @method Hero findOneByStuns(int $stuns) Return the first Hero filtered by the stuns column
  *
  * @method array findById(int $id) Return Hero objects filtered by the id column
  * @method array findByName(string $name) Return Hero objects filtered by the name column
- * @method array findByHP(int $hp) Return Hero objects filtered by the hp column
  * @method array findByRole(string $role) Return Hero objects filtered by the role column
- * @method array findByStr(int $str) Return Hero objects filtered by the str column
- * @method array findByInt(int $int) Return Hero objects filtered by the int column
- * @method array findByDex(int $dex) Return Hero objects filtered by the dex column
+ * @method array findByHP(int $hp) Return Hero objects filtered by the hp column
+ * @method array findByDmg(string $dmg) Return Hero objects filtered by the dmg column
+ * @method array findByArmor(double $armor) Return Hero objects filtered by the armor column
+ * @method array findByDifficulty(double $difficulty) Return Hero objects filtered by the difficulty column
  * @method array findByRange(int $range) Return Hero objects filtered by the range column
  * @method array findBySpeed(int $speed) Return Hero objects filtered by the speed column
- * @method array findByDifficulty(double $difficulty) Return Hero objects filtered by the difficulty column
+ * @method array findByStuns(int $stuns) Return Hero objects filtered by the stuns column
  *
  * @package    propel.generator.hhc.om
  */
@@ -175,7 +175,7 @@ abstract class BaseHeroQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `hp`, `role`, `str`, `int`, `dex`, `range`, `speed`, `difficulty` FROM `hero` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `role`, `hp`, `dmg`, `armor`, `difficulty`, `range`, `speed`, `stuns` FROM `hero` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -336,6 +336,35 @@ abstract class BaseHeroQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the role column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRole('fooValue');   // WHERE role = 'fooValue'
+     * $query->filterByRole('%fooValue%'); // WHERE role LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $role The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return HeroQuery The current query, for fluid interface
+     */
+    public function filterByRole($role = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($role)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $role)) {
+                $role = str_replace('*', '%', $role);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(HeroPeer::ROLE, $role, $comparison);
+    }
+
+    /**
      * Filter the query on the hp column
      *
      * Example usage:
@@ -378,46 +407,46 @@ abstract class BaseHeroQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the role column
+     * Filter the query on the dmg column
      *
      * Example usage:
      * <code>
-     * $query->filterByRole('fooValue');   // WHERE role = 'fooValue'
-     * $query->filterByRole('%fooValue%'); // WHERE role LIKE '%fooValue%'
+     * $query->filterByDmg('fooValue');   // WHERE dmg = 'fooValue'
+     * $query->filterByDmg('%fooValue%'); // WHERE dmg LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $role The value to use as filter.
+     * @param     string $dmg The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function filterByRole($role = null, $comparison = null)
+    public function filterByDmg($dmg = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($role)) {
+            if (is_array($dmg)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $role)) {
-                $role = str_replace('*', '%', $role);
+            } elseif (preg_match('/[\%\*]/', $dmg)) {
+                $dmg = str_replace('*', '%', $dmg);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(HeroPeer::ROLE, $role, $comparison);
+        return $this->addUsingAlias(HeroPeer::DMG, $dmg, $comparison);
     }
 
     /**
-     * Filter the query on the str column
+     * Filter the query on the armor column
      *
      * Example usage:
      * <code>
-     * $query->filterByStr(1234); // WHERE str = 1234
-     * $query->filterByStr(array(12, 34)); // WHERE str IN (12, 34)
-     * $query->filterByStr(array('min' => 12)); // WHERE str >= 12
-     * $query->filterByStr(array('max' => 12)); // WHERE str <= 12
+     * $query->filterByArmor(1234); // WHERE armor = 1234
+     * $query->filterByArmor(array(12, 34)); // WHERE armor IN (12, 34)
+     * $query->filterByArmor(array('min' => 12)); // WHERE armor >= 12
+     * $query->filterByArmor(array('max' => 12)); // WHERE armor <= 12
      * </code>
      *
-     * @param     mixed $str The value to use as filter.
+     * @param     mixed $armor The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -425,16 +454,16 @@ abstract class BaseHeroQuery extends ModelCriteria
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function filterByStr($str = null, $comparison = null)
+    public function filterByArmor($armor = null, $comparison = null)
     {
-        if (is_array($str)) {
+        if (is_array($armor)) {
             $useMinMax = false;
-            if (isset($str['min'])) {
-                $this->addUsingAlias(HeroPeer::STR, $str['min'], Criteria::GREATER_EQUAL);
+            if (isset($armor['min'])) {
+                $this->addUsingAlias(HeroPeer::ARMOR, $armor['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($str['max'])) {
-                $this->addUsingAlias(HeroPeer::STR, $str['max'], Criteria::LESS_EQUAL);
+            if (isset($armor['max'])) {
+                $this->addUsingAlias(HeroPeer::ARMOR, $armor['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -445,21 +474,21 @@ abstract class BaseHeroQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(HeroPeer::STR, $str, $comparison);
+        return $this->addUsingAlias(HeroPeer::ARMOR, $armor, $comparison);
     }
 
     /**
-     * Filter the query on the int column
+     * Filter the query on the difficulty column
      *
      * Example usage:
      * <code>
-     * $query->filterByInt(1234); // WHERE int = 1234
-     * $query->filterByInt(array(12, 34)); // WHERE int IN (12, 34)
-     * $query->filterByInt(array('min' => 12)); // WHERE int >= 12
-     * $query->filterByInt(array('max' => 12)); // WHERE int <= 12
+     * $query->filterByDifficulty(1234); // WHERE difficulty = 1234
+     * $query->filterByDifficulty(array(12, 34)); // WHERE difficulty IN (12, 34)
+     * $query->filterByDifficulty(array('min' => 12)); // WHERE difficulty >= 12
+     * $query->filterByDifficulty(array('max' => 12)); // WHERE difficulty <= 12
      * </code>
      *
-     * @param     mixed $int The value to use as filter.
+     * @param     mixed $difficulty The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -467,16 +496,16 @@ abstract class BaseHeroQuery extends ModelCriteria
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function filterByInt($int = null, $comparison = null)
+    public function filterByDifficulty($difficulty = null, $comparison = null)
     {
-        if (is_array($int)) {
+        if (is_array($difficulty)) {
             $useMinMax = false;
-            if (isset($int['min'])) {
-                $this->addUsingAlias(HeroPeer::INT, $int['min'], Criteria::GREATER_EQUAL);
+            if (isset($difficulty['min'])) {
+                $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($int['max'])) {
-                $this->addUsingAlias(HeroPeer::INT, $int['max'], Criteria::LESS_EQUAL);
+            if (isset($difficulty['max'])) {
+                $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -487,49 +516,7 @@ abstract class BaseHeroQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(HeroPeer::INT, $int, $comparison);
-    }
-
-    /**
-     * Filter the query on the dex column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDex(1234); // WHERE dex = 1234
-     * $query->filterByDex(array(12, 34)); // WHERE dex IN (12, 34)
-     * $query->filterByDex(array('min' => 12)); // WHERE dex >= 12
-     * $query->filterByDex(array('max' => 12)); // WHERE dex <= 12
-     * </code>
-     *
-     * @param     mixed $dex The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return HeroQuery The current query, for fluid interface
-     */
-    public function filterByDex($dex = null, $comparison = null)
-    {
-        if (is_array($dex)) {
-            $useMinMax = false;
-            if (isset($dex['min'])) {
-                $this->addUsingAlias(HeroPeer::DEX, $dex['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($dex['max'])) {
-                $this->addUsingAlias(HeroPeer::DEX, $dex['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(HeroPeer::DEX, $dex, $comparison);
+        return $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty, $comparison);
     }
 
     /**
@@ -617,17 +604,17 @@ abstract class BaseHeroQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the difficulty column
+     * Filter the query on the stuns column
      *
      * Example usage:
      * <code>
-     * $query->filterByDifficulty(1234); // WHERE difficulty = 1234
-     * $query->filterByDifficulty(array(12, 34)); // WHERE difficulty IN (12, 34)
-     * $query->filterByDifficulty(array('min' => 12)); // WHERE difficulty >= 12
-     * $query->filterByDifficulty(array('max' => 12)); // WHERE difficulty <= 12
+     * $query->filterByStuns(1234); // WHERE stuns = 1234
+     * $query->filterByStuns(array(12, 34)); // WHERE stuns IN (12, 34)
+     * $query->filterByStuns(array('min' => 12)); // WHERE stuns >= 12
+     * $query->filterByStuns(array('max' => 12)); // WHERE stuns <= 12
      * </code>
      *
-     * @param     mixed $difficulty The value to use as filter.
+     * @param     mixed $stuns The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -635,16 +622,16 @@ abstract class BaseHeroQuery extends ModelCriteria
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function filterByDifficulty($difficulty = null, $comparison = null)
+    public function filterByStuns($stuns = null, $comparison = null)
     {
-        if (is_array($difficulty)) {
+        if (is_array($stuns)) {
             $useMinMax = false;
-            if (isset($difficulty['min'])) {
-                $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty['min'], Criteria::GREATER_EQUAL);
+            if (isset($stuns['min'])) {
+                $this->addUsingAlias(HeroPeer::STUNS, $stuns['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($difficulty['max'])) {
-                $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty['max'], Criteria::LESS_EQUAL);
+            if (isset($stuns['max'])) {
+                $this->addUsingAlias(HeroPeer::STUNS, $stuns['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -655,7 +642,7 @@ abstract class BaseHeroQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(HeroPeer::DIFFICULTY, $difficulty, $comparison);
+        return $this->addUsingAlias(HeroPeer::STUNS, $stuns, $comparison);
     }
 
     /**

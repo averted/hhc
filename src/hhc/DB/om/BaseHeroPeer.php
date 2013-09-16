@@ -50,20 +50,20 @@ abstract class BaseHeroPeer
     /** the column name for the name field */
     const NAME = 'hero.name';
 
-    /** the column name for the hp field */
-    const HP = 'hero.hp';
-
     /** the column name for the role field */
     const ROLE = 'hero.role';
 
-    /** the column name for the str field */
-    const STR = 'hero.str';
+    /** the column name for the hp field */
+    const HP = 'hero.hp';
 
-    /** the column name for the int field */
-    const INT = 'hero.int';
+    /** the column name for the dmg field */
+    const DMG = 'hero.dmg';
 
-    /** the column name for the dex field */
-    const DEX = 'hero.dex';
+    /** the column name for the armor field */
+    const ARMOR = 'hero.armor';
+
+    /** the column name for the difficulty field */
+    const DIFFICULTY = 'hero.difficulty';
 
     /** the column name for the range field */
     const RANGE = 'hero.range';
@@ -71,8 +71,8 @@ abstract class BaseHeroPeer
     /** the column name for the speed field */
     const SPEED = 'hero.speed';
 
-    /** the column name for the difficulty field */
-    const DIFFICULTY = 'hero.difficulty';
+    /** the column name for the stuns field */
+    const STUNS = 'hero.stuns';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -93,11 +93,11 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[HeroPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'HP', 'Role', 'Str', 'Int', 'Dex', 'Range', 'Speed', 'Difficulty', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'hP', 'role', 'str', 'int', 'dex', 'range', 'speed', 'difficulty', ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::NAME, HeroPeer::HP, HeroPeer::ROLE, HeroPeer::STR, HeroPeer::INT, HeroPeer::DEX, HeroPeer::RANGE, HeroPeer::SPEED, HeroPeer::DIFFICULTY, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'HP', 'ROLE', 'STR', 'INT', 'DEX', 'RANGE', 'SPEED', 'DIFFICULTY', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'hp', 'role', 'str', 'int', 'dex', 'range', 'speed', 'difficulty', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Role', 'HP', 'Dmg', 'Armor', 'Difficulty', 'Range', 'Speed', 'Stuns', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'role', 'hP', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::NAME, HeroPeer::ROLE, HeroPeer::HP, HeroPeer::DMG, HeroPeer::ARMOR, HeroPeer::DIFFICULTY, HeroPeer::RANGE, HeroPeer::SPEED, HeroPeer::STUNS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ROLE', 'HP', 'DMG', 'ARMOR', 'DIFFICULTY', 'RANGE', 'SPEED', 'STUNS', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'role', 'hp', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
@@ -108,11 +108,11 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'HP' => 2, 'Role' => 3, 'Str' => 4, 'Int' => 5, 'Dex' => 6, 'Range' => 7, 'Speed' => 8, 'Difficulty' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'hP' => 2, 'role' => 3, 'str' => 4, 'int' => 5, 'dex' => 6, 'range' => 7, 'speed' => 8, 'difficulty' => 9, ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::NAME => 1, HeroPeer::HP => 2, HeroPeer::ROLE => 3, HeroPeer::STR => 4, HeroPeer::INT => 5, HeroPeer::DEX => 6, HeroPeer::RANGE => 7, HeroPeer::SPEED => 8, HeroPeer::DIFFICULTY => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'HP' => 2, 'ROLE' => 3, 'STR' => 4, 'INT' => 5, 'DEX' => 6, 'RANGE' => 7, 'SPEED' => 8, 'DIFFICULTY' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'hp' => 2, 'role' => 3, 'str' => 4, 'int' => 5, 'dex' => 6, 'range' => 7, 'speed' => 8, 'difficulty' => 9, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Role' => 2, 'HP' => 3, 'Dmg' => 4, 'Armor' => 5, 'Difficulty' => 6, 'Range' => 7, 'Speed' => 8, 'Stuns' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hP' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::NAME => 1, HeroPeer::ROLE => 2, HeroPeer::HP => 3, HeroPeer::DMG => 4, HeroPeer::ARMOR => 5, HeroPeer::DIFFICULTY => 6, HeroPeer::RANGE => 7, HeroPeer::SPEED => 8, HeroPeer::STUNS => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ROLE' => 2, 'HP' => 3, 'DMG' => 4, 'ARMOR' => 5, 'DIFFICULTY' => 6, 'RANGE' => 7, 'SPEED' => 8, 'STUNS' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hp' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
@@ -189,25 +189,25 @@ abstract class BaseHeroPeer
         if (null === $alias) {
             $criteria->addSelectColumn(HeroPeer::ID);
             $criteria->addSelectColumn(HeroPeer::NAME);
-            $criteria->addSelectColumn(HeroPeer::HP);
             $criteria->addSelectColumn(HeroPeer::ROLE);
-            $criteria->addSelectColumn(HeroPeer::STR);
-            $criteria->addSelectColumn(HeroPeer::INT);
-            $criteria->addSelectColumn(HeroPeer::DEX);
+            $criteria->addSelectColumn(HeroPeer::HP);
+            $criteria->addSelectColumn(HeroPeer::DMG);
+            $criteria->addSelectColumn(HeroPeer::ARMOR);
+            $criteria->addSelectColumn(HeroPeer::DIFFICULTY);
             $criteria->addSelectColumn(HeroPeer::RANGE);
             $criteria->addSelectColumn(HeroPeer::SPEED);
-            $criteria->addSelectColumn(HeroPeer::DIFFICULTY);
+            $criteria->addSelectColumn(HeroPeer::STUNS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.hp');
             $criteria->addSelectColumn($alias . '.role');
-            $criteria->addSelectColumn($alias . '.str');
-            $criteria->addSelectColumn($alias . '.int');
-            $criteria->addSelectColumn($alias . '.dex');
+            $criteria->addSelectColumn($alias . '.hp');
+            $criteria->addSelectColumn($alias . '.dmg');
+            $criteria->addSelectColumn($alias . '.armor');
+            $criteria->addSelectColumn($alias . '.difficulty');
             $criteria->addSelectColumn($alias . '.range');
             $criteria->addSelectColumn($alias . '.speed');
-            $criteria->addSelectColumn($alias . '.difficulty');
+            $criteria->addSelectColumn($alias . '.stuns');
         }
     }
 

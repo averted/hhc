@@ -3,14 +3,14 @@
   <table name="hero" phpName="Hero">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="name" type="varchar" size="50" required="true" />
-    <column name="hp" type="integer" required="true" phpName="HP" />
     <column name="role" type="varchar" size="200" required="true" />
-    <column name="str" type="integer" required="true" />
-    <column name="int" type="integer" required="true" />
-    <column name="dex" type="integer" required="true" />
+    <column name="hp" type="integer" required="true" phpName="HP" />
+    <column name="dmg" type="varchar" size="20" required="true" />
+    <column name="armor" type="float" size="4" scale="2" required="true" />
+    <column name="difficulty" type="float" size="3" scale="1" required="true" />
     <column name="range" type="integer" required="true" />
     <column name="speed" type="integer" required="true" />
-    <column name="difficulty" type="float" size="3" scale="1" required="true" />
+    <column name="stuns" type="integer" required="false" />
   </table>
   <table name="votes" phpName="Votes">
     <column name="hero_name" type="varchar" size="50" required="true" primaryKey="true" phpName="HeroName" />

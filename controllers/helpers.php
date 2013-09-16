@@ -64,7 +64,7 @@ function voted($user, $name, $counter) {
     if ($q == 0) 
         return false;
 
-    $q = UserVotesQuery::create()->filterByUserId(getUserId($user))->filterByHeroName(deslug($name))->filterByCounterName(deslug($counter))->find()->count();
+    $q = UserVotesQuery::create()->filterByUserId(getUserId($user))->filterByHeroName($name)->filterByCounterName($counter)->find()->count();
 
     return $q == 0 ? false : true;
 }
@@ -72,8 +72,8 @@ function voted($user, $name, $counter) {
 function registerVote($user, $name, $counter) {
     $vote = new UserVotes();
     $vote->setUserId(getUserId($user));
-    $vote->setHeroName(deslug($name));
-    $vote->setCounterName(deslug($counter));
+    $vote->setHeroName($name);
+    $vote->setCounterName($counter);
     $vote->save();
 }
 
@@ -95,7 +95,7 @@ function valid($name) {
     $heroes = HeroQuery::create()->find();
 
     foreach($heroes as $hero) {
-        if (strtoupper(deslug($name)) == strtoupper($hero->getName()))
+        if (strtoupper($name) == strtoupper($hero->getName()))
             return true;
     }
 

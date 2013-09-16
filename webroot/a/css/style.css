@@ -69,6 +69,9 @@ a:hover { text-decoration:none; }
 .hero .button { padding:4px 6px; margin:0 0 0 4px; background:#0b0b0b; display:block; color:#ffa500; border:1px solid #555; cursor:pointer; text-decoration:none; }
 .hero .button:hover { background:#ffa500; color:#000; border:1px solid #ffa000; }
 
+.hero .sort { }
+.hero .sort .button { display:inline; }
+
 .hero .hero-counters { width:30%; border:1px solid #555; background:#0b0b0b; padding:20px; margin:0; }
 .hero .hero-counters .name { font-size:15px; margin-left:5px; }
 .hero .hero-counters .vote { position:absolute; bottom:0; }

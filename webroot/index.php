@@ -66,8 +66,20 @@ $app->get('/load', function() use($app) {
  * route /hero
  * ----------------------
  */
-$app->get('/hero', function() use ($app) {
-    $heroes = HeroQuery::create()->orderByName()->find();
+$app->get('/hero', function(Request $request) use ($app) {
+    $filter = $request->get('filter');
+    if (isset($filter)) {
+        if ($filter == 'HP') 
+            $heroes = HeroQuery::create()->orderByHP('desc')->find();
+        else if ($filter == 'DMG')
+            $heroes = HeroQuery::create()->orderByDmg('desc')->find();
+        else if ($filter == 'ARMOR')
+            $heroes = HeroQuery::create()->orderByArmor('desc')->find();
+        else if ($filter == 'DIFFICULTY')
+            $heroes = HeroQuery::create()->orderByDifficulty('desc')->find();
+    } else {
+        $heroes = HeroQuery::create()->orderByName()->find();
+    }
     
     return $app['twig']->render('hero-list.html.twig', array(
         'heroes' => $heroes

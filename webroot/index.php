@@ -81,7 +81,7 @@ $app->get('/hero/{name}', function($name) use ($app) {
         return $app->redirect('/hero');
 
     $url = array(
-        'new' => isLoggedIn($user) ? '/counter/'.$name : '/login',
+        'new' => isLoggedIn($user) ? '/counter/'.slug($name) : '/login',
     );
 
     $hero = HeroQuery::create()->filterByName($name)->findOne();
@@ -91,8 +91,8 @@ $app->get('/hero/{name}', function($name) use ($app) {
         $counters[] = array(
             'name'     => slug($counter->getCounterName()),
             'votes'    => $counter->getVotes(),
-            'voteup'   => isLoggedIn($user) ? '/hero/'.$name.'/counter/'.slug($counter->getCounterName()).'/voteup' : '/login',
-            'votedown' => isLoggedIn($user) ? '/hero/'.$name.'/counter/'.slug($counter->getCounterName()).'/votedown' : '/login',
+            'voteup'   => isLoggedIn($user) ? '/hero/'.slug($name).'/counter/'.slug($counter->getCounterName()).'/voteup' : '/login',
+            'votedown' => isLoggedIn($user) ? '/hero/'.slug($name).'/counter/'.slug($counter->getCounterName()).'/votedown' : '/login',
         );
     }
     
@@ -105,6 +105,7 @@ $app->get('/hero/{name}', function($name) use ($app) {
 
 $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use ($app) {
     $user = $app['session']->get('user');
+    $error = null;
 
     if (!valid($name) || !valid($counter))
         return $app->redirect('/hero');
@@ -119,11 +120,17 @@ $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use
             //register vote for current user
             registerVote($user, $name, $counter);
         } else {
-            return 'You may only vote once';
+            $url   = '/hero/'.slug($name);
+            $error = 'You may only vote once for each Hero->Counter combination.';
+            
+            return $app['twig']->render('error.html.twig', array(
+                'url' => $url,
+                'error' => $error
+            ));
         }
     }
     
-    return $app->redirect('/hero/'.$name);
+    return $app->redirect('/hero/'.slug($name));
 })->convert('name', function ($name) { return str_replace('+',' ',$name); 
 })->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
 
@@ -142,7 +149,13 @@ $app->get('/hero/{name}/counter/{counter}/votedown', function($name, $counter) u
 
             registerVote($user, $name, $counter);
         } else {
-            return 'You may only vote once';
+            $url   = '/hero/'.$name;
+            $error = 'You may only vote once for each Hero->Counter combination.';
+            
+            return $app['twig']->render('error.html.twig', array(
+                'url' => $url,
+                'error' => $error
+            ));
         }
     }
     
@@ -190,7 +203,7 @@ $app->get('/counter/{name}/add/{counter}', function($name, $counter) use ($app) 
     $votes->setVotes(1);
     $votes->save();
 
-    return $app->redirect('/hero/'.$name);
+    return $app->redirect('/hero/'.slug($name));
 })->convert('name', function ($name) { return str_replace('+',' ',$name); 
 })->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
 

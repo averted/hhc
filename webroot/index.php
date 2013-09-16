@@ -101,7 +101,8 @@ $app->get('/hero/{name}', function($name) use ($app) {
         'hero' => $hero,
         'counters' => $counters
     ));
-})->convert('name', function ($name) { return str_replace('+',' ',$name); });
+})
+->convert('name', function ($name) { return str_replace('+',' ',$name); });
 
 $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use ($app) {
     $user = $app['session']->get('user');
@@ -131,8 +132,9 @@ $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use
     }
     
     return $app->redirect('/hero/'.slug($name));
-})->convert('name', function ($name) { return str_replace('+',' ',$name); 
-})->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
+})
+->convert('name', function ($name) { return str_replace('+',' ',$name); })
+->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
 
 $app->get('/hero/{name}/counter/{counter}/votedown', function($name, $counter) use ($app) {
     $user = $app['session']->get('user');
@@ -160,8 +162,9 @@ $app->get('/hero/{name}/counter/{counter}/votedown', function($name, $counter) u
     }
     
     return $app->redirect('/hero/'.$name);
-})->convert('name', function ($name) { return str_replace('+',' ',$name); 
-})->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
+})
+->convert('name', function ($name) { return str_replace('+',' ',$name); })
+->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
 
 /**
  * ----------------------
@@ -185,7 +188,8 @@ $app->get('/counter/{name}', function($name) use ($app) {
         'heroes' => $heroes,
         'counters' => $counters
     ));
-})->convert('name', function ($name) { return str_replace('+',' ',$name); });
+})
+->convert('name', function ($name) { return str_replace('+',' ',$name); });
 
 $app->get('/counter/{name}/add/{counter}', function($name, $counter) use ($app) {
     if (!valid($name) || !valid($counter))
@@ -204,8 +208,9 @@ $app->get('/counter/{name}/add/{counter}', function($name, $counter) use ($app) 
     $votes->save();
 
     return $app->redirect('/hero/'.slug($name));
-})->convert('name', function ($name) { return str_replace('+',' ',$name); 
-})->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
+})
+->convert('name', function ($name) { return str_replace('+',' ',$name); })
+->convert('counter', function ($counter) { return str_replace('+',' ',$counter); });
 
 /**
  * ----------------------

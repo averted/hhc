@@ -52,6 +52,7 @@ class HeroTableMap extends TableMap
         $this->addColumn('range', 'Range', 'INTEGER', true, null, null);
         $this->addColumn('speed', 'Speed', 'INTEGER', true, null, null);
         $this->addColumn('stuns', 'Stuns', 'INTEGER', false, null, null);
+        $this->addColumn('side', 'Side', 'VARCHAR', true, 20, null);
         // validators
     } // initialize()
 

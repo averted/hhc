@@ -18,7 +18,7 @@ use hhc\DB\om\BaseHero;
  */
 class Hero extends BaseHero
 {
-    function setAll($name, $role, $hp, $dmg, $armor, $diff, $range, $speed, $stuns = null) {
+    function setAll($name, $role, $hp, $dmg, $armor, $diff, $range, $speed, $stuns = null, $side) {
         parent::setName($name);
         parent::setRole($role);
         parent::setHP($hp);
@@ -28,5 +28,6 @@ class Hero extends BaseHero
         parent::setRange($range);
         parent::setSpeed($speed);
         parent::setStuns($stuns);
+        parent::setSide($side);
     }
 }

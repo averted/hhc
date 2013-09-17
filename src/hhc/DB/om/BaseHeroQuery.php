@@ -29,6 +29,7 @@ use hhc\DB\HeroQuery;
  * @method HeroQuery orderByRange($order = Criteria::ASC) Order by the range column
  * @method HeroQuery orderBySpeed($order = Criteria::ASC) Order by the speed column
  * @method HeroQuery orderByStuns($order = Criteria::ASC) Order by the stuns column
+ * @method HeroQuery orderBySide($order = Criteria::ASC) Order by the side column
  *
  * @method HeroQuery groupById() Group by the id column
  * @method HeroQuery groupByName() Group by the name column
@@ -40,6 +41,7 @@ use hhc\DB\HeroQuery;
  * @method HeroQuery groupByRange() Group by the range column
  * @method HeroQuery groupBySpeed() Group by the speed column
  * @method HeroQuery groupByStuns() Group by the stuns column
+ * @method HeroQuery groupBySide() Group by the side column
  *
  * @method HeroQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method HeroQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,6 +59,7 @@ use hhc\DB\HeroQuery;
  * @method Hero findOneByRange(int $range) Return the first Hero filtered by the range column
  * @method Hero findOneBySpeed(int $speed) Return the first Hero filtered by the speed column
  * @method Hero findOneByStuns(int $stuns) Return the first Hero filtered by the stuns column
+ * @method Hero findOneBySide(string $side) Return the first Hero filtered by the side column
  *
  * @method array findById(int $id) Return Hero objects filtered by the id column
  * @method array findByName(string $name) Return Hero objects filtered by the name column
@@ -68,6 +71,7 @@ use hhc\DB\HeroQuery;
  * @method array findByRange(int $range) Return Hero objects filtered by the range column
  * @method array findBySpeed(int $speed) Return Hero objects filtered by the speed column
  * @method array findByStuns(int $stuns) Return Hero objects filtered by the stuns column
+ * @method array findBySide(string $side) Return Hero objects filtered by the side column
  *
  * @package    propel.generator.hhc.om
  */
@@ -175,7 +179,7 @@ abstract class BaseHeroQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `role`, `hp`, `dmg`, `armor`, `difficulty`, `range`, `speed`, `stuns` FROM `hero` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `role`, `hp`, `dmg`, `armor`, `difficulty`, `range`, `speed`, `stuns`, `side` FROM `hero` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -643,6 +647,35 @@ abstract class BaseHeroQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(HeroPeer::STUNS, $stuns, $comparison);
+    }
+
+    /**
+     * Filter the query on the side column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySide('fooValue');   // WHERE side = 'fooValue'
+     * $query->filterBySide('%fooValue%'); // WHERE side LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $side The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return HeroQuery The current query, for fluid interface
+     */
+    public function filterBySide($side = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($side)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $side)) {
+                $side = str_replace('*', '%', $side);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(HeroPeer::SIDE, $side, $comparison);
     }
 
     /**

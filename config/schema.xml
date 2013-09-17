@@ -12,6 +12,7 @@
     <column name="speed" type="integer" required="true" />
     <column name="stuns" type="integer" required="false" />
     <column name="side" type="varchar" size="20" required="true" />
+    <column name="stat" type="varchar" size="10" required="true" />
   </table>
   <table name="votes" phpName="Votes">
     <column name="hero_name" type="varchar" size="50" required="true" primaryKey="true" phpName="HeroName" />

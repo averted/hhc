@@ -110,6 +110,12 @@ abstract class BaseHero extends BaseObject implements Persistent
     protected $side;
 
     /**
+     * The value for the stat field.
+     * @var        string
+     */
+    protected $stat;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -248,6 +254,17 @@ abstract class BaseHero extends BaseObject implements Persistent
     {
 
         return $this->side;
+    }
+
+    /**
+     * Get the [stat] column value.
+     *
+     * @return string
+     */
+    public function getStat()
+    {
+
+        return $this->stat;
     }
 
     /**
@@ -482,6 +499,27 @@ abstract class BaseHero extends BaseObject implements Persistent
     } // setSide()
 
     /**
+     * Set the value of [stat] column.
+     *
+     * @param  string $v new value
+     * @return Hero The current object (for fluent API support)
+     */
+    public function setStat($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->stat !== $v) {
+            $this->stat = $v;
+            $this->modifiedColumns[] = HeroPeer::STAT;
+        }
+
+
+        return $this;
+    } // setStat()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -524,6 +562,7 @@ abstract class BaseHero extends BaseObject implements Persistent
             $this->speed = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->stuns = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->side = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->stat = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -533,7 +572,7 @@ abstract class BaseHero extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 11; // 11 = HeroPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = HeroPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Hero object", $e);
@@ -778,6 +817,9 @@ abstract class BaseHero extends BaseObject implements Persistent
         if ($this->isColumnModified(HeroPeer::SIDE)) {
             $modifiedColumns[':p' . $index++]  = '`side`';
         }
+        if ($this->isColumnModified(HeroPeer::STAT)) {
+            $modifiedColumns[':p' . $index++]  = '`stat`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `hero` (%s) VALUES (%s)',
@@ -821,6 +863,9 @@ abstract class BaseHero extends BaseObject implements Persistent
                         break;
                     case '`side`':
                         $stmt->bindValue($identifier, $this->side, PDO::PARAM_STR);
+                        break;
+                    case '`stat`':
+                        $stmt->bindValue($identifier, $this->stat, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -989,6 +1034,9 @@ abstract class BaseHero extends BaseObject implements Persistent
             case 10:
                 return $this->getSide();
                 break;
+            case 11:
+                return $this->getStat();
+                break;
             default:
                 return null;
                 break;
@@ -1028,6 +1076,7 @@ abstract class BaseHero extends BaseObject implements Persistent
             $keys[8] => $this->getSpeed(),
             $keys[9] => $this->getStuns(),
             $keys[10] => $this->getSide(),
+            $keys[11] => $this->getStat(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach($virtualColumns as $key => $virtualColumn)
@@ -1101,6 +1150,9 @@ abstract class BaseHero extends BaseObject implements Persistent
             case 10:
                 $this->setSide($value);
                 break;
+            case 11:
+                $this->setStat($value);
+                break;
         } // switch()
     }
 
@@ -1136,6 +1188,7 @@ abstract class BaseHero extends BaseObject implements Persistent
         if (array_key_exists($keys[8], $arr)) $this->setSpeed($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setStuns($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setSide($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setStat($arr[$keys[11]]);
     }
 
     /**
@@ -1158,6 +1211,7 @@ abstract class BaseHero extends BaseObject implements Persistent
         if ($this->isColumnModified(HeroPeer::SPEED)) $criteria->add(HeroPeer::SPEED, $this->speed);
         if ($this->isColumnModified(HeroPeer::STUNS)) $criteria->add(HeroPeer::STUNS, $this->stuns);
         if ($this->isColumnModified(HeroPeer::SIDE)) $criteria->add(HeroPeer::SIDE, $this->side);
+        if ($this->isColumnModified(HeroPeer::STAT)) $criteria->add(HeroPeer::STAT, $this->stat);
 
         return $criteria;
     }
@@ -1231,6 +1285,7 @@ abstract class BaseHero extends BaseObject implements Persistent
         $copyObj->setSpeed($this->getSpeed());
         $copyObj->setStuns($this->getStuns());
         $copyObj->setSide($this->getSide());
+        $copyObj->setStat($this->getStat());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1293,6 +1348,7 @@ abstract class BaseHero extends BaseObject implements Persistent
         $this->speed = null;
         $this->stuns = null;
         $this->side = null;
+        $this->stat = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

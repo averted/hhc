@@ -79,6 +79,9 @@ $app->get('/hero', function(Request $request) use ($app) {
             'range' => getURL('RANGE', $value, $filters),
             'hb'    => getURL('HB', $value, $filters),
             'le'    => getURL('LE', $value, $filters),
+            'agi'   => getURL('AGI', $value, $filters),
+            'int'   => getURL('INT', $value, $filters),
+            'str'   => getURL('STR', $value, $filters),
         );
         
         $heroes = HeroQuery::create();
@@ -91,19 +94,25 @@ $app->get('/hero', function(Request $request) use ($app) {
             if ($filter == 'RANGE') $heroes = $heroes->filterByRange(array('min' => 200));
             if ($filter == 'HB') $heroes = $heroes->filterBySide('Hellbourne');
             if ($filter == 'LE') $heroes = $heroes->filterBySide('Legion');
+            if ($filter == 'AGI') $heroes = $heroes->filterByStat('AGI');
+            if ($filter == 'INT') $heroes = $heroes->filterByStat('INT');
+            if ($filter == 'STR') $heroes = $heroes->filterByStat('STR');
         }
 
         $heroes = $heroes->find();
     } else {
         $heroes = HeroQuery::create()->orderByName()->find();
         $url = array(
-            'hp' => 'HP',
-            'armor' => 'ARMOR',
-            'dmg' => 'DMG',
-            'diff' => 'DIFF',
             'range' => 'RANGE',
-            'hb' => 'HB',
-            'le' => 'LE'
+            'armor' => 'ARMOR',
+            'diff'  => 'DIFF',
+            'dmg'   => 'DMG',
+            'agi'   => 'AGI',
+            'int'   => 'INT',
+            'str'   => 'STR',
+            'hp'    => 'HP',
+            'hb'    => 'HB',
+            'le'    => 'LE',
         );
     }
     

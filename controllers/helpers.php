@@ -9,6 +9,49 @@ use hhc\DB\UserVotesQuery;
 
 /**
  * -----------------
+ * filters
+ * -----------------
+ */
+function getURL($f, $v, $filters) {
+    if (!in_array($f, $filters)) {
+        $url = '+'.slug($v).'+'.$f;
+    } else {
+        foreach($filters as $filter) {
+            if ($filter != $f) $url .= '+'.$filter;
+        }
+    }
+    
+    return substr($url,1);
+    /*
+
+    if (!in_array('ARMOR', $filters)) {
+        $urlARMOR = '+'.slug($value) . '+ARMOR';
+    } else {
+        foreach($filters as $filter) {
+            if ($filter != 'ARMOR') $urlARMOR .= '+'.$filter;
+        }
+    }
+
+    if (!in_array('DMG', $filters)) {
+        $urlDMG = '+'.slug($value) . '+DMG';
+    } else {
+        foreach($filters as $filter) {
+            if ($filter != 'DMG') $urlDMG .= '+'.$filter;
+        }
+    }
+
+    if (!in_array('DIFF', $filters)) {
+        $urlDIFF = '+'.slug($value) . '+DIFF';
+    } else {
+        foreach($filters as $filter) {
+            if ($filter != 'DIFF') $urlDIFF .= '+'.$filter;
+        }
+    }
+    */
+}
+
+/**
+ * -----------------
  * search
  * -----------------
  */

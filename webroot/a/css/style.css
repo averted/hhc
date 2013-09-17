@@ -70,7 +70,7 @@ a:hover { text-decoration:none; }
 .hero .button:hover { background:#ffa500; color:#000; border:1px solid #ffa000; }
 
 .hero .sort { margin:5px 0 0 0; padding:0; }
-.hero .sort .selected { background:#ffa500; color:#000; }
+.hero .sort .selected { background:#ffa500; color:#000; border:1px solid #ffa500; }
 .hero .sort .button { display:inline; }
 
 .hero .search { margin:0 10px 10px 0; }

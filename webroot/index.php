@@ -71,34 +71,14 @@ $app->get('/hero', function(Request $request) use ($app) {
     $filters = explode(' ', $value);
 
     if (isset($value) && $value != null) {
-        if (!in_array('HP', $filters)) {
-            $urlHP = '+'.slug($value).'+HP';
-        } else {
-            foreach($filters as $filter) {
-                if ($filter != 'HP') $urlHP .= '+'.$filter;
-            }
-        }
-
-        if (!in_array('ARMOR', $filters)) {
-            $urlARMOR = '+'.slug($value) . '+ARMOR';
-        } else {
-            foreach($filters as $filter) {
-                if ($filter != 'ARMOR') $urlARMOR .= '+'.$filter;
-            }
-        }
-
-        if (!in_array('DMG', $filters)) {
-            $urlDMG = '+'.slug($value) . '+DMG';
-        } else {
-            foreach($filters as $filter) {
-                if ($filter != 'DMG') $urlDMG .= '+'.$filter;
-            }
-        }
-
         $url = array(
-            'hp' => substr($urlHP,1),
-            'armor' => substr($urlARMOR,1),
-            'dmg' => substr($urlDMG,1)
+            'hp'    => getURL('HP', $value, $filters),
+            'armor' => getURL('ARMOR', $value, $filters),
+            'dmg'   => getURL('DMG', $value, $filters),
+            'diff'  => getURL('DIFF', $value, $filters),
+            'range' => getURL('RANGE', $value, $filters),
+            'hb'    => getURL('HB', $value, $filters),
+            'le'    => getURL('LE', $value, $filters),
         );
         
         $heroes = HeroQuery::create();
@@ -108,6 +88,9 @@ $app->get('/hero', function(Request $request) use ($app) {
             if ($filter == 'ARMOR') $heroes = $heroes->orderByArmor('desc');
             if ($filter == 'DMG') $heroes = $heroes->orderByDmg('desc');
             if ($filter == 'DIFF') $heroes = $heroes->orderByDifficulty('desc');
+            if ($filter == 'RANGE') $heroes = $heroes->filterByRange(array('min' => 200));
+            if ($filter == 'HB') $heroes = $heroes->filterBySide('Hellbourne');
+            if ($filter == 'LE') $heroes = $heroes->filterBySide('Legion');
         }
 
         $heroes = $heroes->find();
@@ -116,7 +99,11 @@ $app->get('/hero', function(Request $request) use ($app) {
         $url = array(
             'hp' => 'HP',
             'armor' => 'ARMOR',
-            'dmg' => 'DMG'
+            'dmg' => 'DMG',
+            'diff' => 'DIFF',
+            'range' => 'RANGE',
+            'hb' => 'HB',
+            'le' => 'LE'
         );
     }
     

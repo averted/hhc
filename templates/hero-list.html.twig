@@ -10,6 +10,10 @@
         <a href="/hero?filter={{ url.hp }}" class="button {% if 'HP' in filters %}selected{% endif %}">HP</a>
         <a href="/hero?filter={{ url.dmg }}" class="button {% if 'DMG' in filters %}selected{% endif %}">DMG</a>
         <a href="/hero?filter={{ url.armor }}" class="button {% if 'ARMOR' in filters %}selected{% endif %}">ARMOR</a>
+        <a href="/hero?filter={{ url.diff }}" class="button {% if 'DIFF' in filters %}selected{% endif %}">DIFFICULTY</a>
+        <a href="/hero?filter={{ url.range }}" class="button {% if 'RANGE' in filters %}selected{% endif %}">RANGE</a>
+        <a href="/hero?filter={{ url.hb }}" class="button {% if 'HB' in filters %}selected{% endif %}">HELLBOURNE</a>
+        <a href="/hero?filter={{ url.le }}" class="button {% if 'LE' in filters %}selected{% endif %}">LEGION</a>
     </div>
     <div class="right search">
         <form action="/search" method="post">

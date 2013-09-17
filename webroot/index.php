@@ -72,34 +72,34 @@ $app->get('/hero', function(Request $request) use ($app) {
 
     if (isset($value) && $value != null) {
         $url = array(
-            'hp'    => getURL('HP', $value, $filters),
             'armor' => getURL('ARMOR', $value, $filters),
-            'dmg'   => getURL('DMG', $value, $filters),
-            'diff'  => getURL('DIFF', $value, $filters),
             'range' => getURL('RANGE', $value, $filters),
-            'hb'    => getURL('HB', $value, $filters),
-            'le'    => getURL('LE', $value, $filters),
+            'diff'  => getURL('DIFF', $value, $filters),
+            'dmg'   => getURL('DMG', $value, $filters),
             'agi'   => getURL('AGI', $value, $filters),
             'int'   => getURL('INT', $value, $filters),
             'str'   => getURL('STR', $value, $filters),
+            'hp'    => getURL('HP', $value, $filters),
+            'hb'    => getURL('HB', $value, $filters),
+            'le'    => getURL('LE', $value, $filters),
         );
         
         $heroes = HeroQuery::create();
 
         foreach($filters as $filter) {
-            if ($filter == 'HP') $heroes = $heroes->orderByHP('desc');
             if ($filter == 'ARMOR') $heroes = $heroes->orderByArmor('desc');
-            if ($filter == 'DMG') $heroes = $heroes->orderByDmg('desc');
-            if ($filter == 'DIFF') $heroes = $heroes->orderByDifficulty('desc');
             if ($filter == 'RANGE') $heroes = $heroes->filterByRange(array('min' => 200));
-            if ($filter == 'HB') $heroes = $heroes->filterBySide('Hellbourne');
-            if ($filter == 'LE') $heroes = $heroes->filterBySide('Legion');
-            if ($filter == 'AGI') $heroes = $heroes->filterByStat('AGI');
-            if ($filter == 'INT') $heroes = $heroes->filterByStat('INT');
-            if ($filter == 'STR') $heroes = $heroes->filterByStat('STR');
+            if ($filter == 'DIFF')  $heroes = $heroes->orderByDifficulty('desc');
+            if ($filter == 'DMG')   $heroes = $heroes->orderByDmg('desc');
+            if ($filter == 'AGI')   $heroes = $heroes->filterByStat('AGI');
+            if ($filter == 'INT')   $heroes = $heroes->filterByStat('INT');
+            if ($filter == 'STR')   $heroes = $heroes->filterByStat('STR');
+            if ($filter == 'HP')    $heroes = $heroes->orderByHP('desc');
+            if ($filter == 'HB')    $heroes = $heroes->filterBySide('Hellbourne');
+            if ($filter == 'LE')    $heroes = $heroes->filterBySide('Legion');
         }
 
-        $heroes = $heroes->find();
+        $heroes = $heroes->orderByName()->find();
     } else {
         $heroes = HeroQuery::create()->orderByName()->find();
         $url = array(

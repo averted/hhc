@@ -297,12 +297,12 @@ $app->match('/login', function (Request $request) use ($app) {
             $error = "Username not found";
         
         if (!$error) {
-            $user = UserQuery::create()->filterByUsername($username)->findOne();
+            $u = UserQuery::create()->filterByUsername($username)->findOne();
             
-            if ($username == $user->getUsername() && $password == $user->getPassword()) {
+            if (strtolower($username) === strtolower($u->getUsername()) && $password === $u->getPassword()) {
                 $app['session']->start();
-                $app['session']->set('user', $username);
-                return $app->redirect('/');
+                $app['session']->set('user', $u->getUsername());
+                return $app->redirect('/account');
             } else {
                 $error = 'Bad credentials';
             }
@@ -356,18 +356,22 @@ $app->match('/register', function (Request $request) use ($app) {
             $error = "Repeating your password is required";
         else if ($password != $password2)
             $error = "Passwords don't match";
+        else if (strlen($username) > 15) 
+            $error = "Username too long (15 char limit)";
 
         if (!$error) {
-            $user = new User();
-            $user->setEmail($email);
-            $user->setUsername($username);
-            $user->setPassword($password);
+            $u = new User();
+            $u->setEmail($email);
+            $u->setUsername($username);
+            $u->setPassword($password);
             
-            if ($user->validate()) {
-                $user->save();
-                return $app->redirect('/');
+            if ($u->validate()) {
+                $u->save();
+                $app['session']->start();
+                $app['session']->set('user', $u->getUsername());
+                return $app->redirect('/hero');
             } else {
-                foreach ($user->getValidationFailures() as $failure) {
+                foreach ($u->getValidationFailures() as $failure) {
                     $error = $failure->getMessage();
                 }
             }

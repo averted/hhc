@@ -12,7 +12,10 @@
         <span class="hover">Your Contribution: {{ '%.1f'|format(votes|length/360*100) ~ '%' }}</span>
     </span>
     <div class="clear"></div>
-    <h2>Your activity:</h2>
+    {% if votes|length > 0 %}<h2>Your activity:</h2>{% else %}
+    <p>Your Contribution increases with each active vote you make.</p>
+    <p>Go ahead - start contributing <a href="/hero">today!</a></p>
+    {% endif %}
     <ul>
     {% for vote in votes %}
         {% set hero = vote.getHeroName|replace({' ':''}) %}

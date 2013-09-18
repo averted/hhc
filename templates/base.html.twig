@@ -38,9 +38,10 @@
             <nav>
                 <ul class="center">
                     <li><a href="/load">LOAD HEROES</a></li>
+                    <li><a href="/">HOME</a></li>
                     <li><a href="/hero">HERO LIST</a></li>
-                    <li><a href="/login">{% if user %}ACCOUNT [{{ user }}] {% else %} LOGIN {% endif %}</a></li>
-                    {% if user %}<li><a href="/logout">LOGOUT</a></li>{% endif %}
+                    <li><a href="/login">{% if user %}ACCOUNT {% else %} LOGIN {% endif %}</a></li>
+                    {% if user %}<li><a href="/logout">LOGOUT [{{ user }}]</a></li>{% endif %}
                 </ul>
             </nav>
         </footer>

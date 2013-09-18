@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+
+{% block head parent() %}
+
+{% block content %} 
+{% set img = '/a/img/heroes/' %}
+{% set jpg = '.jpg' %}
+<div class="account">
+    <h1 class="left">{{ user }}</h1>
+    <span class="bar left">
+        <span class="bar-complete" style="width:{{ votes|length/360*100 }}%;"></span>
+        <span class="hover">Your Contribution: {{ '%.1f'|format(votes|length/360*100) ~ '%' }}</span>
+    </span>
+    <div class="clear"></div>
+    <h2>Your activity:</h2>
+    <ul>
+    {% for vote in votes %}
+        {% set hero = vote.getHeroName|replace({' ':''}) %}
+        {% set counter = vote.getCounterName|replace({' ':''}) %}
+        <li><img src="{{ img ~ hero ~ jpg }}" /> :: <img src="{{ img ~ counter ~ jpg }}" /></li>
+    {% endfor %}
+    </ul>
+</div>
+<script type="text/javascript">
+$('.bar').on('mouseenter', function() {
+    var diff = $(this).width() - $('.bar-complete').width();
+    if (diff < 20) $('.hover').css('color', '#000');
+    $('.hover').css('right', '0');
+});
+$('.bar').on('mouseleave', function() {
+    $('.hover').css('right', '-999px');
+});
+</script>
+{% endblock %}
+
+{% block footer parent() %}
+

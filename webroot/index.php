@@ -272,7 +272,7 @@ $app->match('/login', function (Request $request) use ($app) {
 
     // check if user is logged in
     if (isLoggedIn($user))
-        return $app->redirect('/');
+        return $app->redirect('/account');
        
     if ($request->getMethod() == 'POST') {
         if (!($username = $request->get('_username')))
@@ -299,6 +299,18 @@ $app->match('/login', function (Request $request) use ($app) {
     ));
 });
 
+$app->get('/account', function () use ($app) {
+    $user  = $app['session']->get('user');
+    $error = null;
+    
+    $votes = UserVotesQuery::create()->filterByUserId(getUserId($user))->find();
+
+
+    return $app['twig']->render('account.html.twig', array(
+        'user' => $user,
+        'votes' => $votes,
+    ));
+});
 /**
  * ----------------------
  * route /register

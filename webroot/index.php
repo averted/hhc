@@ -42,7 +42,10 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
  * ----------------------
  */
 $app->get('/', function() use($app) {
+    $user = $app['session']->get('user');
+
     return $app['twig']->render('index.html.twig', array(
+        'user' => $user,
         'link' => '/hero',
         'message' => 'Hero list'
     ));
@@ -55,7 +58,10 @@ $app->get('/', function() use($app) {
  */
 $app->get('/load', function() use($app) {
     include_once dirname(__DIR__).'/load-heroes.php';
+    $user = $app['session']->get('user');
+
     return $app['twig']->render('index.html.twig', array(
+        'user' => $user,
         'link' => '/hero',
         'message' => 'Everything loaded fine.'
     ));
@@ -67,6 +73,7 @@ $app->get('/load', function() use($app) {
  * ----------------------
  */
 $app->get('/hero', function(Request $request) use ($app) {
+    $user = $app['session']->get('user');
     $value = $request->get('filter');
     $filters = explode(' ', $value);
 
@@ -117,6 +124,7 @@ $app->get('/hero', function(Request $request) use ($app) {
     }
     
     return $app['twig']->render('hero-list.html.twig', array(
+        'user' => $user,
         'filters' => $filters,
         'url' => $url,
         'heroes' => $heroes
@@ -146,6 +154,7 @@ $app->get('/hero/{name}', function($name) use ($app) {
     }
     
     return $app['twig']->render('hero.html.twig', array(
+        'user' => $user,
         'url' => $url,
         'hero' => $hero,
         'counters' => $counters
@@ -174,6 +183,7 @@ $app->get('/hero/{name}/counter/{counter}/voteup', function($name, $counter) use
             $error = 'You may only vote once for each Hero->Counter combination.';
             
             return $app['twig']->render('error.html.twig', array(
+                'user' => $user,
                 'url' => $url,
                 'error' => $error
             ));
@@ -204,6 +214,7 @@ $app->get('/hero/{name}/counter/{counter}/votedown', function($name, $counter) u
             $error = 'You may only vote once for each Hero->Counter combination.';
             
             return $app['twig']->render('error.html.twig', array(
+                'user' => $user,
                 'url' => $url,
                 'error' => $error
             ));
@@ -221,6 +232,8 @@ $app->get('/hero/{name}/counter/{counter}/votedown', function($name, $counter) u
  * ----------------------
  */
 $app->get('/counter/{name}', function($name) use ($app) {
+    $user = $app['session']->get('user');
+
     if (!valid($name))
         return $app->redirect('/hero');
 
@@ -233,6 +246,7 @@ $app->get('/counter/{name}', function($name) use ($app) {
     }
 
     return $app['twig']->render('counter-list.html.twig', array(
+        'user' => $user,
         'hero' => $hero,
         'heroes' => $heroes,
         'counters' => $counters
@@ -286,6 +300,7 @@ $app->match('/login', function (Request $request) use ($app) {
             $user = UserQuery::create()->filterByUsername($username)->findOne();
             
             if ($username == $user->getUsername() && $password == $user->getPassword()) {
+                $app['session']->start();
                 $app['session']->set('user', $username);
                 return $app->redirect('/');
             } else {
@@ -295,6 +310,7 @@ $app->match('/login', function (Request $request) use ($app) {
     }
 
     return $app['twig']->render('login.html.twig', array(
+        'user' => $user,
         'error' => $error
     ));
 });
@@ -310,6 +326,11 @@ $app->get('/account', function () use ($app) {
         'user' => $user,
         'votes' => $votes,
     ));
+});
+
+$app->get('/logout', function () use ($app) {
+    $app['session']->clear();
+    return $app->redirect('/');
 });
 /**
  * ----------------------
@@ -354,6 +375,7 @@ $app->match('/register', function (Request $request) use ($app) {
     }
 
     return $app['twig']->render('register.html.twig', array(
+        'user' => $user,
         'error' => $error
     ));
 });

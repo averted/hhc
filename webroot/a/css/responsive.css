@@ -11,6 +11,7 @@
     form { width:100%; }
     form textarea { width:100%; }
 
+    .account .bar { margin:0 0 20px 0; }
     nav { font-size:8px; height:30px; width:100%; }
     nav ul li { line-height:30px; }
     nav ul li a { padding:0 3px; }

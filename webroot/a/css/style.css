@@ -32,63 +32,60 @@ body {
     background:#444 no-repeat center center fixed; 
 }
 
+.grey   { color:#888; }
 .normal { font-size:18px; }
-.title  { font-size:25px; color:#ffa500; }
-.link   { font-size:17px; }
 .caps   { font-variant:small-caps; }
 .center { text-align:center; }
-.grey   { color:#888; }
 .left   { float:left; }
 .right  { float:right; }
 .clear  { clear:both; }
 
 h1 { font-size:20px; font-weight:normal; color:#ffa500; } 
 h2 { font-size:17px; font-weight:normal; color:#ffa500; margin:0; padding:0; }
-hr { width:85%; height:2px; background:#ffa500; border:none; padding:0; margin:0 auto 30px auto; }
 
-a { color:#ffa500; }
-a:hover { text-decoration:none; }
+a { color:#ffa500; text-decoration:none; }
+a:hover { background:#ffa500; color:#000; }
 /* ---- end GENERAL ---- */
 
 /* ------ BODY ------ */
 /* ---- hero ---- */
-.hero, .account { width:80%; border:1px solid #555; background:#1b1b1b; padding:20px; margin:100px auto; }
-.hero h2 { margin:15px 0 8px 0; }
+.hero,
+.account { width:80%; border:1px solid #555; background:#1b1b1b; padding:20px; margin:100px auto; }
 .hero p { padding:0; margin:0; }
+.hero h2 { margin:15px 0 8px 0; }
 .hero img.hero-icon-70px { width:70px; height:70px; border:1px solid #ffa500; }
 .hero img.hero-icon-100px { width:100px; height:100px; border:2px solid #ffa500; float:left; margin-right:10px; }
 
-.hero .hero-info { font-size:12px; padding:0; margin:0; }
+.hero .sort { margin:5px 0 0 0; padding:0; }
+.hero .sort .selected { background:#ffa500; color:#000; border:1px solid #ffa500; }
+.hero .sort .button { display:inline; }
+.hero .search { margin:0 10px 10px 0; }
+
 .hero .name, .hero .role { font-size:18px; line-height:14px; }
 .hero .name { color:#ffa500; }
 .hero .role { color:#666; }
-.hero .bar, .hero .bar-max { height:16px; display:inline-block; border-radius:2px; }
+.hero .bar, 
+.hero .bar-max { height:16px; display:inline-block; border-radius:2px; }
 .hero .bar { background:#000; margin:0; padding:0 0 0 5px; color:#ffa500; }
 .hero .bar-max { background:#555; margin:4px 0 0 0; font-size:12px; padding:1px; }
 .hero .button { padding:4px 6px; margin:0 0 0 4px; background:#0b0b0b; display:block; color:#ffa500; border:1px solid #555; cursor:pointer; text-decoration:none; }
 .hero .button:hover { background:#ffa500; color:#000; border:1px solid #ffa000; }
 
-.hero .sort { margin:5px 0 0 0; padding:0; }
-.hero .sort .selected { background:#ffa500; color:#000; border:1px solid #ffa500; }
-.hero .sort .button { display:inline; }
-
-.hero .search { margin:0 10px 10px 0; }
-
 .hero .hero-counters { width:30%; border:1px solid #555; background:#0b0b0b; padding:20px; margin:0; }
 .hero .hero-counters .name { font-size:15px; margin-left:5px; }
 .hero .hero-counters .vote { position:absolute; bottom:0; }
 .hero .hero-counters ul { list-style:none; padding:0; margin:0; }
-.hero .hero-counters ul li { margin:0 0 15px 0; }
+.hero .hero-counters ul li { margin:0 0 15px 0; position:relative; }
 .hero .hero-counters ul li .add { margin:10px 0 0 0; text-decoration:none; }
 
-.hero .hero-list { list-style:none; padding:0; margin:0; }
-.hero .hero-list a { color:#ffa500; }
-.hero .hero-list a:hover { color:#ffa500; }
-.hero .hero-list li { display:inline-block; margin:5px; }
-.hero .hero-list li .overlay { position:absolute; top:0; bottom:0; left:0; right:0; font-size:8px; background:rgba(0,0,0,0.2); transition:all 0s ease-out; }
-.hero .hero-list li .overlay-dark { position:absolute; top:0; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); }
-.hero .hero-list li .overlay span { font-size:14px; width:75px; height:75px; }
-.hero .hero-list li .overlay:hover { background:rgba(0,0,0,0.0); }
+.hero ul.hero-list { list-style:none; padding:0; margin:0; }
+.hero ul.hero-list a { color:#ffa500; }
+.hero ul.hero-list a:hover { color:#ffa500; }
+.hero ul.hero-list li { display:inline-block; margin:5px; }
+.hero ul.hero-list li .overlay { position:absolute; top:0; bottom:0; left:0; right:0; font-size:8px; background:rgba(0,0,0,0.2); transition:all 0s ease-out; }
+.hero ul.hero-list li .overlay-dark { position:absolute; top:0; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); }
+.hero ul.hero-list li .overlay span { font-size:14px; width:75px; height:75px; }
+.hero ul.hero-list li .overlay:hover { background:rgba(0,0,0,0.0); }
 /* -- end hero -- */
 
 /* ---- account ---- */
@@ -102,7 +99,6 @@ a:hover { text-decoration:none; }
 .account ul { list-style:none; margin:10px 0 0 5px; padding:0; }
 .account ul li { color:#777; margin:5px; padding:6px 6px 3px 6px; border:2px solid #555; display:inline-block; }
 .account ul li img { width:40px; height:40px; border:1px solid #555; padding:0; margin:0;  }
-
 /* -- end account -- */
 
 /* ---- form ---- */

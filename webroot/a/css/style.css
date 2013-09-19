@@ -97,7 +97,7 @@ a:hover { text-decoration:none; }
 .account a { text-decoration:none; }
 .account a:hover { background:#ffa500; color:#000; }
 .account .bar { position:relative; width:50%; height:30px; background:#010101; border-radius:2px; border:1px solid #ffa500; margin:10px 0 0 50px;}
-.account .hover { position:absolute; right:-999px; font-size:17px; color:#ffa500; margin:4px 10px 0 0; text-shadow:0 0 4px #000; }
+.account .hover { position:absolute; right:0px; font-size:17px; color:#ffa500; margin:4px 10px 0 0; text-shadow:0 0 4px #000; }
 .account .bar-complete { height:30px; background:#ffa500; display:inline-block; }
 .account ul { list-style:none; margin:10px 0 0 5px; padding:0; }
 .account ul li { color:#777; margin:5px; padding:6px 6px 3px 6px; border:2px solid #555; display:inline-block; }

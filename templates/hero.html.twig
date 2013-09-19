@@ -17,18 +17,18 @@
     <div class="hero-counters">
         <ul>
         {% for counter in counters %}
-            <li style="position:relative;">
+            <li>
                 <a href="/hero/{{ counter.name }}"><img class="hero-icon-70px left" src="{{ img ~ counter.name|replace({'+':''})|lower ~ ext }}" /></a>
-                <div class="left name">{{ counter.name|replace({'+':' '}) }}</div>
+                <div class="name left">{{ counter.name|replace({'+':' '}) }}</div>
                 <!-- TODO: fix responsive-ness -->
-                <div class="left vote" style="left:72px;"><a href="{{ counter.voteup }}" class="button">up</a></div>
-                <div class="left vote" style="left:107px;"><a href="{{ counter.votedown }}" class="button">down</a></div>
-                <div class="left vote button" style="left:163px;">{{ counter.votes }}</div>
+                <div class="vote left" style="left:72px;"><a href="{{ counter.voteup }}" class="button">up</a></div>
+                <div class="vote left" style="left:107px;"><a href="{{ counter.votedown }}" class="button">down</a></div>
+                <div class="vote button left" style="left:163px;">{{ counter.votes }}</div>
                 <div class="clear"></div>
             </li>
         {% endfor %}
             <li>
-                <a href="{{ url.new }}" class="button center add">add a counter</a>
+                <a href="{% if user %}/counter/{{ hero.getName|replace({' ':'+'}) }}{% else %}/login{% endif %}" class="button center add">add a counter</a>
             </li>
         </ul>
         <div class="clear"></div>

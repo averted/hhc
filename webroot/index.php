@@ -137,10 +137,6 @@ $app->get('/hero/{name}', function($name) use ($app) {
     if (!valid($name))
         return $app->redirect('/hero');
 
-    $url = array(
-        'new' => isLoggedIn($user) ? '/counter/'.slug($name) : '/login',
-    );
-
     $hero = HeroQuery::create()->filterByName($name)->findOne();
     $votes = VotesQuery::create()->filterByHeroName($name)->orderByVotes('desc')->limit(3)->find();
 
@@ -155,7 +151,6 @@ $app->get('/hero/{name}', function($name) use ($app) {
     
     return $app['twig']->render('hero.html.twig', array(
         'user' => $user,
-        'url' => $url,
         'hero' => $hero,
         'counters' => $counters
     ));

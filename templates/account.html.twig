@@ -9,11 +9,11 @@
     <h1 class="left">{{ user }}</h1>
     <span class="bar left">
         <span class="bar-complete" style="width:{{ votes|length/360*100 }}%;"></span>
-        <span class="hover">Your Contribution: {{ '%.1f'|format(votes|length/360*100) ~ '%' }}</span>
+        <span class="hover">Contribution: {{ '%.1f'|format(votes|length/360*100) ~ '%' }}</span>
     </span>
     <div class="clear"></div>
-    {% if votes|length > 0 %}<h2>Your activity:</h2>{% else %}
-    <p>Your Contribution increases with each active vote you make.</p>
+    {% if votes|length > 0 %}<h2>Previous activity:</h2>{% else %}
+    <p>Contribution is increased with each active vote you make.</p>
     <p>Go ahead - start contributing <a href="/hero">today!</a></p>
     {% endif %}
     <ul>
@@ -25,6 +25,12 @@
     </ul>
 </div>
 <script type="text/javascript">
+$(document).ready(function() {
+    var diff = $('.bar').width() - $('.bar-complete').width();
+    if (diff < 20) $('.hover').css('color', '#000');
+});
+    
+/*
 $('.bar').on('mouseenter', function() {
     var diff = $(this).width() - $('.bar-complete').width();
     if (diff < 20) $('.hover').css('color', '#000');
@@ -33,6 +39,7 @@ $('.bar').on('mouseenter', function() {
 $('.bar').on('mouseleave', function() {
     $('.hover').css('right', '-999px');
 });
+*/
 </script>
 {% endblock %}
 

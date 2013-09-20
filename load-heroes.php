@@ -135,6 +135,15 @@ $hero->setAll('Madman','Physical',492,'47-51',3.22,2.5,128,300,null,'Hellbourne'
 $hero = new Hero();
 $hero->setAll('Tremble','Physical MUC',473,'49-54',3.92,4,128,310,null,'Hellbourne','AGI'); $hero->save();
 
+$hero = new Hero();
+$hero->setAll('Blacksmith','CC Magic',587,'56-62',3.96,1,128,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Bombardier','Magic',492,'44-49',2.24,4.5,600,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Bubbles','Magic CC',435,'45-50',2.52,4,550,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Ellonia','CC Magic',454,'41-49',1.24,4,600,300,1,'Legion','INT'); $hero->save();
+
 /*
 $hero = new Hero();
 $hero->setAll('','',,'Legion'); $hero->save();

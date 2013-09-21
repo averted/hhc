@@ -143,6 +143,16 @@ $hero = new Hero();
 $hero->setAll('Bubbles','Magic CC',435,'45-50',2.52,4,550,295,1,'Legion','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Ellonia','CC Magic',454,'41-49',1.24,4,600,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Empath','Protective',473,'43-51',1.64,4.5,600,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Kinesis','Magic CC',492,'46-50',2.24,3.5,600,300,2,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Martyr','Protective',549,'50-54',1.96,3.5,600,300,null,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Monarch','Protective CC',473,'47-55',1.1,3,600,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Nymphora','Protective CC',473,'45-52',2,3,550,295,1,'Legion','INT'); $hero->save();
 
 /*
 $hero = new Hero();

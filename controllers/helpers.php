@@ -62,14 +62,9 @@ function getAbbr() {
 }
 
 function guessHeroName($input) {
-    $heroes = HeroQuery::create()->find();
-
-    foreach($heroes as $hero) {
-        $name = $hero->getName();
-        
-        if (stripos($name, $input) !== false)
-            $possibleMatch = $name;
-    }
+    foreach(HeroQuery::create()->find() as $hero)
+        if (stripos($hero->getName(), $input) !== false)
+            $possibleMatch = $hero->getName();
 
     return $possibleMatch;
 }
@@ -87,7 +82,7 @@ function voted($user, $name, $counter) {
 
     $q = UserVotesQuery::create()->filterByUserId(getUserId($user))->filterByHeroName($name)->filterByCounterName($counter)->find()->count();
 
-    return $q == 0 ? false : true;
+    return $q != 0;
 }
 
 function registerVote($user, $name, $counter) {
@@ -104,7 +99,7 @@ function getUserId($user) {
 }
 
 function isLoggedIn($user) {
-    return $user == null ? false : true;
+    return $user != null;
 }
 
 /**

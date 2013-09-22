@@ -48,10 +48,6 @@ $user->save();
  * -------------------------------
  */
 $hero = new Hero();
-$hero->setAll('Aluna','Magic',454,'47-53',2.52,3.5,600,300,1,'Legion','INT'); $hero->save();
-$hero = new Hero();
-$hero->setAll('Oogie','Magic Tank',586,'50-56',4.1,3,128,300,null,'Legion','INT'); $hero->save();
-$hero = new Hero();
 $hero->setAll('Maliken','Tank Physical',606,'46-52',1.9,4,128,300,null,'Hellbourne','STR'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Lodestone','CC Tank',625,'52-61',4.38,4,128,290,1,'Hellbourne','STR'); $hero->save();
@@ -136,6 +132,8 @@ $hero = new Hero();
 $hero->setAll('Tremble','Physical MUC',473,'49-54',3.92,4,128,310,null,'Hellbourne','AGI'); $hero->save();
 
 $hero = new Hero();
+$hero->setAll('Aluna','Magic',454,'47-53',2.52,3.5,600,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
 $hero->setAll('Blacksmith','CC Magic',587,'56-62',3.96,1,128,295,1,'Legion','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Bombardier','Magic',492,'44-49',2.24,4.5,600,300,1,'Legion','INT'); $hero->save();
@@ -153,10 +151,32 @@ $hero = new Hero();
 $hero->setAll('Monarch','Protective CC',473,'47-55',1.1,3,600,295,1,'Legion','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Nymphora','Protective CC',473,'45-52',2,3,550,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Oogie','Magic Tank',586,'50-56',4.1,3,128,300,null,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Ophelia','MUC Protective',511,'43-53',1.1,5,600,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Pearl','Protective CC',454,'45-53',2.38,2,600,295,null,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Pollywog Priest','CC',511,'42-49',1.3,3.5,550,290,3,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Pyromancer','Magic',492,'43-49',1.14,2.5,600,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Rhapsody','Protective Magic',492,'47-51',2.88,3,550,300,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Tempest','CC MUC',473,'42-48',3.96,4,500,300,2,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Chipper','Magic',511,'43-50',2.3,4,550,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Thunderbringer','Magic','41-49',1.54,1.5,350,295,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Vindicator','CC Physical',530,'45-55',1.5,3.5,600,290,null,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Witch Slayer','CC Magic',454,'42-48',1.1,2.5,600,290,1,'Legion','INT'); $hero->save();
 
 /*
 $hero = new Hero();
-$hero->setAll('','',,'Legion'); $hero->save();
+$hero->setAll('','',,'Legion','INT'); $hero->save();
 */
 
 ?>

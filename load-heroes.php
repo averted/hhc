@@ -168,7 +168,7 @@ $hero->setAll('Tempest','CC MUC',473,'42-48',3.96,4,500,300,2,'Legion','INT'); $
 $hero = new Hero();
 $hero->setAll('Chipper','Magic',511,'43-50',2.3,4,550,295,1,'Legion','INT'); $hero->save();
 $hero = new Hero();
-$hero->setAll('Thunderbringer','Magic','41-49',1.54,1.5,350,295,1,'Legion','INT'); $hero->save();
+$hero->setAll('Thunderbringer','Magic',511,'41-49',1.54,1.5,350,295,1,'Legion','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Vindicator','CC Physical',530,'45-55',1.5,3.5,600,290,null,'Legion','INT'); $hero->save();
 $hero = new Hero();
@@ -205,6 +205,14 @@ $hero = new Hero();
 $hero->setAll('Riftwalker','Magic CC',492,'44-49',2.74,4,600,300,1,'Hellbourne','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Soul Reaper','Protective Magic',492,'44-48',1.75,2,600,290,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Succubus','CC Magic',492,'51-57',3.54,3.5,500,310,2,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Torturer','Magic Physical',492,'45-49',2.24,3,600,305,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Voodoo Jester','Magic Protective',454,'48-58',1.82,3,600,305,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Wretched Hag','Magic',454,'40-48',1.52,3,550,300,null,'Hellbourne','INT'); $hero->save();
 
 /*
 $hero = new Hero();

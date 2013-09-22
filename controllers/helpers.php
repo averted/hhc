@@ -57,6 +57,7 @@ function getAbbr() {
     //missing but widely-used abbreviations
     $abbr[] = array('name' => 'Soulstealer', 'abbr' => 'ss');
     $abbr[] = array('name' => 'Madman', 'abbr' => 'mm');
+    $abbr[] = array('name' => 'Wretched Hag', 'abbr' => 'hag');
 
     return $abbr;
 }

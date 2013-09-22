@@ -214,9 +214,42 @@ $hero->setAll('Voodoo Jester','Magic Protective',454,'48-58',1.82,3,600,305,1,'H
 $hero = new Hero();
 $hero->setAll('Wretched Hag','Magic',454,'40-48',1.52,3,550,300,null,'Hellbourne','INT'); $hero->save();
 
+$hero = new Hero();
+$hero->setAll('Armadon','Physical Tank',568,'52-62',3.38,1,128,295,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Behemoth','Magic CC',568,'45-56',2.68,4,128,300,3,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Berzerker','Physical',606,'55-57',3.16,3,128,300,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Bramble','Tank Protective',606,'55-57',3.6,2,128,300,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Drunken Master','Tank Physical',587,'54-59',2.88,4.5,128,300,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Flux','CC Tank',587,'53-56',2.94,3.5,350,295,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Hammerstorm','CC Physical',587,'54-56',1.94,2.5,128,300,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Jeraziah','Protective Tank',530,'51-61',4.1,3,128,305,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Keeper of the Forest','Tank MUC',625,'57-65',3.1,2.5,128,300,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Legionnaire','CC Tank',625,'49-53',2.8,2.5,128,295,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Midas','Magic CC',530,'45-51',2.18,3.5,450,300,1,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Pandamonium','CC Physical',587,'48-57',5.38,4,128,295,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Pebbles','CC Magic',606,'61-67',0.26,3,128,285,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Predator','Physical Tank',625,'52-62',1.52,1.5,128,300,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Prisoner 945','Physical CC',606,'53-59',3.48,4.5,128,305,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Rally','Physical CC',606,'51-56',3.5,4.5,128,305,2,'Legion','STR'); $hero->save();
+
 /*
 $hero = new Hero();
-$hero->setAll('','',,'Hellbourne','INT'); $hero->save();
+$hero->setAll('','',,'Legion','STR'); $hero->save();
 */
 
 ?>

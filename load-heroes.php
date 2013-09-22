@@ -173,10 +173,42 @@ $hero = new Hero();
 $hero->setAll('Vindicator','CC Physical',530,'45-55',1.5,3.5,600,290,null,'Legion','INT'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Witch Slayer','CC Magic',454,'42-48',1.1,2.5,600,290,1,'Legion','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Artesia','Magic',492,'41-46',0.86,3.5,525,300,null,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Defiler','Magic Physical',511,'41-49',1.74,2,600,285,null,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Demented Shaman','Protective',454,'44-56',1.94,2.5,550,305,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Doctor Repulsor','Magic',511,'47-57',4.1,3.5,500,305,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Geomancer','Magic CC',492,'51-59',2.66,3.5,128,300,2,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Glacius','CC Magic',454,'43-51',1.44,2,600,290,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Gravekeeper','Magic Physical',492,'46-50',1.34,3.5,600,300,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Hellbringer','Magic MUC',473,'46-56',1.4,3.5,600,295,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Myrmidon','Magic CC',511,'42-50',1,3,450,300,2,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Parasite','Magic',549,'50-56',2.58,4,128,300,null,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Plague Rider','Magic',492,'42-51',1.1,1,550,315,null,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Prophet','Magic Protective',492,'46-54',2.8,3,600,300,2,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Puppet Master','CC Physical',492,'47-55',2.8,3,600,305,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Revenant','Magic',492,'51-54',2.94,3,600,300,null,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Riftwalker','Magic CC',492,'44-49',2.74,4,600,300,1,'Hellbourne','INT'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Soul Reaper','Protective Magic',492,'44-48',1.75,2,600,290,1,'Hellbourne','INT'); $hero->save();
 
 /*
 $hero = new Hero();
-$hero->setAll('','',,'Legion','INT'); $hero->save();
+$hero->setAll('','',,'Hellbourne','INT'); $hero->save();
 */
 
 ?>

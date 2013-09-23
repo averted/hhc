@@ -246,6 +246,16 @@ $hero = new Hero();
 $hero->setAll('Prisoner 945','Physical CC',606,'53-59',3.48,4.5,128,305,2,'Legion','STR'); $hero->save();
 $hero = new Hero();
 $hero->setAll('Rally','Physical CC',606,'51-56',3.5,4.5,128,305,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Rampage','CC Physical',587,'45-55',4.4,2.5,128,295,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Salomon','Physical Magic',587,'53-61',3.38,3,128,300,null,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Solstice','Physical Magic',606,'50-54',3,3,128,305,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Gladiator','Physical CC',549,'47-57',2.8,5,128,300,2,'Legion','STR'); $hero->save();
+$hero = new Hero();
+$hero->setAll('Tundra','MUC CC',587,'56-60',4.1,4.5,128,305,1,'Legion','STR'); $hero->save();
 
 /*
 $hero = new Hero();

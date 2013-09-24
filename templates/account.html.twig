@@ -13,7 +13,7 @@
     </span>
     <div class="clear"></div>
     {% if votes|length > 0 %}<h2>Previous activity:</h2>{% else %}
-    <p>Contribution is increased with each active vote you make.</p>
+    <p>Contribution bar is increased with each active vote you make.</p>
     <p>Go ahead - start contributing <a href="/hero">today!</a></p>
     {% endif %}
     <ul>
@@ -25,6 +25,7 @@
     </ul>
 </div>
 <script type="text/javascript">
+
 $(document).ready(function() {
     var diff = $('.bar').width() - $('.bar-complete').width();
     if (diff < 20) $('.hover').css('color', '#000');

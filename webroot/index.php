@@ -392,7 +392,7 @@ $app->post('/search', function (Request $request) use ($app) {
     } else if (valid($name)) {      //seach by hero name
         $url = '/hero/'.slug($name);
     } else {                        //search by closest match
-        $url = guessHeroName($name) ? '/hero/'.guessHeroName($name) : '/hero';
+        $url = guessHeroName($name) ? '/hero/'.slug(guessHeroName($name)) : '/hero';
     }
 
     return $app->redirect($url);

@@ -58,6 +58,7 @@ function getAbbr() {
     $abbr[] = array('name' => 'Soulstealer', 'abbr' => 'ss');
     $abbr[] = array('name' => 'Madman', 'abbr' => 'mm');
     $abbr[] = array('name' => 'Wretched Hag', 'abbr' => 'hag');
+    $abbr[] = array('name' => 'Blacksmith', 'abbr' => 'bs');
 
     return $abbr;
 }

@@ -7,18 +7,31 @@
 {% set ext = '.jpg' %}
 <div class="hero">
     <div class="sort left">
+        <div style="margin-bottom:14px;">
+        <span>Sort:</span>
         <a href="/hero?filter={{ url.hp }}" class="button {% if 'HP' in filters %}selected{% endif %}">HP</a>
         <a href="/hero?filter={{ url.dmg }}" class="button {% if 'DMG' in filters %}selected{% endif %}">DMG</a>
         <a href="/hero?filter={{ url.armor }}" class="button {% if 'ARMOR' in filters %}selected{% endif %}">ARMOR</a>
         <a href="/hero?filter={{ url.diff }}" class="button {% if 'DIFF' in filters %}selected{% endif %}">DIFFICULTY</a>
+        </div>
+        <div style="margin-bottom:14px;">
+        <span>Type:</span>
         <a href="/hero?filter={{ url.range }}" class="button {% if 'RANGE' in filters %}selected{% endif %}">RANGE</a>
+        <a href="/hero?filter={{ url.melee }}" class="button {% if 'MELEE' in filters %}selected{% endif %}">MELEE</a>
+        </div>
+        <div style="margin-bottom:14px;">
+        <span>Side:</span>
         <a href="/hero?filter={{ url.le }}" class="button {% if 'LE' in filters %}selected{% endif %}">LEGION</a>
         <a href="/hero?filter={{ url.hb }}" class="button {% if 'HB' in filters %}selected{% endif %}">HELLBOURNE</a>
+        </div>
+        <div style="margin-bottom:14px;">
+        <span>Stat:</span>
         <a href="/hero?filter={{ url.agi }}" class="button {% if 'AGI' in filters %}selected{% endif %}">AGI</a>
         <a href="/hero?filter={{ url.int }}" class="button {% if 'INT' in filters %}selected{% endif %}">INT</a>
         <a href="/hero?filter={{ url.str }}" class="button {% if 'STR' in filters %}selected{% endif %}">STR</a>
+        </div>
     </div>
-    <div class="right search">
+    <div class="search right">
         <form action="/search" method="post">
             <input type="text" id="search" name="_search" placeholder="Search Hero" value="" />
         </form>

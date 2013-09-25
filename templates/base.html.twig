@@ -13,17 +13,20 @@
         <link href="/a/css/normalize.css" rel="stylesheet" media="screen">
 
         <!-- Styles -->
-        <link href="/a/css/style.css" rel="stylesheet" media="screen">
-        <link href="/a/css/responsive.css" rel="stylesheet" media="screen">
+        <!--<link href="/a/css/style.css" rel="stylesheet" media="screen" />-->
+        <link href="/a/css/style.less" rel="stylesheet/less" type="text/css" />
+        <link href="/a/css/responsive.css" rel="stylesheet" media="screen" />
         <!--[if IE]>
             <link href="/a/css/ie.css" rel="stylesheet" media="screen">
         <![endif]-->
         
         <!-- jQuery -->
-        <script src="/a/js/jquery.min.js"></script>
+        <script src="/a/js/jquery.min.js" type="text/javascript"></script>
+
+        <!-- LESS -->
+        <script src="/a/js/less.js" type="text/javascript"></script>
 
         <!-- Scripts -->
-        <!--<script src="/a/js/core.js"></script>-->
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if IE]>
@@ -36,7 +39,7 @@
     {% block footer %}
         <footer>
             <nav>
-                <ul class="center">
+                <ul>
                     <li><a href="/load">LOAD</a></li>
                     <li><a href="/">HOME</a></li>
                     <li><a href="/hero">HERO LIST</a></li>

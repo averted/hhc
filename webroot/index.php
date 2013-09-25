@@ -81,6 +81,7 @@ $app->get('/hero', function(Request $request) use ($app) {
         $url = array(
             'armor' => getURL('ARMOR', $value, $filters),
             'range' => getURL('RANGE', $value, $filters),
+            'melee' => getURL('MELEE', $value, $filters),
             'diff'  => getURL('DIFF', $value, $filters),
             'dmg'   => getURL('DMG', $value, $filters),
             'agi'   => getURL('AGI', $value, $filters),
@@ -96,6 +97,7 @@ $app->get('/hero', function(Request $request) use ($app) {
         foreach($filters as $filter) {
             if ($filter == 'ARMOR') $heroes = $heroes->orderByArmor('desc');
             if ($filter == 'RANGE') $heroes = $heroes->filterByRange(array('min' => 200));
+            if ($filter == 'MELEE') $heroes = $heroes->filterByRange(array('max' => 150));
             if ($filter == 'DIFF')  $heroes = $heroes->orderByDifficulty('desc');
             if ($filter == 'DMG')   $heroes = $heroes->orderByDmg('desc');
             if ($filter == 'AGI')   $heroes = $heroes->filterByStat('AGI');
@@ -110,8 +112,9 @@ $app->get('/hero', function(Request $request) use ($app) {
     } else {
         $heroes = HeroQuery::create()->orderByName()->find();
         $url = array(
-            'range' => 'RANGE',
             'armor' => 'ARMOR',
+            'range' => 'RANGE',
+            'melee' => 'MELEE',
             'diff'  => 'DIFF',
             'dmg'   => 'DMG',
             'agi'   => 'AGI',

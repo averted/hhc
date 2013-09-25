@@ -254,7 +254,7 @@ $app->get('/counter/{name}/add/{counter}', function($name, $counter) use ($app) 
         return $app->redirect('/hero');
 
     if (VotesQuery::create()->filterByHeroName($name)->filterByCounterName($counter)->find()->count() != 0) // counter already exists
-        return $app->redirect('/hero/'.$name.'/counter/'.$counter.'/voteup');
+        return $app->redirect('/hero/'.slug($name).'/counter/'.slug($counter).'/voteup');
         
 
     $hero = HeroQuery::create()->filterByName($name)->findOne();

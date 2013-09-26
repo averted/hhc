@@ -8,8 +8,7 @@
 @hover: #000;
 
 /* mixins */
-.border-main(@size:1px) { border:@size solid @main; }
-.border-light(@size:1px) { border:@size solid @light; }
+.border(@size:1px; @color:@main) { border:@size solid @color; }
 .border-radius(@radius:2px) {
     border-radius: @radius;
     -moz-border-radius: @radius;
@@ -46,10 +45,10 @@ a:hover { .bg(@main); color:#000; }
 /* ---- end GENERAL ---- */
 
 /* ------ BODY ------ */
-.hero, .account, .login { width:80%; .border-light; .bg(darken(@bg,16%)); padding:20px; margin:100px auto; }
+.hero, .account, .login { width:80%; .border(1px; @light); .bg(darken(@bg,16%)); padding:20px; margin:100px auto; }
 
-.button { .bg(darken(@bg,20%)); color:@main; .border-light; display:block; cursor:pointer; text-decoration:none;
-    &:hover { background:@main; color:@hover; .border-main; }
+.button { .bg(darken(@bg,20%)); color:@main; .border(1px; @light); display:block; cursor:pointer; text-decoration:none;
+    &:hover { .bg(@main); color:@hover; .border; }
 }
 
 /* --- hero --- */
@@ -58,18 +57,19 @@ a:hover { .bg(@main); color:#000; }
     .name { color:@main; }
     .role { color:#666; }
     .bar, .bar-max { height:16px; display:inline-block; .border-radius; }
-    .bar { background:#000; margin:0; padding:0 0 0 5px; color:@main; }
-    .bar-max { background:#555; margin:4px 0 0 0; font-size:12px; padding:1px; }
+    .bar { .bg(#000); margin:0; padding:0 0 0 5px; color:@main; }
+    .bar-max { .bg(@light); margin:4px 0 0 0; font-size:12px; padding:1px; }
     .button { padding:4px 6px; margin:0 0 0 4px; }
 
     h2 { margin:15px 0 8px 0; }
-    img.hero-icon-70px { width:60px; height:60px; .border-main; }
-    img.hero-icon-100px { width:100px; height:100px; .border-main(2px); float:left; margin-right:10px; }
+    img.hero-icon-70px { width:60px; height:60px; .border; }
+    img.hero-icon-100px { width:100px; height:100px; .border(2px); float:left; margin-right:10px; }
 
     .sort { margin:5px 0 0 5px; padding:0; color:@main;
-        .selected { background:@main; color:#000; .border-main; }
+        .selected { .bg(@main); color:@hover; .border; }
         .button { display:inline; }
         span { width:40px; display:inline-block; }
+        div { margin-bottom:14px; }
     }
     .search { margin:0 10px 10px 0; }
 
@@ -78,19 +78,18 @@ a:hover { .bg(@main); color:#000; }
 .hero-list { list-style:none; .clear-metrics;
     a { color:@main; &:hover { color:@main; } }
     li { display:inline-block; margin:4px;
-        .overlay { position:absolute; top:0; bottom:0; left:0; right:0; font-size:8px; background:rgba(0,0,0,0.2); transition:all 0s ease-out; }
+        .overlay { position:absolute; top:0; bottom:0; left:0; right:0; font-size:8px; background:rgba(0,0,0,0.3); &:hover { .bg(@transparent); } }
         .overlay-dark { position:absolute; top:0; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); }
         .overlay span { font-size:14px; width:75px; height:75px; }
-        .overlay:hover { background:@transparent; }
     }
 }
 
-.hero-counters { width:30%; .border-light; background:#0b0b0b; padding:20px; margin:0;
+.hero-counters { width:30%; .border(1px; @light); .bg(darken(@bg,19%)); padding:20px; margin:0;
     .name { font-size:15px; margin-left:5px; }
     .vote { position:absolute; bottom:0; }
     ul { list-style:none; .clear-metrics;
         li { margin:0 0 15px 0; position:relative;
-            .add { margin:10px 0 0 0; text-decoration:none; }
+            .add { margin:15px 0 0 0; text-decoration:none; }
         }
     }
 }
@@ -99,13 +98,13 @@ a:hover { .bg(@main); color:#000; }
 .account {
     h1 { font-size:40px; padding:0; margin:0 0 15px 0; }
     p { color:#999; }
-    a { text-decoration:none; &:hover { background:@main; color:#000; } }
-    .bar { position:relative; width:50%; height:30px; background:#010101; .border-radius; .border-main; margin:10px 0 0 50px;}
+    a { text-decoration:none; &:hover { .bg(@main); color:#000; } }
+    .bar { position:relative; width:50%; height:30px; .bg(@hover); .border-radius; .border; margin:10px 0 0 50px;}
     .hover { position:absolute; right:0px; font-size:17px; color:@main; margin:4px 10px 0 0; text-shadow:0 0 4px #000; }
-    .bar-complete { height:30px; background:@main; display:inline-block; }
+    .bar-complete { height:30px; .bg(@main); display:inline-block; }
     ul { list-style:none; margin:10px 0 0 5px; padding:0; 
-        li { color:#777; margin:5px; padding:6px 6px 3px 6px; .border-light(2px); display:inline-block;
-            img { width:40px; height:40px; .border-main; .clear-metrics; }
+        li { color:#777; margin:5px; padding:6px 6px 3px 6px; .border(2px; @light); display:inline-block;
+            img { width:40px; height:40px; .border; .clear-metrics; }
         }
     }
 }
@@ -113,14 +112,14 @@ a:hover { .bg(@main); color:#000; }
 /* --- form --- */
 form {
     label { float:left; width:100px; }
-    input { width:200px; margin:0; padding:3px; .border-light; background:#101010; color:#888; &:focus { outline-color:@main; } }
+    input { width:200px; margin:0; padding:3px; .border(1px; @light); .bg(darken(@bg, 20%)); color:#888; &:focus { outline-color:@main; } }
     .button { width:auto; display:inline-block; padding:5px 15px; margin:0 5px 0 0; }
     .controls { margin:0 0 5px 0; }
 }
 /* ---- end BODY ---- */
 
 /* ------ FOOTER ------ */
-nav { height:50px; width:100%; position:fixed; top:0; font-size:12px; border-bottom:1px solid @light; background:#0e0e0e; text-align:center;
+nav { height:50px; width:100%; position:fixed; top:0; font-size:12px; border-bottom:1px solid @light; background:#0e0e0e; .bg(darken(@bg,21%)); text-align:center;
     ul::selection, li::selection, li a::selection { color:@main; background:@transparent; }
     ul { list-style:none; .clear-metrics;
         li { display:inline; line-height:50px;

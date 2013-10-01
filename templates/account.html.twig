@@ -16,7 +16,8 @@
     <p>Contribution bar is increased with each active vote you make.</p>
     <p>Go ahead - start contributing <a href="/hero">today!</a></p>
     {% endif %}
-    <ul>
+    <span class="expand">Expand -</span>
+    <ul class="history">
     {% for vote in votes %}
         {% set hero = vote.getHeroName|replace({' ':''}) %}
         {% set counter = vote.getCounterName|replace({' ':''}) %}
@@ -25,10 +26,21 @@
     </ul>
 </div>
 <script type="text/javascript">
-
 $(document).ready(function() {
     var diff = $('.bar').width() - $('.bar-complete').width();
     if (diff < 20) $('.hover').css('color', '#000');
+
+    var h = $('.history');
+    $('.expand').on('click', function() {
+        var d = h.css('display');
+        if (d == 'block') { 
+            $(h).slideUp('500'); 
+            $(this).html('Expand +');
+        } else { 
+            $(h).slideDown('500'); 
+            $(this).html('Expand -');
+        }
+    });
 });
     
 /*

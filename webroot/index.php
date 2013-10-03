@@ -74,62 +74,11 @@ $app->get('/load', function() use($app) {
  */
 $app->get('/hero', function(Request $request) use ($app) {
     $user = $app['session']->get('user');
-    $value = $request->get('filter');
-    $filters = explode(' ', $value);
 
-    if (isset($value) && $value != null) {
-        $url = array(
-            'armor' => getURL('ARMOR', $value, $filters),
-            'range' => getURL('RANGE', $value, $filters),
-            'melee' => getURL('MELEE', $value, $filters),
-            'diff'  => getURL('DIFF', $value, $filters),
-            'dmg'   => getURL('DMG', $value, $filters),
-            'agi'   => getURL('AGI', $value, $filters),
-            'int'   => getURL('INT', $value, $filters),
-            'str'   => getURL('STR', $value, $filters),
-            'hp'    => getURL('HP', $value, $filters),
-            'hb'    => getURL('HB', $value, $filters),
-            'le'    => getURL('LE', $value, $filters),
-        );
-        
-        $heroes = HeroQuery::create();
+    $heroes = HeroQuery::create()->orderByName('asc')->find();;
 
-        foreach($filters as $filter) {
-            if ($filter == 'ARMOR') $heroes = $heroes->orderByArmor('desc');
-            if ($filter == 'RANGE') $heroes = $heroes->filterByRange(array('min' => 200));
-            if ($filter == 'MELEE') $heroes = $heroes->filterByRange(array('max' => 150));
-            if ($filter == 'DIFF')  $heroes = $heroes->orderByDifficulty('desc');
-            if ($filter == 'DMG')   $heroes = $heroes->orderByDmg('desc');
-            if ($filter == 'AGI')   $heroes = $heroes->filterByStat('AGI');
-            if ($filter == 'INT')   $heroes = $heroes->filterByStat('INT');
-            if ($filter == 'STR')   $heroes = $heroes->filterByStat('STR');
-            if ($filter == 'HP')    $heroes = $heroes->orderByHP('desc');
-            if ($filter == 'HB')    $heroes = $heroes->filterBySide('Hellbourne');
-            if ($filter == 'LE')    $heroes = $heroes->filterBySide('Legion');
-        }
-
-        $heroes = $heroes->orderByName()->find();
-    } else {
-        $heroes = HeroQuery::create()->orderByName()->find();
-        $url = array(
-            'armor' => 'ARMOR',
-            'range' => 'RANGE',
-            'melee' => 'MELEE',
-            'diff'  => 'DIFF',
-            'dmg'   => 'DMG',
-            'agi'   => 'AGI',
-            'int'   => 'INT',
-            'str'   => 'STR',
-            'hp'    => 'HP',
-            'hb'    => 'HB',
-            'le'    => 'LE',
-        );
-    }
-    
     return $app['twig']->render('hero-list.html.twig', array(
         'user' => $user,
-        'filters' => $filters,
-        'url' => $url,
         'heroes' => $heroes
     ));
 });

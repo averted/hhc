@@ -5,6 +5,84 @@
 {% block content %} 
 {% set img = '/a/img/heroes/' %}
 {% set ext = '.jpg' %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var _ra = $('.fRange');
+        var _me = $('.fMelee');
+        var _le = $('.fLegion');
+        var _hb = $('.fHellbourne');
+        var _ag = $('.fAgi');
+        var _in = $('.fInt');
+        var _st = $('.fStr');
+
+        // redone sorting with js
+        _ra.on('click', function() { _ra.addClass('selected'); _me.removeClass('selected'); });
+        _me.on('click', function() { _me.addClass('selected'); _ra.removeClass('selected'); });
+        _le.on('click', function() { _le.addClass('selected'); _hb.removeClass('selected'); });
+        _hb.on('click', function() { _hb.addClass('selected'); _le.removeClass('selected'); });
+        _ag.on('click', function() { _ag.addClass('selected'); _in.removeClass('selected'); _st.removeClass('selected'); });
+        _in.on('click', function() { _in.addClass('selected'); _ag.removeClass('selected'); _st.removeClass('selected'); });
+        _st.on('click', function() { _st.addClass('selected'); _ag.removeClass('selected'); _in.removeClass('selected'); });
+
+        $('.filter').on('click', function() {
+            var af = getFilters();
+
+            $('ul.hero-list li').each(function() { $(this).hide(); });
+
+            for (var i = 0; i < af.length; i++) {
+                $('ul.hero-list li').each(function() {
+                    if (i == 0) {
+                        if ($(this).hasClass(af[i])) {
+                            $(this).show();
+                            $(this).addClass('active');
+                        }
+                    } else {
+                        if ($(this).hasClass('active')) {
+                            if (!$(this).hasClass(af[i])) {
+                                $(this).hide();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // init ui-tooltip
+        $('.hero-list').tooltip({
+            position: {
+                my: "center top-31",
+                at: "center top"
+            },
+            show: {
+                effect: "fade",
+                delay: 100,
+            }
+        });
+    });
+
+    function getFilters() {
+        var range = $('.fRange').hasClass('selected');
+        var melee = $('.fMelee').hasClass('selected');
+        var hb    = $('.fHellbourne').hasClass('selected');
+        var le    = $('.fLegion').hasClass('selected');
+        var agi   = $('.fAgi').hasClass('selected');
+        var _int  = $('.fInt').hasClass('selected');
+        var str   = $('.fStr').hasClass('selected');
+        var active = new Array(); 
+
+        if (range) { active.push('range'); } 
+        else if (melee) { active.push('melee'); }
+
+        if (hb) { active.push('hb'); }
+        else if (le) { active.push('le'); }
+        
+        if (agi) { active.push('agi'); }
+        else if (_int) { active.push('int'); }
+        else if (str) { active.push('str'); }
+
+        return active;
+    }
+</script>
 <div class="hero">
     <div class="sort left">
         <div>
@@ -16,19 +94,19 @@
         </div>
         <div>
             <span>Type:</span>
-            <a href="/hero?filter={{ url.range }}" class="button {% if 'RANGE' in filters %}selected{% endif %}">RANGE</a>
-            <a href="/hero?filter={{ url.melee }}" class="button {% if 'MELEE' in filters %}selected{% endif %}">MELEE</a>
+            <span class="button filter fRange">RANGE</span>
+            <span class="button filter fMelee">MELEE</span>
         </div>
         <div>
             <span>Side:</span>
-            <a href="/hero?filter={{ url.le }}" class="button {% if 'LE' in filters %}selected{% endif %}">LEGION</a>
-            <a href="/hero?filter={{ url.hb }}" class="button {% if 'HB' in filters %}selected{% endif %}">HELLBOURNE</a>
+            <span class="button filter fLegion">LEGION</span>
+            <span class="button filter fHellbourne">HELLBOURNE</span>
         </div>
         <div>
             <span>Stat:</span>
-            <a href="/hero?filter={{ url.agi }}" class="button {% if 'AGI' in filters %}selected{% endif %}">AGI</a>
-            <a href="/hero?filter={{ url.int }}" class="button {% if 'INT' in filters %}selected{% endif %}">INT</a>
-            <a href="/hero?filter={{ url.str }}" class="button {% if 'STR' in filters %}selected{% endif %}">STR</a>
+            <span class="button filter fAgi">AGI</span>
+            <span class="button filter fInt">INT</span>
+            <span class="button filter fStr">STR</span>
         </div>
     </div>
     <div class="search right">
@@ -40,7 +118,10 @@
 
     <ul class='hero-list'>
     {% for hero in heroes %}
-        <li style='position:relative;'>
+        <li style='position:relative;' title="{{ hero.getName }}" class="tooltip 
+        {% if hero.getRange > 150 %}range{% else %}melee{% endif %}
+        {% if hero.getSide == 'Legion' %}le{% else %}hb{% endif %}
+        {% if hero.getStat == 'AGI' %}agi{% elseif hero.getStat == 'INT' %}int{% else %}str{% endif %}">
             <a href="/hero/{{ hero.getName|replace({' ':'+'}) }}">
                 <img class='hero-icon-70px' src="{{ img ~ hero.getName|replace({' ':''})|lower ~ ext }}" />
                 <div class="overlay"></div>

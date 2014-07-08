@@ -18,17 +18,18 @@ use hhc\DB\om\BaseHero;
  */
 class Hero extends BaseHero
 {
-    function setAll($name, $role, $hp, $dmg, $armor, $diff, $range, $speed, $stuns = null, $side, $stat) {
-        parent::setName($name);
-        parent::setRole($role);
-        parent::setHP($hp);
-        parent::setDmg($dmg);
-        parent::setArmor($armor);
-        parent::setDifficulty($diff);
-        parent::setRange($range);
-        parent::setSpeed($speed);
-        parent::setStuns($stuns);
-        parent::setSide($side);
-        parent::setStat($stat);
+    function setAll($name, $role, $hp, $dmg, $armor, $diff, $range, $speed, $stuns = null, $side, $stat = null) {
+        $this->setName($name);
+        $this->setRole($role);
+        $this->setHP($hp);
+        $this->setDmg($dmg);
+        $this->setArmor($armor);
+        $this->setDifficulty($diff);
+        $this->setRange($range);
+        $this->setSpeed($speed);
+        $this->setStuns($stuns);
+        $this->setSide($side);
+        $this->setStat($stat);
+        $this->save();
     }
 }

@@ -9,48 +9,36 @@
     $(document).ready(function() {
         // init ui-tooltip
         $('.hero-list').tooltip({
-            position: {
-                my: "center top-31",
-                at: "center top"
-            },
-            show: {
-                effect: "fade",
-                delay: 100,
-            }
+            position: { my: "center top-31", at: "center top" },
+            show: { effect: "fade", delay: 100, }
         });
 
         $('.search').tooltip({
-            position: {
-                my: "center top-51",
-                at: "center top"
-            },
-            show: {
-                effect: "fade",
-                delay: 100,
-            }
+            position: { my: "center top-51", at: "center top" },
+            show: { effect: "fade", delay: 100, }
         });
     });
 </script>
 <div class="hero">
     <div class="sort left">
-        <div>
+        <div class="unselectable">
             <span>Sort:</span>
             <span class="button sHP">HP</span>
             <span class="button sDMG">DMG</span>
             <span class="button sARMOR">ARMOR</span>
             <span class="button sDIFF">DIFFICULTY</span>
         </div>
-        <div>
+        <div class="unselectable">
             <span>Type:</span>
             <span class="button filter fRange">RANGE</span>
             <span class="button filter fMelee">MELEE</span>
         </div>
-        <div>
+        <div class="unselectable">
             <span>Side:</span>
             <span class="button filter fLegion">LEGION</span>
             <span class="button filter fHellbourne">HELLBOURNE</span>
         </div>
-        <div>
+        <div class="unselectable">
             <span>Stat:</span>
             <span class="button filter fAgi">AGI</span>
             <span class="button filter fInt">INT</span>

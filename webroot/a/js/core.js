@@ -11,35 +11,40 @@ var _ag = $('.fAgi');
 var _in = $('.fInt');
 var _st = $('.fStr');
 
-_ra.on('click', function() { _ra.addClass('selected'); _me.removeClass('selected'); });
-_me.on('click', function() { _me.addClass('selected'); _ra.removeClass('selected'); });
-_le.on('click', function() { _le.addClass('selected'); _hb.removeClass('selected'); });
-_hb.on('click', function() { _hb.addClass('selected'); _le.removeClass('selected'); });
-_ag.on('click', function() { _ag.addClass('selected'); _in.removeClass('selected'); _st.removeClass('selected'); });
-_in.on('click', function() { _in.addClass('selected'); _ag.removeClass('selected'); _st.removeClass('selected'); });
-_st.on('click', function() { _st.addClass('selected'); _ag.removeClass('selected'); _in.removeClass('selected'); });
+_ra.on('click', function() { _ra.toggleClass('selected'); _me.removeClass('selected'); });
+_me.on('click', function() { _me.toggleClass('selected'); _ra.removeClass('selected'); });
+_le.on('click', function() { _le.toggleClass('selected'); _hb.removeClass('selected'); });
+_hb.on('click', function() { _hb.toggleClass('selected'); _le.removeClass('selected'); });
+_ag.on('click', function() { _ag.toggleClass('selected'); _in.removeClass('selected'); _st.removeClass('selected'); });
+_in.on('click', function() { _in.toggleClass('selected'); _ag.removeClass('selected'); _st.removeClass('selected'); });
+_st.on('click', function() { _st.toggleClass('selected'); _ag.removeClass('selected'); _in.removeClass('selected'); });
 
 $('.filter').on('click', function() {
     var af = getFilters();
 
-    $('ul.hero-list li').each(function() { $(this).hide(); });
+    if (af.length) {
+        $('ul.hero-list li').each(function() { $(this).hide(); });
+    } else {
+        $('ul.hero-list li').each(function() { 
+            $(this).removeClass('active').show();
+        });
+    }
 
-    for (var i = 0; i < af.length; i++) {
+    $.each(af, function(index, filter) {
         $('ul.hero-list li').each(function() {
-            if (i == 0) {
-                if ($(this).hasClass(af[i])) {
-                    $(this).show();
-                    $(this).addClass('active');
+            if (index == 0) {
+                if ($(this).hasClass(filter)) {
+                    $(this).addClass('active').show();
                 }
             } else {
                 if ($(this).hasClass('active')) {
-                    if (!$(this).hasClass(af[i])) {
+                    if (!$(this).hasClass(filter)) {
                         $(this).hide();
                     }
                 }
             }
         });
-    }
+    });
 });
 
 // sorts

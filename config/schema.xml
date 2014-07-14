@@ -13,6 +13,7 @@
     <column name="stuns" type="integer" required="false" />
     <column name="side" type="varchar" size="20" required="true" />
     <column name="stat" type="varchar" size="10" required="true" />
+    <column name="slug" type="varchar" size="255" required="false" />
   </table>
   <table name="votes" phpName="Votes">
     <column name="hero_name" type="varchar" size="50" required="true" primaryKey="true" phpName="HeroName" />
@@ -33,7 +34,7 @@
     <column name="username" type="varchar" size="255" required="true" />
     <column name="email" type="varchar" size="255" required="true" />
     <column name="password" type="varchar" size="255" />
-    <column name="roles" type="varchar" size="255" default="USER_ROLE" />
+    <column name="roles" valueSet="USER_ROLE,ADMIN_ROLE" default="USER_ROLE" />
     <unique name="unique_username">
         <unique-column name="username" />
     </unique>

@@ -36,13 +36,13 @@ abstract class BaseHeroPeer
     const TM_CLASS = 'hhc\\DB\\map\\HeroTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /** the column name for the id field */
     const ID = 'hero.id';
@@ -80,6 +80,9 @@ abstract class BaseHeroPeer
     /** the column name for the stat field */
     const STAT = 'hero.stat';
 
+    /** the column name for the slug field */
+    const SLUG = 'hero.slug';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -99,12 +102,12 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[HeroPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Role', 'HP', 'Dmg', 'Armor', 'Difficulty', 'Range', 'Speed', 'Stuns', 'Side', 'Stat', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'role', 'hP', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::NAME, HeroPeer::ROLE, HeroPeer::HP, HeroPeer::DMG, HeroPeer::ARMOR, HeroPeer::DIFFICULTY, HeroPeer::RANGE, HeroPeer::SPEED, HeroPeer::STUNS, HeroPeer::SIDE, HeroPeer::STAT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ROLE', 'HP', 'DMG', 'ARMOR', 'DIFFICULTY', 'RANGE', 'SPEED', 'STUNS', 'SIDE', 'STAT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'role', 'hp', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Role', 'HP', 'Dmg', 'Armor', 'Difficulty', 'Range', 'Speed', 'Stuns', 'Side', 'Stat', 'Slug', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'role', 'hP', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', 'slug', ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::NAME, HeroPeer::ROLE, HeroPeer::HP, HeroPeer::DMG, HeroPeer::ARMOR, HeroPeer::DIFFICULTY, HeroPeer::RANGE, HeroPeer::SPEED, HeroPeer::STUNS, HeroPeer::SIDE, HeroPeer::STAT, HeroPeer::SLUG, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ROLE', 'HP', 'DMG', 'ARMOR', 'DIFFICULTY', 'RANGE', 'SPEED', 'STUNS', 'SIDE', 'STAT', 'SLUG', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'role', 'hp', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', 'slug', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -114,12 +117,12 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Role' => 2, 'HP' => 3, 'Dmg' => 4, 'Armor' => 5, 'Difficulty' => 6, 'Range' => 7, 'Speed' => 8, 'Stuns' => 9, 'Side' => 10, 'Stat' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hP' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::NAME => 1, HeroPeer::ROLE => 2, HeroPeer::HP => 3, HeroPeer::DMG => 4, HeroPeer::ARMOR => 5, HeroPeer::DIFFICULTY => 6, HeroPeer::RANGE => 7, HeroPeer::SPEED => 8, HeroPeer::STUNS => 9, HeroPeer::SIDE => 10, HeroPeer::STAT => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ROLE' => 2, 'HP' => 3, 'DMG' => 4, 'ARMOR' => 5, 'DIFFICULTY' => 6, 'RANGE' => 7, 'SPEED' => 8, 'STUNS' => 9, 'SIDE' => 10, 'STAT' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hp' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Role' => 2, 'HP' => 3, 'Dmg' => 4, 'Armor' => 5, 'Difficulty' => 6, 'Range' => 7, 'Speed' => 8, 'Stuns' => 9, 'Side' => 10, 'Stat' => 11, 'Slug' => 12, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hP' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, 'slug' => 12, ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::NAME => 1, HeroPeer::ROLE => 2, HeroPeer::HP => 3, HeroPeer::DMG => 4, HeroPeer::ARMOR => 5, HeroPeer::DIFFICULTY => 6, HeroPeer::RANGE => 7, HeroPeer::SPEED => 8, HeroPeer::STUNS => 9, HeroPeer::SIDE => 10, HeroPeer::STAT => 11, HeroPeer::SLUG => 12, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ROLE' => 2, 'HP' => 3, 'DMG' => 4, 'ARMOR' => 5, 'DIFFICULTY' => 6, 'RANGE' => 7, 'SPEED' => 8, 'STUNS' => 9, 'SIDE' => 10, 'STAT' => 11, 'SLUG' => 12, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hp' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, 'slug' => 12, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -205,6 +208,7 @@ abstract class BaseHeroPeer
             $criteria->addSelectColumn(HeroPeer::STUNS);
             $criteria->addSelectColumn(HeroPeer::SIDE);
             $criteria->addSelectColumn(HeroPeer::STAT);
+            $criteria->addSelectColumn(HeroPeer::SLUG);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
@@ -218,6 +222,7 @@ abstract class BaseHeroPeer
             $criteria->addSelectColumn($alias . '.stuns');
             $criteria->addSelectColumn($alias . '.side');
             $criteria->addSelectColumn($alias . '.stat');
+            $criteria->addSelectColumn($alias . '.slug');
         }
     }
 

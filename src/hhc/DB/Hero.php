@@ -19,6 +19,7 @@ use hhc\DB\om\BaseHero;
 class Hero extends BaseHero
 {
     function setAll($name, $role, $hp, $dmg, $armor, $diff, $range, $speed, $stuns = null, $side, $stat = null) {
+        $slug = str_replace(' ', '', strtolower($name));
         $this->setName($name);
         $this->setRole($role);
         $this->setHP($hp);
@@ -30,6 +31,7 @@ class Hero extends BaseHero
         $this->setStuns($stuns);
         $this->setSide($side);
         $this->setStat($stat);
+        $this->setSlug($slug);
         $this->save();
     }
 }

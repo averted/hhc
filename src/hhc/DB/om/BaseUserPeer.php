@@ -59,6 +59,10 @@ abstract class BaseUserPeer
     /** the column name for the roles field */
     const ROLES = 'user.roles';
 
+    /** The enumerated values for the roles field */
+    const ROLES_USER_ROLE = 'USER_ROLE';
+    const ROLES_ADMIN_ROLE = 'ADMIN_ROLE';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -101,6 +105,14 @@ abstract class BaseUserPeer
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        UserPeer::ROLES => array(
+            UserPeer::ROLES_USER_ROLE,
+            UserPeer::ROLES_ADMIN_ROLE,
+        ),
+    );
+
     /**
      * Translates a fieldname to another type
      *
@@ -138,6 +150,51 @@ abstract class BaseUserPeer
         }
 
         return UserPeer::$fieldNames[$type];
+    }
+
+    /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return UserPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = UserPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = UserPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace hhc\DB;
 
-use hhc\DB\om\BaseUserVotesPeer;
+use hhc\DB\om\BaseVoteQuery;
 
 
 /**
- * Skeleton subclass for performing query and update operations on the 'user_votes' table.
+ * Skeleton subclass for performing query and update operations on the 'vote' table.
  *
  *
  *
@@ -16,6 +16,6 @@ use hhc\DB\om\BaseUserVotesPeer;
  *
  * @package    propel.generator.hhc
  */
-class UserVotesPeer extends BaseUserVotesPeer
+class VoteQuery extends BaseVoteQuery
 {
 }

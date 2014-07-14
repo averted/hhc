@@ -5,14 +5,17 @@ namespace hhc\DB\om;
 use \Criteria;
 use \Exception;
 use \ModelCriteria;
+use \ModelJoin;
 use \PDO;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use hhc\DB\Hero;
 use hhc\DB\HeroPeer;
 use hhc\DB\HeroQuery;
+use hhc\DB\Vote;
 
 /**
  * Base class that represents a query for the 'hero' table.
@@ -50,6 +53,14 @@ use hhc\DB\HeroQuery;
  * @method HeroQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method HeroQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method HeroQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method HeroQuery leftJoinHeroVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the HeroVote relation
+ * @method HeroQuery rightJoinHeroVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the HeroVote relation
+ * @method HeroQuery innerJoinHeroVote($relationAlias = null) Adds a INNER JOIN clause to the query using the HeroVote relation
+ *
+ * @method HeroQuery leftJoinCounterVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the CounterVote relation
+ * @method HeroQuery rightJoinCounterVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CounterVote relation
+ * @method HeroQuery innerJoinCounterVote($relationAlias = null) Adds a INNER JOIN clause to the query using the CounterVote relation
  *
  * @method Hero findOne(PropelPDO $con = null) Return the first Hero matching the query
  * @method Hero findOneOrCreate(PropelPDO $con = null) Return the first Hero matching the query, or a new Hero object populated from the query conditions when no match is found
@@ -742,6 +753,154 @@ abstract class BaseHeroQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(HeroPeer::SLUG, $slug, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Vote object
+     *
+     * @param   Vote|PropelObjectCollection $vote  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 HeroQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByHeroVote($vote, $comparison = null)
+    {
+        if ($vote instanceof Vote) {
+            return $this
+                ->addUsingAlias(HeroPeer::ID, $vote->getHid(), $comparison);
+        } elseif ($vote instanceof PropelObjectCollection) {
+            return $this
+                ->useHeroVoteQuery()
+                ->filterByPrimaryKeys($vote->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByHeroVote() only accepts arguments of type Vote or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the HeroVote relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return HeroQuery The current query, for fluid interface
+     */
+    public function joinHeroVote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('HeroVote');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'HeroVote');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the HeroVote relation Vote object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \hhc\DB\VoteQuery A secondary query class using the current class as primary query
+     */
+    public function useHeroVoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinHeroVote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'HeroVote', '\hhc\DB\VoteQuery');
+    }
+
+    /**
+     * Filter the query by a related Vote object
+     *
+     * @param   Vote|PropelObjectCollection $vote  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 HeroQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCounterVote($vote, $comparison = null)
+    {
+        if ($vote instanceof Vote) {
+            return $this
+                ->addUsingAlias(HeroPeer::ID, $vote->getCid(), $comparison);
+        } elseif ($vote instanceof PropelObjectCollection) {
+            return $this
+                ->useCounterVoteQuery()
+                ->filterByPrimaryKeys($vote->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCounterVote() only accepts arguments of type Vote or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CounterVote relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return HeroQuery The current query, for fluid interface
+     */
+    public function joinCounterVote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CounterVote');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CounterVote');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CounterVote relation Vote object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \hhc\DB\VoteQuery A secondary query class using the current class as primary query
+     */
+    public function useCounterVoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCounterVote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CounterVote', '\hhc\DB\VoteQuery');
     }
 
     /**

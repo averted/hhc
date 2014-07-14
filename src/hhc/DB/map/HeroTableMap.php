@@ -63,6 +63,8 @@ class HeroTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('HeroVote', 'hhc\\DB\\Vote', RelationMap::ONE_TO_MANY, array('id' => 'hid', ), null, null, 'HeroVotes');
+        $this->addRelation('CounterVote', 'hhc\\DB\\Vote', RelationMap::ONE_TO_MANY, array('id' => 'cid', ), null, null, 'CounterVotes');
     } // buildRelations()
 
 } // HeroTableMap

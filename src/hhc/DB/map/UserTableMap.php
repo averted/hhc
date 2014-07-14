@@ -46,7 +46,7 @@ class UserTableMap extends TableMap
         $this->addColumn('username', 'Username', 'VARCHAR', true, 255, null);
         $this->addColumn('email', 'Email', 'VARCHAR', true, 255, null);
         $this->addColumn('password', 'Password', 'VARCHAR', false, 255, null);
-        $this->addColumn('roles', 'Roles', 'VARCHAR', false, 255, 'USER_ROLE');
+        $this->addColumn('roles', 'Roles', 'ENUM', false, null, null);
         $this->getColumn('roles', false)->setValueSet(array (
   0 => 'USER_ROLE',
   1 => 'ADMIN_ROLE',
@@ -62,7 +62,7 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('UserVotes', 'hhc\\DB\\UserVotes', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'UserVotess');
+        $this->addRelation('Vote', 'hhc\\DB\\Vote', RelationMap::ONE_TO_MANY, array('id' => 'uid', ), null, null, 'Votes');
     } // buildRelations()
 
 } // UserTableMap

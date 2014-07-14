@@ -9,11 +9,15 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
 use hhc\DB\Hero;
 use hhc\DB\HeroPeer;
 use hhc\DB\HeroQuery;
+use hhc\DB\Vote;
+use hhc\DB\VoteQuery;
 
 /**
  * Base class that represents a row from the 'hero' table.
@@ -122,6 +126,18 @@ abstract class BaseHero extends BaseObject implements Persistent
     protected $slug;
 
     /**
+     * @var        PropelObjectCollection|Vote[] Collection to store aggregation of Vote objects.
+     */
+    protected $collHeroVotes;
+    protected $collHeroVotesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Vote[] Collection to store aggregation of Vote objects.
+     */
+    protected $collCounterVotes;
+    protected $collCounterVotesPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -140,6 +156,18 @@ abstract class BaseHero extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $heroVotesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $counterVotesScheduledForDeletion = null;
 
     /**
      * Get the [id] column value.
@@ -673,6 +701,10 @@ abstract class BaseHero extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collHeroVotes = null;
+
+            $this->collCounterVotes = null;
+
         } // if (deep)
     }
 
@@ -795,6 +827,40 @@ abstract class BaseHero extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->heroVotesScheduledForDeletion !== null) {
+                if (!$this->heroVotesScheduledForDeletion->isEmpty()) {
+                    VoteQuery::create()
+                        ->filterByPrimaryKeys($this->heroVotesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->heroVotesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collHeroVotes !== null) {
+                foreach ($this->collHeroVotes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->counterVotesScheduledForDeletion !== null) {
+                if (!$this->counterVotesScheduledForDeletion->isEmpty()) {
+                    VoteQuery::create()
+                        ->filterByPrimaryKeys($this->counterVotesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->counterVotesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCounterVotes !== null) {
+                foreach ($this->collCounterVotes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1011,6 +1077,22 @@ abstract class BaseHero extends BaseObject implements Persistent
             }
 
 
+                if ($this->collHeroVotes !== null) {
+                    foreach ($this->collHeroVotes as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCounterVotes !== null) {
+                    foreach ($this->collCounterVotes as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1102,10 +1184,11 @@ abstract class BaseHero extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Hero'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -1133,6 +1216,14 @@ abstract class BaseHero extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collHeroVotes) {
+                $result['HeroVotes'] = $this->collHeroVotes->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCounterVotes) {
+                $result['CounterVotes'] = $this->collCounterVotes->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1341,6 +1432,30 @@ abstract class BaseHero extends BaseObject implements Persistent
         $copyObj->setSide($this->getSide());
         $copyObj->setStat($this->getStat());
         $copyObj->setSlug($this->getSlug());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getHeroVotes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addHeroVote($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCounterVotes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCounterVote($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1387,6 +1502,531 @@ abstract class BaseHero extends BaseObject implements Persistent
         return self::$peer;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('HeroVote' == $relationName) {
+            $this->initHeroVotes();
+        }
+        if ('CounterVote' == $relationName) {
+            $this->initCounterVotes();
+        }
+    }
+
+    /**
+     * Clears out the collHeroVotes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Hero The current object (for fluent API support)
+     * @see        addHeroVotes()
+     */
+    public function clearHeroVotes()
+    {
+        $this->collHeroVotes = null; // important to set this to null since that means it is uninitialized
+        $this->collHeroVotesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collHeroVotes collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialHeroVotes($v = true)
+    {
+        $this->collHeroVotesPartial = $v;
+    }
+
+    /**
+     * Initializes the collHeroVotes collection.
+     *
+     * By default this just sets the collHeroVotes collection to an empty array (like clearcollHeroVotes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initHeroVotes($overrideExisting = true)
+    {
+        if (null !== $this->collHeroVotes && !$overrideExisting) {
+            return;
+        }
+        $this->collHeroVotes = new PropelObjectCollection();
+        $this->collHeroVotes->setModel('Vote');
+    }
+
+    /**
+     * Gets an array of Vote objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Hero is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     * @throws PropelException
+     */
+    public function getHeroVotes($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collHeroVotesPartial && !$this->isNew();
+        if (null === $this->collHeroVotes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collHeroVotes) {
+                // return empty collection
+                $this->initHeroVotes();
+            } else {
+                $collHeroVotes = VoteQuery::create(null, $criteria)
+                    ->filterByHero($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collHeroVotesPartial && count($collHeroVotes)) {
+                      $this->initHeroVotes(false);
+
+                      foreach ($collHeroVotes as $obj) {
+                        if (false == $this->collHeroVotes->contains($obj)) {
+                          $this->collHeroVotes->append($obj);
+                        }
+                      }
+
+                      $this->collHeroVotesPartial = true;
+                    }
+
+                    $collHeroVotes->getInternalIterator()->rewind();
+
+                    return $collHeroVotes;
+                }
+
+                if ($partial && $this->collHeroVotes) {
+                    foreach ($this->collHeroVotes as $obj) {
+                        if ($obj->isNew()) {
+                            $collHeroVotes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collHeroVotes = $collHeroVotes;
+                $this->collHeroVotesPartial = false;
+            }
+        }
+
+        return $this->collHeroVotes;
+    }
+
+    /**
+     * Sets a collection of HeroVote objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $heroVotes A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Hero The current object (for fluent API support)
+     */
+    public function setHeroVotes(PropelCollection $heroVotes, PropelPDO $con = null)
+    {
+        $heroVotesToDelete = $this->getHeroVotes(new Criteria(), $con)->diff($heroVotes);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->heroVotesScheduledForDeletion = clone $heroVotesToDelete;
+
+        foreach ($heroVotesToDelete as $heroVoteRemoved) {
+            $heroVoteRemoved->setHero(null);
+        }
+
+        $this->collHeroVotes = null;
+        foreach ($heroVotes as $heroVote) {
+            $this->addHeroVote($heroVote);
+        }
+
+        $this->collHeroVotes = $heroVotes;
+        $this->collHeroVotesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Vote objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Vote objects.
+     * @throws PropelException
+     */
+    public function countHeroVotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collHeroVotesPartial && !$this->isNew();
+        if (null === $this->collHeroVotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collHeroVotes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getHeroVotes());
+            }
+            $query = VoteQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByHero($this)
+                ->count($con);
+        }
+
+        return count($this->collHeroVotes);
+    }
+
+    /**
+     * Method called to associate a Vote object to this object
+     * through the Vote foreign key attribute.
+     *
+     * @param    Vote $l Vote
+     * @return Hero The current object (for fluent API support)
+     */
+    public function addHeroVote(Vote $l)
+    {
+        if ($this->collHeroVotes === null) {
+            $this->initHeroVotes();
+            $this->collHeroVotesPartial = true;
+        }
+
+        if (!in_array($l, $this->collHeroVotes->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddHeroVote($l);
+
+            if ($this->heroVotesScheduledForDeletion and $this->heroVotesScheduledForDeletion->contains($l)) {
+                $this->heroVotesScheduledForDeletion->remove($this->heroVotesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	HeroVote $heroVote The heroVote object to add.
+     */
+    protected function doAddHeroVote($heroVote)
+    {
+        $this->collHeroVotes[]= $heroVote;
+        $heroVote->setHero($this);
+    }
+
+    /**
+     * @param	HeroVote $heroVote The heroVote object to remove.
+     * @return Hero The current object (for fluent API support)
+     */
+    public function removeHeroVote($heroVote)
+    {
+        if ($this->getHeroVotes()->contains($heroVote)) {
+            $this->collHeroVotes->remove($this->collHeroVotes->search($heroVote));
+            if (null === $this->heroVotesScheduledForDeletion) {
+                $this->heroVotesScheduledForDeletion = clone $this->collHeroVotes;
+                $this->heroVotesScheduledForDeletion->clear();
+            }
+            $this->heroVotesScheduledForDeletion[]= clone $heroVote;
+            $heroVote->setHero(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Hero is new, it will return
+     * an empty collection; or if this Hero has previously
+     * been saved, it will retrieve related HeroVotes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Hero.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     */
+    public function getHeroVotesJoinUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VoteQuery::create(null, $criteria);
+        $query->joinWith('User', $join_behavior);
+
+        return $this->getHeroVotes($query, $con);
+    }
+
+    /**
+     * Clears out the collCounterVotes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Hero The current object (for fluent API support)
+     * @see        addCounterVotes()
+     */
+    public function clearCounterVotes()
+    {
+        $this->collCounterVotes = null; // important to set this to null since that means it is uninitialized
+        $this->collCounterVotesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCounterVotes collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCounterVotes($v = true)
+    {
+        $this->collCounterVotesPartial = $v;
+    }
+
+    /**
+     * Initializes the collCounterVotes collection.
+     *
+     * By default this just sets the collCounterVotes collection to an empty array (like clearcollCounterVotes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCounterVotes($overrideExisting = true)
+    {
+        if (null !== $this->collCounterVotes && !$overrideExisting) {
+            return;
+        }
+        $this->collCounterVotes = new PropelObjectCollection();
+        $this->collCounterVotes->setModel('Vote');
+    }
+
+    /**
+     * Gets an array of Vote objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Hero is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     * @throws PropelException
+     */
+    public function getCounterVotes($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCounterVotesPartial && !$this->isNew();
+        if (null === $this->collCounterVotes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCounterVotes) {
+                // return empty collection
+                $this->initCounterVotes();
+            } else {
+                $collCounterVotes = VoteQuery::create(null, $criteria)
+                    ->filterByCounter($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCounterVotesPartial && count($collCounterVotes)) {
+                      $this->initCounterVotes(false);
+
+                      foreach ($collCounterVotes as $obj) {
+                        if (false == $this->collCounterVotes->contains($obj)) {
+                          $this->collCounterVotes->append($obj);
+                        }
+                      }
+
+                      $this->collCounterVotesPartial = true;
+                    }
+
+                    $collCounterVotes->getInternalIterator()->rewind();
+
+                    return $collCounterVotes;
+                }
+
+                if ($partial && $this->collCounterVotes) {
+                    foreach ($this->collCounterVotes as $obj) {
+                        if ($obj->isNew()) {
+                            $collCounterVotes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCounterVotes = $collCounterVotes;
+                $this->collCounterVotesPartial = false;
+            }
+        }
+
+        return $this->collCounterVotes;
+    }
+
+    /**
+     * Sets a collection of CounterVote objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $counterVotes A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Hero The current object (for fluent API support)
+     */
+    public function setCounterVotes(PropelCollection $counterVotes, PropelPDO $con = null)
+    {
+        $counterVotesToDelete = $this->getCounterVotes(new Criteria(), $con)->diff($counterVotes);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->counterVotesScheduledForDeletion = clone $counterVotesToDelete;
+
+        foreach ($counterVotesToDelete as $counterVoteRemoved) {
+            $counterVoteRemoved->setCounter(null);
+        }
+
+        $this->collCounterVotes = null;
+        foreach ($counterVotes as $counterVote) {
+            $this->addCounterVote($counterVote);
+        }
+
+        $this->collCounterVotes = $counterVotes;
+        $this->collCounterVotesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Vote objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Vote objects.
+     * @throws PropelException
+     */
+    public function countCounterVotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCounterVotesPartial && !$this->isNew();
+        if (null === $this->collCounterVotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCounterVotes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCounterVotes());
+            }
+            $query = VoteQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCounter($this)
+                ->count($con);
+        }
+
+        return count($this->collCounterVotes);
+    }
+
+    /**
+     * Method called to associate a Vote object to this object
+     * through the Vote foreign key attribute.
+     *
+     * @param    Vote $l Vote
+     * @return Hero The current object (for fluent API support)
+     */
+    public function addCounterVote(Vote $l)
+    {
+        if ($this->collCounterVotes === null) {
+            $this->initCounterVotes();
+            $this->collCounterVotesPartial = true;
+        }
+
+        if (!in_array($l, $this->collCounterVotes->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCounterVote($l);
+
+            if ($this->counterVotesScheduledForDeletion and $this->counterVotesScheduledForDeletion->contains($l)) {
+                $this->counterVotesScheduledForDeletion->remove($this->counterVotesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CounterVote $counterVote The counterVote object to add.
+     */
+    protected function doAddCounterVote($counterVote)
+    {
+        $this->collCounterVotes[]= $counterVote;
+        $counterVote->setCounter($this);
+    }
+
+    /**
+     * @param	CounterVote $counterVote The counterVote object to remove.
+     * @return Hero The current object (for fluent API support)
+     */
+    public function removeCounterVote($counterVote)
+    {
+        if ($this->getCounterVotes()->contains($counterVote)) {
+            $this->collCounterVotes->remove($this->collCounterVotes->search($counterVote));
+            if (null === $this->counterVotesScheduledForDeletion) {
+                $this->counterVotesScheduledForDeletion = clone $this->collCounterVotes;
+                $this->counterVotesScheduledForDeletion->clear();
+            }
+            $this->counterVotesScheduledForDeletion[]= clone $counterVote;
+            $counterVote->setCounter(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Hero is new, it will return
+     * an empty collection; or if this Hero has previously
+     * been saved, it will retrieve related CounterVotes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Hero.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     */
+    public function getCounterVotesJoinUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VoteQuery::create(null, $criteria);
+        $query->joinWith('User', $join_behavior);
+
+        return $this->getCounterVotes($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1427,10 +2067,28 @@ abstract class BaseHero extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collHeroVotes) {
+                foreach ($this->collHeroVotes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCounterVotes) {
+                foreach ($this->collCounterVotes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collHeroVotes instanceof PropelCollection) {
+            $this->collHeroVotes->clearIterator();
+        }
+        $this->collHeroVotes = null;
+        if ($this->collCounterVotes instanceof PropelCollection) {
+            $this->collCounterVotes->clearIterator();
+        }
+        $this->collCounterVotes = null;
     }
 
     /**

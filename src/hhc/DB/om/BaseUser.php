@@ -16,8 +16,8 @@ use \PropelPDO;
 use hhc\DB\User;
 use hhc\DB\UserPeer;
 use hhc\DB\UserQuery;
-use hhc\DB\UserVotes;
-use hhc\DB\UserVotesQuery;
+use hhc\DB\Vote;
+use hhc\DB\VoteQuery;
 
 /**
  * Base class that represents a row from the 'user' table.
@@ -73,16 +73,15 @@ abstract class BaseUser extends BaseObject implements Persistent
 
     /**
      * The value for the roles field.
-     * Note: this column has a database default value of: 'USER_ROLE'
-     * @var        string
+     * @var        int
      */
     protected $roles;
 
     /**
-     * @var        PropelObjectCollection|UserVotes[] Collection to store aggregation of UserVotes objects.
+     * @var        PropelObjectCollection|Vote[] Collection to store aggregation of Vote objects.
      */
-    protected $collUserVotess;
-    protected $collUserVotessPartial;
+    protected $collVotes;
+    protected $collVotesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -108,28 +107,7 @@ abstract class BaseUser extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
-    protected $userVotessScheduledForDeletion = null;
-
-    /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->roles = 'USER_ROLE';
-    }
-
-    /**
-     * Initializes internal state of BaseUser object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
+    protected $votesScheduledForDeletion = null;
 
     /**
      * Get the [id] column value.
@@ -178,12 +156,20 @@ abstract class BaseUser extends BaseObject implements Persistent
     /**
      * Get the [roles] column value.
      *
-     * @return string
+     * @return int
+     * @throws PropelException - if the stored enum key is unknown.
      */
     public function getRoles()
     {
+        if (null === $this->roles) {
+            return null;
+        }
+        $valueSet = UserPeer::getValueSet(UserPeer::ROLES);
+        if (!isset($valueSet[$this->roles])) {
+            throw new PropelException('Unknown stored enum key: ' . $this->roles);
+        }
 
-        return $this->roles;
+        return $valueSet[$this->roles];
     }
 
     /**
@@ -273,13 +259,18 @@ abstract class BaseUser extends BaseObject implements Persistent
     /**
      * Set the value of [roles] column.
      *
-     * @param  string $v new value
+     * @param  int $v new value
      * @return User The current object (for fluent API support)
+     * @throws PropelException - if the value is not accepted by this enum.
      */
     public function setRoles($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
+        if ($v !== null) {
+            $valueSet = UserPeer::getValueSet(UserPeer::ROLES);
+            if (!in_array($v, $valueSet)) {
+                throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $v));
+            }
+            $v = array_search($v, $valueSet);
         }
 
         if ($this->roles !== $v) {
@@ -301,10 +292,6 @@ abstract class BaseUser extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->roles !== 'USER_ROLE') {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -331,7 +318,7 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->username = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->email = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->password = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->roles = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->roles = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -403,7 +390,7 @@ abstract class BaseUser extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collUserVotess = null;
+            $this->collVotes = null;
 
         } // if (deep)
     }
@@ -529,17 +516,17 @@ abstract class BaseUser extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
-            if ($this->userVotessScheduledForDeletion !== null) {
-                if (!$this->userVotessScheduledForDeletion->isEmpty()) {
-                    UserVotesQuery::create()
-                        ->filterByPrimaryKeys($this->userVotessScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->votesScheduledForDeletion !== null) {
+                if (!$this->votesScheduledForDeletion->isEmpty()) {
+                    VoteQuery::create()
+                        ->filterByPrimaryKeys($this->votesScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->userVotessScheduledForDeletion = null;
+                    $this->votesScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUserVotess !== null) {
-                foreach ($this->collUserVotess as $referrerFK) {
+            if ($this->collVotes !== null) {
+                foreach ($this->collVotes as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -611,7 +598,7 @@ abstract class BaseUser extends BaseObject implements Persistent
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
                     case '`roles`':
-                        $stmt->bindValue($identifier, $this->roles, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->roles, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -712,8 +699,8 @@ abstract class BaseUser extends BaseObject implements Persistent
             }
 
 
-                if ($this->collUserVotess !== null) {
-                    foreach ($this->collUserVotess as $referrerFK) {
+                if ($this->collVotes !== null) {
+                    foreach ($this->collVotes as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -812,8 +799,8 @@ abstract class BaseUser extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collUserVotess) {
-                $result['UserVotess'] = $this->collUserVotess->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            if (null !== $this->collVotes) {
+                $result['Votes'] = $this->collVotes->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -862,6 +849,10 @@ abstract class BaseUser extends BaseObject implements Persistent
                 $this->setPassword($value);
                 break;
             case 4:
+                $valueSet = UserPeer::getValueSet(UserPeer::ROLES);
+                if (isset($valueSet[$value])) {
+                    $value = $valueSet[$value];
+                }
                 $this->setRoles($value);
                 break;
         } // switch()
@@ -984,9 +975,9 @@ abstract class BaseUser extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
-            foreach ($this->getUserVotess() as $relObj) {
+            foreach ($this->getVotes() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUserVotes($relObj->copy($deepCopy));
+                    $copyObj->addVote($relObj->copy($deepCopy));
                 }
             }
 
@@ -1051,42 +1042,42 @@ abstract class BaseUser extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
-        if ('UserVotes' == $relationName) {
-            $this->initUserVotess();
+        if ('Vote' == $relationName) {
+            $this->initVotes();
         }
     }
 
     /**
-     * Clears out the collUserVotess collection
+     * Clears out the collVotes collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return User The current object (for fluent API support)
-     * @see        addUserVotess()
+     * @see        addVotes()
      */
-    public function clearUserVotess()
+    public function clearVotes()
     {
-        $this->collUserVotess = null; // important to set this to null since that means it is uninitialized
-        $this->collUserVotessPartial = null;
+        $this->collVotes = null; // important to set this to null since that means it is uninitialized
+        $this->collVotesPartial = null;
 
         return $this;
     }
 
     /**
-     * reset is the collUserVotess collection loaded partially
+     * reset is the collVotes collection loaded partially
      *
      * @return void
      */
-    public function resetPartialUserVotess($v = true)
+    public function resetPartialVotes($v = true)
     {
-        $this->collUserVotessPartial = $v;
+        $this->collVotesPartial = $v;
     }
 
     /**
-     * Initializes the collUserVotess collection.
+     * Initializes the collVotes collection.
      *
-     * By default this just sets the collUserVotess collection to an empty array (like clearcollUserVotess());
+     * By default this just sets the collVotes collection to an empty array (like clearcollVotes());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1095,17 +1086,17 @@ abstract class BaseUser extends BaseObject implements Persistent
      *
      * @return void
      */
-    public function initUserVotess($overrideExisting = true)
+    public function initVotes($overrideExisting = true)
     {
-        if (null !== $this->collUserVotess && !$overrideExisting) {
+        if (null !== $this->collVotes && !$overrideExisting) {
             return;
         }
-        $this->collUserVotess = new PropelObjectCollection();
-        $this->collUserVotess->setModel('UserVotes');
+        $this->collVotes = new PropelObjectCollection();
+        $this->collVotes->setModel('Vote');
     }
 
     /**
-     * Gets an array of UserVotes objects which contain a foreign key that references this object.
+     * Gets an array of Vote objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1115,107 +1106,110 @@ abstract class BaseUser extends BaseObject implements Persistent
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|UserVotes[] List of UserVotes objects
+     * @return PropelObjectCollection|Vote[] List of Vote objects
      * @throws PropelException
      */
-    public function getUserVotess($criteria = null, PropelPDO $con = null)
+    public function getVotes($criteria = null, PropelPDO $con = null)
     {
-        $partial = $this->collUserVotessPartial && !$this->isNew();
-        if (null === $this->collUserVotess || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUserVotess) {
+        $partial = $this->collVotesPartial && !$this->isNew();
+        if (null === $this->collVotes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVotes) {
                 // return empty collection
-                $this->initUserVotess();
+                $this->initVotes();
             } else {
-                $collUserVotess = UserVotesQuery::create(null, $criteria)
+                $collVotes = VoteQuery::create(null, $criteria)
                     ->filterByUser($this)
                     ->find($con);
                 if (null !== $criteria) {
-                    if (false !== $this->collUserVotessPartial && count($collUserVotess)) {
-                      $this->initUserVotess(false);
+                    if (false !== $this->collVotesPartial && count($collVotes)) {
+                      $this->initVotes(false);
 
-                      foreach ($collUserVotess as $obj) {
-                        if (false == $this->collUserVotess->contains($obj)) {
-                          $this->collUserVotess->append($obj);
+                      foreach ($collVotes as $obj) {
+                        if (false == $this->collVotes->contains($obj)) {
+                          $this->collVotes->append($obj);
                         }
                       }
 
-                      $this->collUserVotessPartial = true;
+                      $this->collVotesPartial = true;
                     }
 
-                    $collUserVotess->getInternalIterator()->rewind();
+                    $collVotes->getInternalIterator()->rewind();
 
-                    return $collUserVotess;
+                    return $collVotes;
                 }
 
-                if ($partial && $this->collUserVotess) {
-                    foreach ($this->collUserVotess as $obj) {
+                if ($partial && $this->collVotes) {
+                    foreach ($this->collVotes as $obj) {
                         if ($obj->isNew()) {
-                            $collUserVotess[] = $obj;
+                            $collVotes[] = $obj;
                         }
                     }
                 }
 
-                $this->collUserVotess = $collUserVotess;
-                $this->collUserVotessPartial = false;
+                $this->collVotes = $collVotes;
+                $this->collVotesPartial = false;
             }
         }
 
-        return $this->collUserVotess;
+        return $this->collVotes;
     }
 
     /**
-     * Sets a collection of UserVotes objects related by a one-to-many relationship
+     * Sets a collection of Vote objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param PropelCollection $userVotess A Propel collection.
+     * @param PropelCollection $votes A Propel collection.
      * @param PropelPDO $con Optional connection object
      * @return User The current object (for fluent API support)
      */
-    public function setUserVotess(PropelCollection $userVotess, PropelPDO $con = null)
+    public function setVotes(PropelCollection $votes, PropelPDO $con = null)
     {
-        $userVotessToDelete = $this->getUserVotess(new Criteria(), $con)->diff($userVotess);
+        $votesToDelete = $this->getVotes(new Criteria(), $con)->diff($votes);
 
 
-        $this->userVotessScheduledForDeletion = $userVotessToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->votesScheduledForDeletion = clone $votesToDelete;
 
-        foreach ($userVotessToDelete as $userVotesRemoved) {
-            $userVotesRemoved->setUser(null);
+        foreach ($votesToDelete as $voteRemoved) {
+            $voteRemoved->setUser(null);
         }
 
-        $this->collUserVotess = null;
-        foreach ($userVotess as $userVotes) {
-            $this->addUserVotes($userVotes);
+        $this->collVotes = null;
+        foreach ($votes as $vote) {
+            $this->addVote($vote);
         }
 
-        $this->collUserVotess = $userVotess;
-        $this->collUserVotessPartial = false;
+        $this->collVotes = $votes;
+        $this->collVotesPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related UserVotes objects.
+     * Returns the number of related Vote objects.
      *
      * @param Criteria $criteria
      * @param boolean $distinct
      * @param PropelPDO $con
-     * @return int             Count of related UserVotes objects.
+     * @return int             Count of related Vote objects.
      * @throws PropelException
      */
-    public function countUserVotess(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    public function countVotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
     {
-        $partial = $this->collUserVotessPartial && !$this->isNew();
-        if (null === $this->collUserVotess || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUserVotess) {
+        $partial = $this->collVotesPartial && !$this->isNew();
+        if (null === $this->collVotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVotes) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUserVotess());
+                return count($this->getVotes());
             }
-            $query = UserVotesQuery::create(null, $criteria);
+            $query = VoteQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1225,28 +1219,28 @@ abstract class BaseUser extends BaseObject implements Persistent
                 ->count($con);
         }
 
-        return count($this->collUserVotess);
+        return count($this->collVotes);
     }
 
     /**
-     * Method called to associate a UserVotes object to this object
-     * through the UserVotes foreign key attribute.
+     * Method called to associate a Vote object to this object
+     * through the Vote foreign key attribute.
      *
-     * @param    UserVotes $l UserVotes
+     * @param    Vote $l Vote
      * @return User The current object (for fluent API support)
      */
-    public function addUserVotes(UserVotes $l)
+    public function addVote(Vote $l)
     {
-        if ($this->collUserVotess === null) {
-            $this->initUserVotess();
-            $this->collUserVotessPartial = true;
+        if ($this->collVotes === null) {
+            $this->initVotes();
+            $this->collVotesPartial = true;
         }
 
-        if (!in_array($l, $this->collUserVotess->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddUserVotes($l);
+        if (!in_array($l, $this->collVotes->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVote($l);
 
-            if ($this->userVotessScheduledForDeletion and $this->userVotessScheduledForDeletion->contains($l)) {
-                $this->userVotessScheduledForDeletion->remove($this->userVotessScheduledForDeletion->search($l));
+            if ($this->votesScheduledForDeletion and $this->votesScheduledForDeletion->contains($l)) {
+                $this->votesScheduledForDeletion->remove($this->votesScheduledForDeletion->search($l));
             }
         }
 
@@ -1254,31 +1248,81 @@ abstract class BaseUser extends BaseObject implements Persistent
     }
 
     /**
-     * @param	UserVotes $userVotes The userVotes object to add.
+     * @param	Vote $vote The vote object to add.
      */
-    protected function doAddUserVotes($userVotes)
+    protected function doAddVote($vote)
     {
-        $this->collUserVotess[]= $userVotes;
-        $userVotes->setUser($this);
+        $this->collVotes[]= $vote;
+        $vote->setUser($this);
     }
 
     /**
-     * @param	UserVotes $userVotes The userVotes object to remove.
+     * @param	Vote $vote The vote object to remove.
      * @return User The current object (for fluent API support)
      */
-    public function removeUserVotes($userVotes)
+    public function removeVote($vote)
     {
-        if ($this->getUserVotess()->contains($userVotes)) {
-            $this->collUserVotess->remove($this->collUserVotess->search($userVotes));
-            if (null === $this->userVotessScheduledForDeletion) {
-                $this->userVotessScheduledForDeletion = clone $this->collUserVotess;
-                $this->userVotessScheduledForDeletion->clear();
+        if ($this->getVotes()->contains($vote)) {
+            $this->collVotes->remove($this->collVotes->search($vote));
+            if (null === $this->votesScheduledForDeletion) {
+                $this->votesScheduledForDeletion = clone $this->collVotes;
+                $this->votesScheduledForDeletion->clear();
             }
-            $this->userVotessScheduledForDeletion[]= clone $userVotes;
-            $userVotes->setUser(null);
+            $this->votesScheduledForDeletion[]= clone $vote;
+            $vote->setUser(null);
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related Votes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     */
+    public function getVotesJoinHero($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VoteQuery::create(null, $criteria);
+        $query->joinWith('Hero', $join_behavior);
+
+        return $this->getVotes($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related Votes from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Vote[] List of Vote objects
+     */
+    public function getVotesJoinCounter($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VoteQuery::create(null, $criteria);
+        $query->joinWith('Counter', $join_behavior);
+
+        return $this->getVotes($query, $con);
     }
 
     /**
@@ -1295,7 +1339,6 @@ abstract class BaseUser extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1314,8 +1357,8 @@ abstract class BaseUser extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->collUserVotess) {
-                foreach ($this->collUserVotess as $o) {
+            if ($this->collVotes) {
+                foreach ($this->collVotes as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -1323,10 +1366,10 @@ abstract class BaseUser extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->collUserVotess instanceof PropelCollection) {
-            $this->collUserVotess->clearIterator();
+        if ($this->collVotes instanceof PropelCollection) {
+            $this->collVotes->clearIterator();
         }
-        $this->collUserVotess = null;
+        $this->collVotes = null;
     }
 
     /**

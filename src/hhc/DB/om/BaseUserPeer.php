@@ -541,6 +541,17 @@ abstract class BaseUserPeer
     }
 
     /**
+     * Gets the SQL value for Roles ENUM value
+     *
+     * @param  string $enumVal ENUM value to get SQL value for
+     * @return int SQL value
+     */
+    public static function getRolesSqlValue($enumVal)
+    {
+        return UserPeer::getSqlValueForEnum(UserPeer::ROLES, $enumVal);
+    }
+
+    /**
      * Returns the TableMap related to this peer.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap

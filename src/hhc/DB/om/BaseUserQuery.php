@@ -15,7 +15,7 @@ use \PropelPDO;
 use hhc\DB\User;
 use hhc\DB\UserPeer;
 use hhc\DB\UserQuery;
-use hhc\DB\UserVotes;
+use hhc\DB\Vote;
 
 /**
  * Base class that represents a query for the 'user' table.
@@ -38,9 +38,9 @@ use hhc\DB\UserVotes;
  * @method UserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method UserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method UserQuery leftJoinUserVotes($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserVotes relation
- * @method UserQuery rightJoinUserVotes($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserVotes relation
- * @method UserQuery innerJoinUserVotes($relationAlias = null) Adds a INNER JOIN clause to the query using the UserVotes relation
+ * @method UserQuery leftJoinVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Vote relation
+ * @method UserQuery rightJoinVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Vote relation
+ * @method UserQuery innerJoinVote($relationAlias = null) Adds a INNER JOIN clause to the query using the Vote relation
  *
  * @method User findOne(PropelPDO $con = null) Return the first User matching the query
  * @method User findOneOrCreate(PropelPDO $con = null) Return the first User matching the query, or a new User object populated from the query conditions when no match is found
@@ -48,13 +48,13 @@ use hhc\DB\UserVotes;
  * @method User findOneByUsername(string $username) Return the first User filtered by the username column
  * @method User findOneByEmail(string $email) Return the first User filtered by the email column
  * @method User findOneByPassword(string $password) Return the first User filtered by the password column
- * @method User findOneByRoles(string $roles) Return the first User filtered by the roles column
+ * @method User findOneByRoles(int $roles) Return the first User filtered by the roles column
  *
  * @method array findById(int $id) Return User objects filtered by the id column
  * @method array findByUsername(string $username) Return User objects filtered by the username column
  * @method array findByEmail(string $email) Return User objects filtered by the email column
  * @method array findByPassword(string $password) Return User objects filtered by the password column
- * @method array findByRoles(string $roles) Return User objects filtered by the roles column
+ * @method array findByRoles(int $roles) Return User objects filtered by the roles column
  *
  * @package    propel.generator.hhc.om
  */
@@ -383,26 +383,24 @@ abstract class BaseUserQuery extends ModelCriteria
     /**
      * Filter the query on the roles column
      *
-     * Example usage:
-     * <code>
-     * $query->filterByRoles('fooValue');   // WHERE roles = 'fooValue'
-     * $query->filterByRoles('%fooValue%'); // WHERE roles LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $roles The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $roles The value to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return UserQuery The current query, for fluid interface
+     * @throws PropelException - if the value is not accepted by the enum.
      */
     public function filterByRoles($roles = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($roles)) {
+        if (is_scalar($roles)) {
+            $roles = UserPeer::getSqlValueForEnum(UserPeer::ROLES, $roles);
+        } elseif (is_array($roles)) {
+            $convertedValues = array();
+            foreach ($roles as $value) {
+                $convertedValues[] = UserPeer::getSqlValueForEnum(UserPeer::ROLES, $value);
+            }
+            $roles = $convertedValues;
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $roles)) {
-                $roles = str_replace('*', '%', $roles);
-                $comparison = Criteria::LIKE;
             }
         }
 
@@ -410,41 +408,41 @@ abstract class BaseUserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related UserVotes object
+     * Filter the query by a related Vote object
      *
-     * @param   UserVotes|PropelObjectCollection $userVotes  the related object to use as filter
+     * @param   Vote|PropelObjectCollection $vote  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 UserQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByUserVotes($userVotes, $comparison = null)
+    public function filterByVote($vote, $comparison = null)
     {
-        if ($userVotes instanceof UserVotes) {
+        if ($vote instanceof Vote) {
             return $this
-                ->addUsingAlias(UserPeer::ID, $userVotes->getUserId(), $comparison);
-        } elseif ($userVotes instanceof PropelObjectCollection) {
+                ->addUsingAlias(UserPeer::ID, $vote->getUid(), $comparison);
+        } elseif ($vote instanceof PropelObjectCollection) {
             return $this
-                ->useUserVotesQuery()
-                ->filterByPrimaryKeys($userVotes->getPrimaryKeys())
+                ->useVoteQuery()
+                ->filterByPrimaryKeys($vote->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserVotes() only accepts arguments of type UserVotes or PropelCollection');
+            throw new PropelException('filterByVote() only accepts arguments of type Vote or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the UserVotes relation
+     * Adds a JOIN clause to the query using the Vote relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return UserQuery The current query, for fluid interface
      */
-    public function joinUserVotes($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinVote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('UserVotes');
+        $relationMap = $tableMap->getRelation('Vote');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -459,14 +457,14 @@ abstract class BaseUserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'UserVotes');
+            $this->addJoinObject($join, 'Vote');
         }
 
         return $this;
     }
 
     /**
-     * Use the UserVotes relation UserVotes object
+     * Use the Vote relation Vote object
      *
      * @see       useQuery()
      *
@@ -474,13 +472,13 @@ abstract class BaseUserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \hhc\DB\UserVotesQuery A secondary query class using the current class as primary query
+     * @return   \hhc\DB\VoteQuery A secondary query class using the current class as primary query
      */
-    public function useUserVotesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useVoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUserVotes($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserVotes', '\hhc\DB\UserVotesQuery');
+            ->joinVote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Vote', '\hhc\DB\VoteQuery');
     }
 
     /**

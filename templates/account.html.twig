@@ -14,15 +14,17 @@
     <div class="clear"></div>
     {% if votes|length > 0 %}<h2>Previous activity:</h2>{% else %}
     <p>Contribution bar is increased with each active vote you make.</p>
-    <p>Go ahead - start contributing <a href="/hero">today!</a></p>
-    {% endif %}
+    <p>Start contributing <a href="/hero">today!</a></p>
     <span class="expand">Expand -</span>
+    {% endif %}
     <ul class="history">
-    {% for vote in votes %}
-        {% set hero = vote.getHeroName|replace({' ':''}) %}
-        {% set counter = vote.getCounterName|replace({' ':''}) %}
-        <li><img src="{{ img ~ hero ~ jpg }}" /> :: <img src="{{ img ~ counter ~ jpg }}" /></li>
-    {% endfor %}
+    {% if false %}
+        {% for vote in votes %}
+            {% set hero = vote.hero.getSlug %}
+            {% set counter = vote.counter.getSlug %}
+            <li><img src="{{ img ~ hero ~ jpg }}" /> :: <img src="{{ img ~ counter ~ jpg }}" /></li>
+        {% endfor %}
+    {% endif %}
     </ul>
 </div>
 <script type="text/javascript">
@@ -42,19 +44,7 @@ $(document).ready(function() {
         }
     });
 });
-    
-/*
-$('.bar').on('mouseenter', function() {
-    var diff = $(this).width() - $('.bar-complete').width();
-    if (diff < 20) $('.hover').css('color', '#000');
-    $('.hover').css('right', '0');
-});
-$('.bar').on('mouseleave', function() {
-    $('.hover').css('right', '-999px');
-});
-*/
 </script>
 {% endblock %}
 
 {% block footer parent() %}
-

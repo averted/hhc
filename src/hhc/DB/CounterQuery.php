@@ -2,11 +2,11 @@
 
 namespace hhc\DB;
 
-use hhc\DB\om\BaseUser;
+use hhc\DB\om\BaseCounterQuery;
 
 
 /**
- * Skeleton subclass for representing a row from the 'user' table.
+ * Skeleton subclass for performing query and update operations on the 'counter' table.
  *
  *
  *
@@ -16,11 +16,6 @@ use hhc\DB\om\BaseUser;
  *
  * @package    propel.generator.hhc
  */
-class User extends BaseUser
+class CounterQuery extends BaseCounterQuery
 {
-    function findAllVotes() {
-        $votes = VoteQuery::create()->filterByUid($this->getId())->find();
-
-        return $votes;
-    }
 }

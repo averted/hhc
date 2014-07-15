@@ -6,7 +6,7 @@
 {% set ext = '.jpg' %}
 {% block content %} 
 <div class="hero">
-    <img class="hero-icon-100px" src='{{ img ~ hero.getName|replace({' ':''})|lower ~ ext }}' />
+    <img class="hero-icon-100px" src='{{ img ~ hero.getSlug ~ ext }}' />
         <span class="name">{{ hero.getName }}</span><span class="role"> - {{ hero.getRole }}</span><br/>
         <span class="bar-max hp"><span class="bar" style="width:{{ hero.getHP/3.5 }}px;">{{ hero.getHP }}</span></span><br/> 
         <span class="bar-max dmg"><span class="bar" style="width:{{ hero.getDmg*2.5 }}px;">{{ hero.getDmg }}</span></span><br/> 
@@ -18,17 +18,17 @@
         <ul>
         {% for counter in counters %}
             <li>
-                <a href="/hero/{{ counter.name }}"><img class="hero-icon-70px left" src="{{ img ~ counter.name|replace({'+':''})|lower ~ ext }}" /></a>
-                <div class="name left">{{ counter.name|replace({'+':' '}) }}</div>
+                <a href="/hero/{{ counter.slug }}"><img class="hero-icon-70px left" src="{{ img ~ counter.slug ~ ext }}" /></a>
+                <div class="name left">{{ counter.slug }}</div>
                 <!-- TODO: fix responsive-ness -->
-                <div class="vote left" style="left:62px;"><a href="{{ counter.voteup }}" class="button">up</a></div>
-                <div class="vote left" style="left:97px;"><a href="{{ counter.votedown }}" class="button">down</a></div>
+                <div class="vote left" style="left:62px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up" class="button">up</a></div>
+                <div class="vote left" style="left:97px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down" class="button">down</a></div>
                 <div class="vote button left" style="left:153px;">{{ counter.votes }}</div>
                 <div class="clear"></div>
             </li>
         {% endfor %}
             <li>
-                <a href="{% if user %}/counter/{{ hero.getName|replace({' ':'+'}) }}{% else %}/login{% endif %}" class="button center add">add a counter</a>
+                <a href="{% if user %}/counter/{{ hero.getSlug }}{% else %}/login{% endif %}" class="button center add">add a counter</a>
             </li>
         </ul>
         <div class="clear"></div>

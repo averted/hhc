@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
  * ----------------------
  */
 $app->get('/', function() use($app) {
-    $user = $app['session']->get('user');
+    $session = $app['session']->get('user');
 
     return $app['twig']->render('index.html.twig', array(
-        'user' => $user,
+        'user' => $session,
         'link' => '/hero',
         'message' => 'Hero list'
     ));
@@ -24,10 +24,10 @@ $app->get('/', function() use($app) {
  */
 $app->get('/load', function() use($app) {
     include_once dirname(__DIR__).'/load-heroes.php';
-    $user = $app['session']->get('user');
+    $session = $app['session']->get('user');
 
     return $app['twig']->render('index.html.twig', array(
-        'user' => $user,
+        'user' => $session,
         'link' => '/hero',
         'message' => 'Everything loaded fine.'
     ));
@@ -39,14 +39,12 @@ $app->get('/load', function() use($app) {
  * ----------------------
  */
 $app->post('/search', function (Request $request) use ($app) {
-    $name = $request->get('_search');
+    $search = $request->get('_search');
 
-    if (strlen($name) <= 3) {       //search by abbreviation
-        $url = '/hero/'.slug(getHeroNameFromAbbr($name));
-    } else if (valid($name)) {      //seach by hero name
-        $url = '/hero/'.slug($name);
-    } else {                        //search by closest match
-        $url = guessHeroName($name) ? '/hero/'.slug(guessHeroName($name)) : '/hero';
+    if (strlen($search) <= 3) {       //search by abbreviation
+        $url = '/hero/'.getHeroNameFromAbbr($search);
+    } else {                          //search by closest match
+        $url = guessHeroName($search) ? '/hero/'.guessHeroName($search) : '/hero';
     }
 
     return $app->redirect($url);

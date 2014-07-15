@@ -35,6 +35,7 @@ $root = dirname(__DIR__);
 require "{$root}/modules/base.php";
 require "{$root}/modules/hero.php";
 require "{$root}/modules/login.php";
+require "{$root}/modules/account.php";
 
 $app->run();
 

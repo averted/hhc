@@ -2,8 +2,8 @@
 
 use hhc\DB\User;
 use hhc\DB\UserQuery;
-use hhc\DB\UserVotes;
-use hhc\DB\UserVotesQuery;
+use hhc\DB\Vote;
+use hhc\DB\VoteQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,13 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
  * ----------------------
  */
 $app->match('/login', function (Request $request) use ($app) {
-    $user  = $app['session']->get('user');
-    $error = null;
+    $session = $app['session']->get('user');
+    $error   = null;
+    
+    if ($session) return $app->redirect('/account');
 
-    // check if user is logged in
-    if (isLoggedIn($user))
-        return $app->redirect('/account');
-       
     if ($request->getMethod() == 'POST') {
         if (!($username = $request->get('_username')))
             $error = "Username is required";
@@ -30,6 +28,7 @@ $app->match('/login', function (Request $request) use ($app) {
         if (!$error) {
             $u = UserQuery::create()->filterByUsername($username)->findOne();
             
+            // needs hashing
             if (strtolower($username) === strtolower($u->getUsername()) && $password === $u->getPassword()) {
                 $app['session']->start();
                 $app['session']->set('user', $u->getUsername());
@@ -43,19 +42,6 @@ $app->match('/login', function (Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(
         'user' => $user,
         'error' => $error
-    ));
-});
-
-$app->get('/account', function () use ($app) {
-    $user  = $app['session']->get('user');
-    $error = null;
-    
-    $votes = UserVotesQuery::create()->filterByUserId(getUserId($user))->find();
-
-
-    return $app['twig']->render('account.html.twig', array(
-        'user' => $user,
-        'votes' => $votes,
     ));
 });
 
@@ -115,6 +101,5 @@ $app->match('/register', function (Request $request) use ($app) {
         'error' => $error
     ));
 });
-
 
 ?>

@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'vote' table.
+ * This class defines the structure of the 'counter' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.hhc.map
  */
-class VoteTableMap extends TableMap
+class CounterTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'hhc.map.VoteTableMap';
+    const CLASS_NAME = 'hhc.map.CounterTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,20 +36,15 @@ class VoteTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('vote');
-        $this->setPhpName('Vote');
-        $this->setClassname('hhc\\DB\\Vote');
+        $this->setName('counter');
+        $this->setPhpName('Counter');
+        $this->setClassname('hhc\\DB\\Counter');
         $this->setPackage('hhc');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('uid', 'Uid', 'INTEGER' , 'user', 'id', true, null, null);
-        $this->addForeignPrimaryKey('cid', 'Cid', 'INTEGER' , 'counter', 'id', true, null, null);
-        $this->addColumn('vote_type', 'VoteType', 'ENUM', false, null, null);
-        $this->getColumn('vote_type', false)->setValueSet(array (
-  0 => 'up',
-  1 => 'down',
-));
+        $this->addForeignKey('hid', 'Hid', 'INTEGER', 'hero', 'id', true, null, null);
+        $this->addForeignKey('cid', 'Cid', 'INTEGER', 'hero', 'id', true, null, null);
         // validators
     } // initialize()
 
@@ -58,8 +53,9 @@ class VoteTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', 'hhc\\DB\\User', RelationMap::MANY_TO_ONE, array('uid' => 'id', ), null, null);
-        $this->addRelation('Counter', 'hhc\\DB\\Counter', RelationMap::MANY_TO_ONE, array('cid' => 'id', ), null, null);
+        $this->addRelation('Hero', 'hhc\\DB\\Hero', RelationMap::MANY_TO_ONE, array('hid' => 'id', ), null, null);
+        $this->addRelation('Counter', 'hhc\\DB\\Hero', RelationMap::MANY_TO_ONE, array('cid' => 'id', ), null, null);
+        $this->addRelation('Vote', 'hhc\\DB\\Vote', RelationMap::ONE_TO_MANY, array('id' => 'cid', ), null, null, 'Votes');
     } // buildRelations()
 
-} // VoteTableMap
+} // CounterTableMap

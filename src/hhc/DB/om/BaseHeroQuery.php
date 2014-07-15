@@ -12,10 +12,10 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use hhc\DB\Counter;
 use hhc\DB\Hero;
 use hhc\DB\HeroPeer;
 use hhc\DB\HeroQuery;
-use hhc\DB\Vote;
 
 /**
  * Base class that represents a query for the 'hero' table.
@@ -54,13 +54,13 @@ use hhc\DB\Vote;
  * @method HeroQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method HeroQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method HeroQuery leftJoinHeroVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the HeroVote relation
- * @method HeroQuery rightJoinHeroVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the HeroVote relation
- * @method HeroQuery innerJoinHeroVote($relationAlias = null) Adds a INNER JOIN clause to the query using the HeroVote relation
+ * @method HeroQuery leftJoinCounter($relationAlias = null) Adds a LEFT JOIN clause to the query using the Counter relation
+ * @method HeroQuery rightJoinCounter($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Counter relation
+ * @method HeroQuery innerJoinCounter($relationAlias = null) Adds a INNER JOIN clause to the query using the Counter relation
  *
- * @method HeroQuery leftJoinCounterVote($relationAlias = null) Adds a LEFT JOIN clause to the query using the CounterVote relation
- * @method HeroQuery rightJoinCounterVote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CounterVote relation
- * @method HeroQuery innerJoinCounterVote($relationAlias = null) Adds a INNER JOIN clause to the query using the CounterVote relation
+ * @method HeroQuery leftJoinCounterRelatedByCid($relationAlias = null) Adds a LEFT JOIN clause to the query using the CounterRelatedByCid relation
+ * @method HeroQuery rightJoinCounterRelatedByCid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CounterRelatedByCid relation
+ * @method HeroQuery innerJoinCounterRelatedByCid($relationAlias = null) Adds a INNER JOIN clause to the query using the CounterRelatedByCid relation
  *
  * @method Hero findOne(PropelPDO $con = null) Return the first Hero matching the query
  * @method Hero findOneOrCreate(PropelPDO $con = null) Return the first Hero matching the query, or a new Hero object populated from the query conditions when no match is found
@@ -756,41 +756,41 @@ abstract class BaseHeroQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related Vote object
+     * Filter the query by a related Counter object
      *
-     * @param   Vote|PropelObjectCollection $vote  the related object to use as filter
+     * @param   Counter|PropelObjectCollection $counter  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 HeroQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByHeroVote($vote, $comparison = null)
+    public function filterByCounter($counter, $comparison = null)
     {
-        if ($vote instanceof Vote) {
+        if ($counter instanceof Counter) {
             return $this
-                ->addUsingAlias(HeroPeer::ID, $vote->getHid(), $comparison);
-        } elseif ($vote instanceof PropelObjectCollection) {
+                ->addUsingAlias(HeroPeer::ID, $counter->getHid(), $comparison);
+        } elseif ($counter instanceof PropelObjectCollection) {
             return $this
-                ->useHeroVoteQuery()
-                ->filterByPrimaryKeys($vote->getPrimaryKeys())
+                ->useCounterQuery()
+                ->filterByPrimaryKeys($counter->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByHeroVote() only accepts arguments of type Vote or PropelCollection');
+            throw new PropelException('filterByCounter() only accepts arguments of type Counter or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the HeroVote relation
+     * Adds a JOIN clause to the query using the Counter relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function joinHeroVote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCounter($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('HeroVote');
+        $relationMap = $tableMap->getRelation('Counter');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -805,14 +805,14 @@ abstract class BaseHeroQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'HeroVote');
+            $this->addJoinObject($join, 'Counter');
         }
 
         return $this;
     }
 
     /**
-     * Use the HeroVote relation Vote object
+     * Use the Counter relation Counter object
      *
      * @see       useQuery()
      *
@@ -820,51 +820,51 @@ abstract class BaseHeroQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \hhc\DB\VoteQuery A secondary query class using the current class as primary query
+     * @return   \hhc\DB\CounterQuery A secondary query class using the current class as primary query
      */
-    public function useHeroVoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCounterQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinHeroVote($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'HeroVote', '\hhc\DB\VoteQuery');
+            ->joinCounter($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Counter', '\hhc\DB\CounterQuery');
     }
 
     /**
-     * Filter the query by a related Vote object
+     * Filter the query by a related Counter object
      *
-     * @param   Vote|PropelObjectCollection $vote  the related object to use as filter
+     * @param   Counter|PropelObjectCollection $counter  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 HeroQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByCounterVote($vote, $comparison = null)
+    public function filterByCounterRelatedByCid($counter, $comparison = null)
     {
-        if ($vote instanceof Vote) {
+        if ($counter instanceof Counter) {
             return $this
-                ->addUsingAlias(HeroPeer::ID, $vote->getCid(), $comparison);
-        } elseif ($vote instanceof PropelObjectCollection) {
+                ->addUsingAlias(HeroPeer::ID, $counter->getCid(), $comparison);
+        } elseif ($counter instanceof PropelObjectCollection) {
             return $this
-                ->useCounterVoteQuery()
-                ->filterByPrimaryKeys($vote->getPrimaryKeys())
+                ->useCounterRelatedByCidQuery()
+                ->filterByPrimaryKeys($counter->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByCounterVote() only accepts arguments of type Vote or PropelCollection');
+            throw new PropelException('filterByCounterRelatedByCid() only accepts arguments of type Counter or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the CounterVote relation
+     * Adds a JOIN clause to the query using the CounterRelatedByCid relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return HeroQuery The current query, for fluid interface
      */
-    public function joinCounterVote($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCounterRelatedByCid($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('CounterVote');
+        $relationMap = $tableMap->getRelation('CounterRelatedByCid');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -879,14 +879,14 @@ abstract class BaseHeroQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'CounterVote');
+            $this->addJoinObject($join, 'CounterRelatedByCid');
         }
 
         return $this;
     }
 
     /**
-     * Use the CounterVote relation Vote object
+     * Use the CounterRelatedByCid relation Counter object
      *
      * @see       useQuery()
      *
@@ -894,13 +894,13 @@ abstract class BaseHeroQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \hhc\DB\VoteQuery A secondary query class using the current class as primary query
+     * @return   \hhc\DB\CounterQuery A secondary query class using the current class as primary query
      */
-    public function useCounterVoteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCounterRelatedByCidQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinCounterVote($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'CounterVote', '\hhc\DB\VoteQuery');
+            ->joinCounterRelatedByCid($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CounterRelatedByCid', '\hhc\DB\CounterQuery');
     }
 
     /**

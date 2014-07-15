@@ -11,8 +11,8 @@ use \Persistent;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use hhc\DB\Hero;
-use hhc\DB\HeroQuery;
+use hhc\DB\Counter;
+use hhc\DB\CounterQuery;
 use hhc\DB\User;
 use hhc\DB\UserQuery;
 use hhc\DB\Vote;
@@ -48,16 +48,16 @@ abstract class BaseVote extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
+     * The value for the id field.
+     * @var        int
+     */
+    protected $id;
+
+    /**
      * The value for the uid field.
      * @var        int
      */
     protected $uid;
-
-    /**
-     * The value for the hid field.
-     * @var        int
-     */
-    protected $hid;
 
     /**
      * The value for the cid field.
@@ -77,12 +77,7 @@ abstract class BaseVote extends BaseObject implements Persistent
     protected $aUser;
 
     /**
-     * @var        Hero
-     */
-    protected $aHero;
-
-    /**
-     * @var        Hero
+     * @var        Counter
      */
     protected $aCounter;
 
@@ -107,6 +102,17 @@ abstract class BaseVote extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
+     * Get the [id] column value.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+
+        return $this->id;
+    }
+
+    /**
      * Get the [uid] column value.
      *
      * @return int
@@ -115,17 +121,6 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
 
         return $this->uid;
-    }
-
-    /**
-     * Get the [hid] column value.
-     *
-     * @return int
-     */
-    public function getHid()
-    {
-
-        return $this->hid;
     }
 
     /**
@@ -159,6 +154,27 @@ abstract class BaseVote extends BaseObject implements Persistent
     }
 
     /**
+     * Set the value of [id] column.
+     *
+     * @param  int $v new value
+     * @return Vote The current object (for fluent API support)
+     */
+    public function setId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[] = VotePeer::ID;
+        }
+
+
+        return $this;
+    } // setId()
+
+    /**
      * Set the value of [uid] column.
      *
      * @param  int $v new value
@@ -182,31 +198,6 @@ abstract class BaseVote extends BaseObject implements Persistent
 
         return $this;
     } // setUid()
-
-    /**
-     * Set the value of [hid] column.
-     *
-     * @param  int $v new value
-     * @return Vote The current object (for fluent API support)
-     */
-    public function setHid($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->hid !== $v) {
-            $this->hid = $v;
-            $this->modifiedColumns[] = VotePeer::HID;
-        }
-
-        if ($this->aHero !== null && $this->aHero->getId() !== $v) {
-            $this->aHero = null;
-        }
-
-
-        return $this;
-    } // setHid()
 
     /**
      * Set the value of [cid] column.
@@ -291,8 +282,8 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
         try {
 
-            $this->uid = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->hid = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->uid = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->cid = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->vote_type = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->resetModified();
@@ -329,9 +320,6 @@ abstract class BaseVote extends BaseObject implements Persistent
 
         if ($this->aUser !== null && $this->uid !== $this->aUser->getId()) {
             $this->aUser = null;
-        }
-        if ($this->aHero !== null && $this->hid !== $this->aHero->getId()) {
-            $this->aHero = null;
         }
         if ($this->aCounter !== null && $this->cid !== $this->aCounter->getId()) {
             $this->aCounter = null;
@@ -376,7 +364,6 @@ abstract class BaseVote extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
-            $this->aHero = null;
             $this->aCounter = null;
         } // if (deep)
     }
@@ -503,13 +490,6 @@ abstract class BaseVote extends BaseObject implements Persistent
                 $this->setUser($this->aUser);
             }
 
-            if ($this->aHero !== null) {
-                if ($this->aHero->isModified() || $this->aHero->isNew()) {
-                    $affectedRows += $this->aHero->save($con);
-                }
-                $this->setHero($this->aHero);
-            }
-
             if ($this->aCounter !== null) {
                 if ($this->aCounter->isModified() || $this->aCounter->isNew()) {
                     $affectedRows += $this->aCounter->save($con);
@@ -548,13 +528,17 @@ abstract class BaseVote extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[] = VotePeer::ID;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . VotePeer::ID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
+        if ($this->isColumnModified(VotePeer::ID)) {
+            $modifiedColumns[':p' . $index++]  = '`id`';
+        }
         if ($this->isColumnModified(VotePeer::UID)) {
             $modifiedColumns[':p' . $index++]  = '`uid`';
-        }
-        if ($this->isColumnModified(VotePeer::HID)) {
-            $modifiedColumns[':p' . $index++]  = '`hid`';
         }
         if ($this->isColumnModified(VotePeer::CID)) {
             $modifiedColumns[':p' . $index++]  = '`cid`';
@@ -573,11 +557,11 @@ abstract class BaseVote extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
+                    case '`id`':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
                     case '`uid`':
                         $stmt->bindValue($identifier, $this->uid, PDO::PARAM_INT);
-                        break;
-                    case '`hid`':
-                        $stmt->bindValue($identifier, $this->hid, PDO::PARAM_INT);
                         break;
                     case '`cid`':
                         $stmt->bindValue($identifier, $this->cid, PDO::PARAM_INT);
@@ -592,6 +576,13 @@ abstract class BaseVote extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', $e);
+        }
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -683,12 +674,6 @@ abstract class BaseVote extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->aHero !== null) {
-                if (!$this->aHero->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aHero->getValidationFailures());
-                }
-            }
-
             if ($this->aCounter !== null) {
                 if (!$this->aCounter->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aCounter->getValidationFailures());
@@ -737,10 +722,10 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getUid();
+                return $this->getId();
                 break;
             case 1:
-                return $this->getHid();
+                return $this->getUid();
                 break;
             case 2:
                 return $this->getCid();
@@ -777,8 +762,8 @@ abstract class BaseVote extends BaseObject implements Persistent
         $alreadyDumpedObjects['Vote'][serialize($this->getPrimaryKey())] = true;
         $keys = VotePeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getUid(),
-            $keys[1] => $this->getHid(),
+            $keys[0] => $this->getId(),
+            $keys[1] => $this->getUid(),
             $keys[2] => $this->getCid(),
             $keys[3] => $this->getVoteType(),
         );
@@ -791,9 +776,6 @@ abstract class BaseVote extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aUser) {
                 $result['User'] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aHero) {
-                $result['Hero'] = $this->aHero->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aCounter) {
                 $result['Counter'] = $this->aCounter->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -833,10 +815,10 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setUid($value);
+                $this->setId($value);
                 break;
             case 1:
-                $this->setHid($value);
+                $this->setUid($value);
                 break;
             case 2:
                 $this->setCid($value);
@@ -872,8 +854,8 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
         $keys = VotePeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setUid($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setHid($arr[$keys[1]]);
+        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setUid($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setCid($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setVoteType($arr[$keys[3]]);
     }
@@ -887,8 +869,8 @@ abstract class BaseVote extends BaseObject implements Persistent
     {
         $criteria = new Criteria(VotePeer::DATABASE_NAME);
 
+        if ($this->isColumnModified(VotePeer::ID)) $criteria->add(VotePeer::ID, $this->id);
         if ($this->isColumnModified(VotePeer::UID)) $criteria->add(VotePeer::UID, $this->uid);
-        if ($this->isColumnModified(VotePeer::HID)) $criteria->add(VotePeer::HID, $this->hid);
         if ($this->isColumnModified(VotePeer::CID)) $criteria->add(VotePeer::CID, $this->cid);
         if ($this->isColumnModified(VotePeer::VOTE_TYPE)) $criteria->add(VotePeer::VOTE_TYPE, $this->vote_type);
 
@@ -906,8 +888,8 @@ abstract class BaseVote extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(VotePeer::DATABASE_NAME);
+        $criteria->add(VotePeer::ID, $this->id);
         $criteria->add(VotePeer::UID, $this->uid);
-        $criteria->add(VotePeer::HID, $this->hid);
         $criteria->add(VotePeer::CID, $this->cid);
 
         return $criteria;
@@ -921,8 +903,8 @@ abstract class BaseVote extends BaseObject implements Persistent
     public function getPrimaryKey()
     {
         $pks = array();
-        $pks[0] = $this->getUid();
-        $pks[1] = $this->getHid();
+        $pks[0] = $this->getId();
+        $pks[1] = $this->getUid();
         $pks[2] = $this->getCid();
 
         return $pks;
@@ -936,8 +918,8 @@ abstract class BaseVote extends BaseObject implements Persistent
      */
     public function setPrimaryKey($keys)
     {
-        $this->setUid($keys[0]);
-        $this->setHid($keys[1]);
+        $this->setId($keys[0]);
+        $this->setUid($keys[1]);
         $this->setCid($keys[2]);
     }
 
@@ -948,7 +930,7 @@ abstract class BaseVote extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return (null === $this->getUid()) && (null === $this->getHid()) && (null === $this->getCid());
+        return (null === $this->getId()) && (null === $this->getUid()) && (null === $this->getCid());
     }
 
     /**
@@ -965,7 +947,6 @@ abstract class BaseVote extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setUid($this->getUid());
-        $copyObj->setHid($this->getHid());
         $copyObj->setCid($this->getCid());
         $copyObj->setVoteType($this->getVoteType());
 
@@ -982,6 +963,7 @@ abstract class BaseVote extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1078,65 +1060,13 @@ abstract class BaseVote extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Hero object.
+     * Declares an association between this object and a Counter object.
      *
-     * @param                  Hero $v
+     * @param                  Counter $v
      * @return Vote The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setHero(Hero $v = null)
-    {
-        if ($v === null) {
-            $this->setHid(NULL);
-        } else {
-            $this->setHid($v->getId());
-        }
-
-        $this->aHero = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Hero object, it will not be re-added.
-        if ($v !== null) {
-            $v->addHeroVote($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Hero object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Hero The associated Hero object.
-     * @throws PropelException
-     */
-    public function getHero(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aHero === null && ($this->hid !== null) && $doQuery) {
-            $this->aHero = HeroQuery::create()->findPk($this->hid, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aHero->addHeroVotes($this);
-             */
-        }
-
-        return $this->aHero;
-    }
-
-    /**
-     * Declares an association between this object and a Hero object.
-     *
-     * @param                  Hero $v
-     * @return Vote The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setCounter(Hero $v = null)
+    public function setCounter(Counter $v = null)
     {
         if ($v === null) {
             $this->setCid(NULL);
@@ -1147,9 +1077,9 @@ abstract class BaseVote extends BaseObject implements Persistent
         $this->aCounter = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Hero object, it will not be re-added.
+        // If this object has already been added to the Counter object, it will not be re-added.
         if ($v !== null) {
-            $v->addCounterVote($this);
+            $v->addVote($this);
         }
 
 
@@ -1158,23 +1088,23 @@ abstract class BaseVote extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Hero object
+     * Get the associated Counter object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Hero The associated Hero object.
+     * @return Counter The associated Counter object.
      * @throws PropelException
      */
     public function getCounter(PropelPDO $con = null, $doQuery = true)
     {
         if ($this->aCounter === null && ($this->cid !== null) && $doQuery) {
-            $this->aCounter = HeroQuery::create()->findPk($this->cid, $con);
+            $this->aCounter = CounterQuery::create()->findPk($this->cid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aCounter->addCounterVotes($this);
+                $this->aCounter->addVotes($this);
              */
         }
 
@@ -1186,8 +1116,8 @@ abstract class BaseVote extends BaseObject implements Persistent
      */
     public function clear()
     {
+        $this->id = null;
         $this->uid = null;
-        $this->hid = null;
         $this->cid = null;
         $this->vote_type = null;
         $this->alreadyInSave = false;
@@ -1215,9 +1145,6 @@ abstract class BaseVote extends BaseObject implements Persistent
             if ($this->aUser instanceof Persistent) {
               $this->aUser->clearAllReferences($deep);
             }
-            if ($this->aHero instanceof Persistent) {
-              $this->aHero->clearAllReferences($deep);
-            }
             if ($this->aCounter instanceof Persistent) {
               $this->aCounter->clearAllReferences($deep);
             }
@@ -1226,7 +1153,6 @@ abstract class BaseVote extends BaseObject implements Persistent
         } // if ($deep)
 
         $this->aUser = null;
-        $this->aHero = null;
         $this->aCounter = null;
     }
 

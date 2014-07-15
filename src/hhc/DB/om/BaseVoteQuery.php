@@ -12,7 +12,7 @@ use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use hhc\DB\Hero;
+use hhc\DB\Counter;
 use hhc\DB\User;
 use hhc\DB\Vote;
 use hhc\DB\VotePeer;
@@ -23,13 +23,13 @@ use hhc\DB\VoteQuery;
  *
  *
  *
+ * @method VoteQuery orderById($order = Criteria::ASC) Order by the id column
  * @method VoteQuery orderByUid($order = Criteria::ASC) Order by the uid column
- * @method VoteQuery orderByHid($order = Criteria::ASC) Order by the hid column
  * @method VoteQuery orderByCid($order = Criteria::ASC) Order by the cid column
  * @method VoteQuery orderByVoteType($order = Criteria::ASC) Order by the vote_type column
  *
+ * @method VoteQuery groupById() Group by the id column
  * @method VoteQuery groupByUid() Group by the uid column
- * @method VoteQuery groupByHid() Group by the hid column
  * @method VoteQuery groupByCid() Group by the cid column
  * @method VoteQuery groupByVoteType() Group by the vote_type column
  *
@@ -41,10 +41,6 @@ use hhc\DB\VoteQuery;
  * @method VoteQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method VoteQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method VoteQuery leftJoinHero($relationAlias = null) Adds a LEFT JOIN clause to the query using the Hero relation
- * @method VoteQuery rightJoinHero($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Hero relation
- * @method VoteQuery innerJoinHero($relationAlias = null) Adds a INNER JOIN clause to the query using the Hero relation
- *
  * @method VoteQuery leftJoinCounter($relationAlias = null) Adds a LEFT JOIN clause to the query using the Counter relation
  * @method VoteQuery rightJoinCounter($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Counter relation
  * @method VoteQuery innerJoinCounter($relationAlias = null) Adds a INNER JOIN clause to the query using the Counter relation
@@ -52,13 +48,13 @@ use hhc\DB\VoteQuery;
  * @method Vote findOne(PropelPDO $con = null) Return the first Vote matching the query
  * @method Vote findOneOrCreate(PropelPDO $con = null) Return the first Vote matching the query, or a new Vote object populated from the query conditions when no match is found
  *
+ * @method Vote findOneById(int $id) Return the first Vote filtered by the id column
  * @method Vote findOneByUid(int $uid) Return the first Vote filtered by the uid column
- * @method Vote findOneByHid(int $hid) Return the first Vote filtered by the hid column
  * @method Vote findOneByCid(int $cid) Return the first Vote filtered by the cid column
  * @method Vote findOneByVoteType(int $vote_type) Return the first Vote filtered by the vote_type column
  *
+ * @method array findById(int $id) Return Vote objects filtered by the id column
  * @method array findByUid(int $uid) Return Vote objects filtered by the uid column
- * @method array findByHid(int $hid) Return Vote objects filtered by the hid column
  * @method array findByCid(int $cid) Return Vote objects filtered by the cid column
  * @method array findByVoteType(int $vote_type) Return Vote objects filtered by the vote_type column
  *
@@ -116,7 +112,7 @@ abstract class BaseVoteQuery extends ModelCriteria
      * </code>
      *
      * @param array $key Primary key to use for the query
-                         A Primary key composition: [$uid, $hid, $cid]
+                         A Primary key composition: [$id, $uid, $cid]
      * @param     PropelPDO $con an optional connection object
      *
      * @return   Vote|Vote[]|mixed the result, formatted by the current formatter
@@ -155,7 +151,7 @@ abstract class BaseVoteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `uid`, `hid`, `cid`, `vote_type` FROM `vote` WHERE `uid` = :p0 AND `hid` = :p1 AND `cid` = :p2';
+        $sql = 'SELECT `id`, `uid`, `cid`, `vote_type` FROM `vote` WHERE `id` = :p0 AND `uid` = :p1 AND `cid` = :p2';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -229,8 +225,8 @@ abstract class BaseVoteQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(VotePeer::UID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(VotePeer::HID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(VotePeer::ID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(VotePeer::UID, $key[1], Criteria::EQUAL);
         $this->addUsingAlias(VotePeer::CID, $key[2], Criteria::EQUAL);
 
         return $this;
@@ -249,8 +245,8 @@ abstract class BaseVoteQuery extends ModelCriteria
             return $this->add(null, '1<>1', Criteria::CUSTOM);
         }
         foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(VotePeer::UID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(VotePeer::HID, $key[1], Criteria::EQUAL);
+            $cton0 = $this->getNewCriterion(VotePeer::ID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(VotePeer::UID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
             $cton2 = $this->getNewCriterion(VotePeer::CID, $key[2], Criteria::EQUAL);
             $cton0->addAnd($cton2);
@@ -258,6 +254,48 @@ abstract class BaseVoteQuery extends ModelCriteria
         }
 
         return $this;
+    }
+
+    /**
+     * Filter the query on the id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterById(1234); // WHERE id = 1234
+     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+     * $query->filterById(array('min' => 12)); // WHERE id >= 12
+     * $query->filterById(array('max' => 12)); // WHERE id <= 12
+     * </code>
+     *
+     * @param     mixed $id The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VoteQuery The current query, for fluid interface
+     */
+    public function filterById($id = null, $comparison = null)
+    {
+        if (is_array($id)) {
+            $useMinMax = false;
+            if (isset($id['min'])) {
+                $this->addUsingAlias(VotePeer::ID, $id['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($id['max'])) {
+                $this->addUsingAlias(VotePeer::ID, $id['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(VotePeer::ID, $id, $comparison);
     }
 
     /**
@@ -302,50 +340,6 @@ abstract class BaseVoteQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(VotePeer::UID, $uid, $comparison);
-    }
-
-    /**
-     * Filter the query on the hid column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByHid(1234); // WHERE hid = 1234
-     * $query->filterByHid(array(12, 34)); // WHERE hid IN (12, 34)
-     * $query->filterByHid(array('min' => 12)); // WHERE hid >= 12
-     * $query->filterByHid(array('max' => 12)); // WHERE hid <= 12
-     * </code>
-     *
-     * @see       filterByHero()
-     *
-     * @param     mixed $hid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return VoteQuery The current query, for fluid interface
-     */
-    public function filterByHid($hid = null, $comparison = null)
-    {
-        if (is_array($hid)) {
-            $useMinMax = false;
-            if (isset($hid['min'])) {
-                $this->addUsingAlias(VotePeer::HID, $hid['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($hid['max'])) {
-                $this->addUsingAlias(VotePeer::HID, $hid['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(VotePeer::HID, $hid, $comparison);
     }
 
     /**
@@ -496,104 +490,28 @@ abstract class BaseVoteQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related Hero object
+     * Filter the query by a related Counter object
      *
-     * @param   Hero|PropelObjectCollection $hero The related object(s) to use as filter
+     * @param   Counter|PropelObjectCollection $counter The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 VoteQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByHero($hero, $comparison = null)
+    public function filterByCounter($counter, $comparison = null)
     {
-        if ($hero instanceof Hero) {
+        if ($counter instanceof Counter) {
             return $this
-                ->addUsingAlias(VotePeer::HID, $hero->getId(), $comparison);
-        } elseif ($hero instanceof PropelObjectCollection) {
+                ->addUsingAlias(VotePeer::CID, $counter->getId(), $comparison);
+        } elseif ($counter instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(VotePeer::HID, $hero->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(VotePeer::CID, $counter->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByHero() only accepts arguments of type Hero or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Hero relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return VoteQuery The current query, for fluid interface
-     */
-    public function joinHero($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Hero');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Hero');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Hero relation Hero object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   \hhc\DB\HeroQuery A secondary query class using the current class as primary query
-     */
-    public function useHeroQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinHero($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Hero', '\hhc\DB\HeroQuery');
-    }
-
-    /**
-     * Filter the query by a related Hero object
-     *
-     * @param   Hero|PropelObjectCollection $hero The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 VoteQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByCounter($hero, $comparison = null)
-    {
-        if ($hero instanceof Hero) {
-            return $this
-                ->addUsingAlias(VotePeer::CID, $hero->getId(), $comparison);
-        } elseif ($hero instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(VotePeer::CID, $hero->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByCounter() only accepts arguments of type Hero or PropelCollection');
+            throw new PropelException('filterByCounter() only accepts arguments of type Counter or PropelCollection');
         }
     }
 
@@ -630,7 +548,7 @@ abstract class BaseVoteQuery extends ModelCriteria
     }
 
     /**
-     * Use the Counter relation Hero object
+     * Use the Counter relation Counter object
      *
      * @see       useQuery()
      *
@@ -638,13 +556,13 @@ abstract class BaseVoteQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \hhc\DB\HeroQuery A secondary query class using the current class as primary query
+     * @return   \hhc\DB\CounterQuery A secondary query class using the current class as primary query
      */
     public function useCounterQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinCounter($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Counter', '\hhc\DB\HeroQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'Counter', '\hhc\DB\CounterQuery');
     }
 
     /**
@@ -657,8 +575,8 @@ abstract class BaseVoteQuery extends ModelCriteria
     public function prune($vote = null)
     {
         if ($vote) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(VotePeer::UID), $vote->getUid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(VotePeer::HID), $vote->getHid(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond0', $this->getAliasedColName(VotePeer::ID), $vote->getId(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(VotePeer::UID), $vote->getUid(), Criteria::NOT_EQUAL);
             $this->addCond('pruneCond2', $this->getAliasedColName(VotePeer::CID), $vote->getCid(), Criteria::NOT_EQUAL);
             $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
         }

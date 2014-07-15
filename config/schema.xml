@@ -15,23 +15,34 @@
     <column name="stat" type="varchar" size="10" required="true" />
     <column name="slug" type="varchar" size="255" required="false" />
   </table>
+
+  <table name="counter" phpName="Counter">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="hid" type="integer" required="true" />
+    <column name="cid" type="integer" required="true" />
+
+    <foreign-key foreignTable="hero" phpName="Hero" refPhpName="Counter">
+        <reference local="hid" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="hero" phpName="Counter">
+        <reference local="cid" foreign="id" />
+    </foreign-key>
+  </table>
+
   <table name="vote" phpName="Vote">
+    <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="uid" type="integer" required="true" primaryKey="true" />
-    <column name="hid" type="integer" required="true" primaryKey="true" />
     <column name="cid" type="integer" required="true" primaryKey="true" />
+    <column name="vote_type" type="ENUM" valueSet="up,down" />
 
     <foreign-key foreignTable="user" phpName="User" refPhpName="Vote">
         <reference local="uid" foreign="id" />
     </foreign-key>
-    <foreign-key foreignTable="hero" phpName="Hero" refPhpName="HeroVote">
-        <reference local="hid" foreign="id" />
-    </foreign-key>
-    <foreign-key foreignTable="hero" phpName="Counter" refPhpName="CounterVote">
+    <foreign-key foreignTable="counter" phpName="Counter" refPhpName="Vote">
         <reference local="cid" foreign="id" />
     </foreign-key>
-
-    <column name="vote_type" type="ENUM" valueSet="up,down" />
   </table>
+
   <table name="user" phpName="User">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
     <column name="username" type="varchar" size="255" required="true" />

@@ -6,16 +6,18 @@ use hhc\DB\Vote;
 use hhc\DB\VoteQuery;
 use Symfony\Component\HttpFoundation\Request;
 
+require dirname(__DIR__).'/lib/password.php';
+
 /**
  * ----------------------
  * route /login
  * ----------------------
  */
 $app->match('/login', function (Request $request) use ($app) {
-    $session = $app['session']->get('user');
-    $error   = null;
+    $error = null;
     
-    if ($session) return $app->redirect('/account');
+    if ($session = $app['session']->get('user'))
+        return $app->redirect('/account');
 
     if ($request->getMethod() == 'POST') {
         if (!($username = $request->get('_username')))
@@ -29,7 +31,7 @@ $app->match('/login', function (Request $request) use ($app) {
             $u = UserQuery::create()->filterByUsername($username)->findOne();
             
             // needs hashing
-            if (strtolower($username) === strtolower($u->getUsername()) && $password === $u->getPassword()) {
+            if (strtolower($username) === strtolower($u->getUsername()) && password_verify($password, $u->getPassword())) {
                 $app['session']->start();
                 $app['session']->set('user', $u->getUsername());
                 return $app->redirect('/account');
@@ -40,7 +42,7 @@ $app->match('/login', function (Request $request) use ($app) {
     }
 
     return $app['twig']->render('login.html.twig', array(
-        'user' => $user,
+        'user' => $session,
         'error' => $error
     ));
 });
@@ -56,11 +58,9 @@ $app->get('/logout', function () use ($app) {
  * ----------------------
  */
 $app->match('/register', function (Request $request) use ($app) {
-    $user  = $app['session']->get('user');
     $error = null;
 
-    // check if user is logged in
-    if (isLoggedIn($user))
+    if ($session = $app['session']->get('user'))
         return $app->redirect('/');
 
     if ($request->getMethod() == 'POST') {
@@ -81,7 +81,7 @@ $app->match('/register', function (Request $request) use ($app) {
             $u = new User();
             $u->setEmail($email);
             $u->setUsername($username);
-            $u->setPassword($password);
+            $u->setPassword(password_hash($password, PASSWORD_DEFAULT));
             
             if ($u->validate()) {
                 $u->save();
@@ -97,7 +97,7 @@ $app->match('/register', function (Request $request) use ($app) {
     }
 
     return $app['twig']->render('register.html.twig', array(
-        'user' => $user,
+        'user' => $session,
         'error' => $error
     ));
 });

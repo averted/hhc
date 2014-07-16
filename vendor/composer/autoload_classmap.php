@@ -4,7 +4,9 @@
 
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
+$libDir = $baseDir.'/lib';
 
 return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
+    'HeroSearch' => $libDir . '/HeroSearch.php',
 );

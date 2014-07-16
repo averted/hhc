@@ -1,7 +1,6 @@
 <?php
 
 require dirname(__DIR__).'/autoload.php';
-require dirname(__DIR__).'/modules/functions.php';
 
 /**
  * ---------------------

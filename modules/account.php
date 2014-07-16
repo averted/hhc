@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  * ----------------------
  */
 $app->get('/account', function () use ($app) {
-    $session = $app['session']->get('user');
-    if (!$session) return $app->redirect('/login');
+    if (!$session = $app['session']->get('user')) return $app->redirect('/login');
 
     $user = UserQuery::create()->filterByUsername($session)->findOne();
     if (!$user) return $app->redirect('/');

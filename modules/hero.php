@@ -17,48 +17,42 @@ use Symfony\Component\HttpFoundation\Response;
  * ----------------------
  */
 $app->get('/hero', function(Request $request) use ($app) {
-    $session = $app['session']->get('user');
-
     $heroes = HeroQuery::create()->orderByName('asc')->find();
 
     return $app['twig']->render('hero-list.html.twig', array(
-        'user' => $session,
+        'user' => $app['session']->get('user'),
         'heroes' => $heroes
     ));
 });
 
 $app->get('/hero/{slug}', function($slug) use ($app) {
-    $session = $app['session']->get('user');
-
     $hero = HeroQuery::create()->filterBySlug($slug)->findOne();
-    if (!$hero) return $app->redirect('/hero');
+    if (!$hero)
+        throw new Exception('Unknown Hero');
 
     return $app['twig']->render('hero.html.twig', array(
-        'user' => $session,
+        'user' => $app['session']->get('user'),
         'hero' => $hero,
         'counters' => $hero->getCounterArray()
     ));
 });
 
 $app->get('/hero/{slug}/counter/{counter}/{vote_type}', function($slug, $counter, $vote_type) use ($app) {
-    if (!in_array($vote_type, array('up', 'down'))) return $app->redirect('/hero');
+    if (!in_array($vote_type, array('up', 'down')))
+        throw new Exception('Invalid Vote Type');
 
-    $session = $app['session']->get('user');
-    if (!$session) return $app->redirect('/login');
+    if (!$session = $app['session']->get('user'))
+        return $app->redirect('/login');
 
     $hero = HeroQuery::create()->filterBySlug($slug)->findOne();
     $cntr = HeroQuery::create()->filterBySlug($counter)->findOne();
     $user = UserQuery::create()->filterByUsername($session)->findOne();
 
-    if (!$hero || !$cntr || !$user) return $app->redirect('/hero');
+    if (!$hero || !$cntr || !$user)
+        throw new Exception('Invalid Hero/User/Counter Specified');
 
-    if ($hero->voteExists($user, $cntr)) {
-        return $app['twig']->render('error.html.twig', array(
-            'user' => $session,
-            'url' => "/hero/{$slug}",
-            'error' => 'You may only vote once for each Hero->Counter combination'
-        ));
-    }
+    if ($hero->voteExists($user, $cntr))
+        throw new Exception('You may only vote once for each Hero->Counter combination');
 
     if ($hero->counterExists($cntr)) {
         $c = CounterQuery::create()
@@ -88,16 +82,15 @@ $app->get('/hero/{slug}/counter/{counter}/{vote_type}', function($slug, $counter
  * route /counter
  * ----------------------
  */
-$app->get('/counter/{name}', function($name) use ($app) {
-    $session = $app['session']->get('user');
-
+$app->get('/counter/{slug}', function($slug) use ($app) {
     $heroes = HeroQuery::create()->orderByName()->find();
-    $hero   = HeroQuery::create()->filterByName($name)->findOne();
+    $hero   = HeroQuery::create()->filterBySlug($slug)->findOne();
 
-    if (!$hero) return $app->redirect('/hero');
+    if (!$hero)
+        throw new Exception('Unknown Hero');
 
     return $app['twig']->render('counter-list.html.twig', array(
-        'user' => $session,
+        'user' => $app['session']->get('user'),
         'hero' => $hero,
         'heroes' => $heroes,
         'counters' => $hero->getCounterArray()

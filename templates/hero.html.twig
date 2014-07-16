@@ -19,7 +19,7 @@
         {% for counter in counters %}
             <li>
                 <a href="/hero/{{ counter.slug }}"><img class="hero-icon-70px left" src="{{ img ~ counter.slug ~ ext }}" /></a>
-                <div class="name left">{{ counter.slug }}</div>
+                <div class="name left">{{ counter.name }}</div>
                 <!-- TODO: fix responsive-ness -->
                 <div class="vote left" style="left:62px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up" class="button">up</a></div>
                 <div class="vote left" style="left:97px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down" class="button">down</a></div>

@@ -13,26 +13,66 @@
         <span class="bar-max armor"><span class="bar" style="width:{{ hero.getArmor*20 }}px;">{{ hero.getArmor }}</span></span><br/> 
         <span class="bar-max diff"><span class="bar" style="width:{{ hero.getDifficulty*30 }}px;">{{ hero.getDifficulty }}</span></span><br/> 
     <div class="clear"></div>
-    <h2>Top counters for {{ hero.getName }}:</h2>
-    <div class="hero-counters">
-        <ul>
-        {% for counter in counters %}
-            <li>
-                <a href="/hero/{{ counter.slug }}"><img class="hero-icon-70px left" src="{{ img ~ counter.slug ~ ext }}" /></a>
-                <div class="name left">{{ counter.name }}</div>
-                <!-- TODO: fix responsive-ness -->
-                <div class="vote left" style="left:62px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up" class="button">up</a></div>
-                <div class="vote left" style="left:97px;"><a href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down" class="button">down</a></div>
-                <div class="vote button left" style="left:153px;">{{ counter.votes }}</div>
-                <div class="clear"></div>
-            </li>
-        {% endfor %}
-            <li>
-                <a href="{% if user %}/counter/{{ hero.getSlug }}{% else %}/login{% endif %}" class="button center add">add a counter</a>
-            </li>
-        </ul>
-        <div class="clear"></div>
+
+    <div class="hero-counters left">
+        <h2 class="center">Top counters for {{ hero.getName }}:</h2>
+        <div class="hero-box">
+            <ul>
+            {% for counter in counters %}
+                <li>
+                    <div class="hero-img left">
+                        <a href="/hero/{{ counter.slug }}"><img class="hero-icon-70px left" src="{{ img ~ counter.slug ~ ext }}" /></a>
+                    </div>
+                    <div class="hero-info left">
+                        <div class="name">{{ counter.name }}</div>
+                        <!-- TODO: fix responsive-ness -->
+                        <div class="votes">
+                            <div class="button">{{ counter.votes }}</div>
+                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up">&#9650; {{ counter.up }}</a></div>
+                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down">&#9660; {{ counter.down }}</a></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </li>
+            {% endfor %}
+                <li>
+                    <a class="button center add" href="{% if user %}/counter/{{ hero.getSlug }}{% else %}/login{% endif %}">add a counter</a>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div>
     </div>
+
+    {% if pros|length %}
+    <div class="hero-pros right">
+        <h2 class="center">{{ hero.getName }} is good against:</h2>
+        <div class="hero-box">
+            <ul>
+            {% for pro in pros %}
+                <li>
+                    <div class="hero-img left">
+                        <a href="/hero/{{ pro.slug }}"><img class="hero-icon-70px left" src="{{ img ~ pro.slug ~ ext }}" /></a>
+                    </div>
+                    <div class="hero-info left">
+                        <div class="name">{{ pro.name }}</div>
+                        <!-- TODO: fix responsive-ness -->
+                        <div class="votes">
+                            <div class="button">{{ pro.votes }}</div>
+                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/up">&#9650; {{ pro.up }}</a></div>
+                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/down">&#9660; {{ pro.down }}</a></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </li>
+            {% endfor %}
+            </ul>
+            <div class="clear"></div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="clear"></div>
 </div>
 <script type="text/javascript">
 $('.bar').each(function() {

@@ -33,7 +33,8 @@ $app->get('/hero/{slug}', function($slug) use ($app) {
     return $app['twig']->render('hero.html.twig', array(
         'user' => $app['session']->get('user'),
         'hero' => $hero,
-        'counters' => $hero->getCounterArray()
+        'counters' => $hero->getCounterArray(),
+        'pros' => $hero->getCounterArray(true)
     ));
 });
 

@@ -35,12 +35,15 @@ class Hero extends BaseHero
         return $counter ? true : false;
     }
 
-    function getCounterArray() {
-        $mappings = CounterQuery::create()->filterByHid($this->id)->find();
+    function getCounterArray($reverse = false) {
+        $query = CounterQuery::create();
+        $query = $reverse ? $query->filterByCid($this->id) : $query->filterByHid($this->id);
+        $mappings = $query->find();
         $counters = array();
         
         foreach ($mappings as $m) {
-            $hero = HeroQuery::create()->findPK($m->getCid());
+            $id = $reverse ? $m->getHid() : $m->getCid();
+            $hero = HeroQuery::create()->findPK($id);
             $votes = (count($m->findVotes()) - count($m->findVotes('down')) < 0) ? '0' : count($m->findVotes()) - count($m->findVotes('down'));
             $counters[] = array (
                 'name' => $hero->getName(),

@@ -43,18 +43,32 @@ class HeroTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('hero_id', 'HeroId', 'INTEGER', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
-        $this->addColumn('role', 'Role', 'VARCHAR', true, 200, null);
-        $this->addColumn('hp', 'HP', 'INTEGER', true, null, null);
+        $this->addColumn('team', 'Team', 'VARCHAR', true, 50, null);
+        $this->addColumn('role', 'Role', 'VARCHAR', false, 200, null);
+        $this->addColumn('attacktype', 'Attacktype', 'VARCHAR', false, 100, null);
+        $this->addColumn('attackrange', 'Attackrange', 'INTEGER', false, null, null);
+        $this->addColumn('attackspeed', 'Attackspeed', 'FLOAT', false, 4, null);
+        $this->addColumn('hp', 'HP', 'INTEGER', false, null, null);
+        $this->addColumn('mana', 'Mana', 'INTEGER', false, null, null);
         $this->addColumn('dmg', 'Dmg', 'VARCHAR', true, 20, null);
+        $this->addColumn('dmgmin', 'DmgMin', 'INTEGER', false, null, null);
+        $this->addColumn('dmgmax', 'DmgMax', 'INTEGER', false, null, null);
         $this->addColumn('armor', 'Armor', 'FLOAT', true, 4, null);
-        $this->addColumn('difficulty', 'Difficulty', 'FLOAT', true, 3, null);
-        $this->addColumn('range', 'Range', 'INTEGER', true, null, null);
-        $this->addColumn('speed', 'Speed', 'INTEGER', true, null, null);
-        $this->addColumn('stuns', 'Stuns', 'INTEGER', false, null, null);
-        $this->addColumn('side', 'Side', 'VARCHAR', true, 20, null);
-        $this->addColumn('stat', 'Stat', 'VARCHAR', true, 10, null);
-        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 255, null);
+        $this->addColumn('magicarmor', 'MagicArmor', 'FLOAT', false, 4, null);
+        $this->addColumn('stat', 'Stat', 'VARCHAR', true, 20, null);
+        $this->addColumn('strength', 'Strength', 'INTEGER', false, null, null);
+        $this->addColumn('strperlvl', 'Strperlvl', 'FLOAT', false, 4, null);
+        $this->addColumn('agility', 'Agility', 'INTEGER', false, null, null);
+        $this->addColumn('agiperlvl', 'Agiperlvl', 'FLOAT', false, 4, null);
+        $this->addColumn('intelligence', 'Intelligence', 'INTEGER', false, null, null);
+        $this->addColumn('intperlvl', 'Intperlvl', 'FLOAT', false, 4, null);
+        $this->addColumn('hpregen', 'HpRegen', 'FLOAT', false, 4, null);
+        $this->addColumn('manaregen', 'ManaRegen', 'FLOAT', false, 4, null);
+        $this->addColumn('movespeed', 'MoveSpeed', 'INTEGER', true, null, null);
+        $this->addColumn('difficulty', 'Difficulty', 'FLOAT', false, 3, null);
+        $this->addColumn('slug', 'Slug', 'VARCHAR', false, 50, null);
         // validators
     } // initialize()
 

@@ -4,6 +4,7 @@ config/build.sh
 config/hhc-conf.php
 config/runtime-conf.xml
 config/schema.sql
+modules/api.php
 
 # other
 composer.phar

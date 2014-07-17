@@ -52,15 +52,4 @@ $app->post('/search', function (Request $request) use ($app) {
     return $app->redirect($url);
 });
 
-/**
- * ----------------------
- * route /error
- * ----------------------
- */
-$app->get('/error/{msg}', function (Request $request, $msg) use ($app) {
-    return $app['twig']->render('error.html.twig', array(
-        'user' => $app['session']->get('user'), 
-        'error' => $msg
-    ));
-});
 ?>

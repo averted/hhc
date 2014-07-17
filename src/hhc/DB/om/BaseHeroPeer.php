@@ -36,49 +36,91 @@ abstract class BaseHeroPeer
     const TM_CLASS = 'hhc\\DB\\map\\HeroTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 27;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 27;
 
     /** the column name for the id field */
     const ID = 'hero.id';
 
+    /** the column name for the hero_id field */
+    const HERO_ID = 'hero.hero_id';
+
     /** the column name for the name field */
     const NAME = 'hero.name';
+
+    /** the column name for the team field */
+    const TEAM = 'hero.team';
 
     /** the column name for the role field */
     const ROLE = 'hero.role';
 
+    /** the column name for the attacktype field */
+    const ATTACKTYPE = 'hero.attacktype';
+
+    /** the column name for the attackrange field */
+    const ATTACKRANGE = 'hero.attackrange';
+
+    /** the column name for the attackspeed field */
+    const ATTACKSPEED = 'hero.attackspeed';
+
     /** the column name for the hp field */
     const HP = 'hero.hp';
+
+    /** the column name for the mana field */
+    const MANA = 'hero.mana';
 
     /** the column name for the dmg field */
     const DMG = 'hero.dmg';
 
+    /** the column name for the dmgmin field */
+    const DMGMIN = 'hero.dmgmin';
+
+    /** the column name for the dmgmax field */
+    const DMGMAX = 'hero.dmgmax';
+
     /** the column name for the armor field */
     const ARMOR = 'hero.armor';
 
-    /** the column name for the difficulty field */
-    const DIFFICULTY = 'hero.difficulty';
-
-    /** the column name for the range field */
-    const RANGE = 'hero.range';
-
-    /** the column name for the speed field */
-    const SPEED = 'hero.speed';
-
-    /** the column name for the stuns field */
-    const STUNS = 'hero.stuns';
-
-    /** the column name for the side field */
-    const SIDE = 'hero.side';
+    /** the column name for the magicarmor field */
+    const MAGICARMOR = 'hero.magicarmor';
 
     /** the column name for the stat field */
     const STAT = 'hero.stat';
+
+    /** the column name for the strength field */
+    const STRENGTH = 'hero.strength';
+
+    /** the column name for the strperlvl field */
+    const STRPERLVL = 'hero.strperlvl';
+
+    /** the column name for the agility field */
+    const AGILITY = 'hero.agility';
+
+    /** the column name for the agiperlvl field */
+    const AGIPERLVL = 'hero.agiperlvl';
+
+    /** the column name for the intelligence field */
+    const INTELLIGENCE = 'hero.intelligence';
+
+    /** the column name for the intperlvl field */
+    const INTPERLVL = 'hero.intperlvl';
+
+    /** the column name for the hpregen field */
+    const HPREGEN = 'hero.hpregen';
+
+    /** the column name for the manaregen field */
+    const MANAREGEN = 'hero.manaregen';
+
+    /** the column name for the movespeed field */
+    const MOVESPEED = 'hero.movespeed';
+
+    /** the column name for the difficulty field */
+    const DIFFICULTY = 'hero.difficulty';
 
     /** the column name for the slug field */
     const SLUG = 'hero.slug';
@@ -102,12 +144,12 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[HeroPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Role', 'HP', 'Dmg', 'Armor', 'Difficulty', 'Range', 'Speed', 'Stuns', 'Side', 'Stat', 'Slug', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'role', 'hP', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', 'slug', ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::NAME, HeroPeer::ROLE, HeroPeer::HP, HeroPeer::DMG, HeroPeer::ARMOR, HeroPeer::DIFFICULTY, HeroPeer::RANGE, HeroPeer::SPEED, HeroPeer::STUNS, HeroPeer::SIDE, HeroPeer::STAT, HeroPeer::SLUG, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ROLE', 'HP', 'DMG', 'ARMOR', 'DIFFICULTY', 'RANGE', 'SPEED', 'STUNS', 'SIDE', 'STAT', 'SLUG', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'role', 'hp', 'dmg', 'armor', 'difficulty', 'range', 'speed', 'stuns', 'side', 'stat', 'slug', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'HeroId', 'Name', 'Team', 'Role', 'Attacktype', 'Attackrange', 'Attackspeed', 'HP', 'Mana', 'Dmg', 'DmgMin', 'DmgMax', 'Armor', 'MagicArmor', 'Stat', 'Strength', 'Strperlvl', 'Agility', 'Agiperlvl', 'Intelligence', 'Intperlvl', 'HpRegen', 'ManaRegen', 'MoveSpeed', 'Difficulty', 'Slug', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'heroId', 'name', 'team', 'role', 'attacktype', 'attackrange', 'attackspeed', 'hP', 'mana', 'dmg', 'dmgMin', 'dmgMax', 'armor', 'magicArmor', 'stat', 'strength', 'strperlvl', 'agility', 'agiperlvl', 'intelligence', 'intperlvl', 'hpRegen', 'manaRegen', 'moveSpeed', 'difficulty', 'slug', ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID, HeroPeer::HERO_ID, HeroPeer::NAME, HeroPeer::TEAM, HeroPeer::ROLE, HeroPeer::ATTACKTYPE, HeroPeer::ATTACKRANGE, HeroPeer::ATTACKSPEED, HeroPeer::HP, HeroPeer::MANA, HeroPeer::DMG, HeroPeer::DMGMIN, HeroPeer::DMGMAX, HeroPeer::ARMOR, HeroPeer::MAGICARMOR, HeroPeer::STAT, HeroPeer::STRENGTH, HeroPeer::STRPERLVL, HeroPeer::AGILITY, HeroPeer::AGIPERLVL, HeroPeer::INTELLIGENCE, HeroPeer::INTPERLVL, HeroPeer::HPREGEN, HeroPeer::MANAREGEN, HeroPeer::MOVESPEED, HeroPeer::DIFFICULTY, HeroPeer::SLUG, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'HERO_ID', 'NAME', 'TEAM', 'ROLE', 'ATTACKTYPE', 'ATTACKRANGE', 'ATTACKSPEED', 'HP', 'MANA', 'DMG', 'DMGMIN', 'DMGMAX', 'ARMOR', 'MAGICARMOR', 'STAT', 'STRENGTH', 'STRPERLVL', 'AGILITY', 'AGIPERLVL', 'INTELLIGENCE', 'INTPERLVL', 'HPREGEN', 'MANAREGEN', 'MOVESPEED', 'DIFFICULTY', 'SLUG', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'hero_id', 'name', 'team', 'role', 'attacktype', 'attackrange', 'attackspeed', 'hp', 'mana', 'dmg', 'dmgmin', 'dmgmax', 'armor', 'magicarmor', 'stat', 'strength', 'strperlvl', 'agility', 'agiperlvl', 'intelligence', 'intperlvl', 'hpregen', 'manaregen', 'movespeed', 'difficulty', 'slug', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
     );
 
     /**
@@ -117,12 +159,12 @@ abstract class BaseHeroPeer
      * e.g. HeroPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Role' => 2, 'HP' => 3, 'Dmg' => 4, 'Armor' => 5, 'Difficulty' => 6, 'Range' => 7, 'Speed' => 8, 'Stuns' => 9, 'Side' => 10, 'Stat' => 11, 'Slug' => 12, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hP' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, 'slug' => 12, ),
-        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::NAME => 1, HeroPeer::ROLE => 2, HeroPeer::HP => 3, HeroPeer::DMG => 4, HeroPeer::ARMOR => 5, HeroPeer::DIFFICULTY => 6, HeroPeer::RANGE => 7, HeroPeer::SPEED => 8, HeroPeer::STUNS => 9, HeroPeer::SIDE => 10, HeroPeer::STAT => 11, HeroPeer::SLUG => 12, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ROLE' => 2, 'HP' => 3, 'DMG' => 4, 'ARMOR' => 5, 'DIFFICULTY' => 6, 'RANGE' => 7, 'SPEED' => 8, 'STUNS' => 9, 'SIDE' => 10, 'STAT' => 11, 'SLUG' => 12, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'role' => 2, 'hp' => 3, 'dmg' => 4, 'armor' => 5, 'difficulty' => 6, 'range' => 7, 'speed' => 8, 'stuns' => 9, 'side' => 10, 'stat' => 11, 'slug' => 12, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'HeroId' => 1, 'Name' => 2, 'Team' => 3, 'Role' => 4, 'Attacktype' => 5, 'Attackrange' => 6, 'Attackspeed' => 7, 'HP' => 8, 'Mana' => 9, 'Dmg' => 10, 'DmgMin' => 11, 'DmgMax' => 12, 'Armor' => 13, 'MagicArmor' => 14, 'Stat' => 15, 'Strength' => 16, 'Strperlvl' => 17, 'Agility' => 18, 'Agiperlvl' => 19, 'Intelligence' => 20, 'Intperlvl' => 21, 'HpRegen' => 22, 'ManaRegen' => 23, 'MoveSpeed' => 24, 'Difficulty' => 25, 'Slug' => 26, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'heroId' => 1, 'name' => 2, 'team' => 3, 'role' => 4, 'attacktype' => 5, 'attackrange' => 6, 'attackspeed' => 7, 'hP' => 8, 'mana' => 9, 'dmg' => 10, 'dmgMin' => 11, 'dmgMax' => 12, 'armor' => 13, 'magicArmor' => 14, 'stat' => 15, 'strength' => 16, 'strperlvl' => 17, 'agility' => 18, 'agiperlvl' => 19, 'intelligence' => 20, 'intperlvl' => 21, 'hpRegen' => 22, 'manaRegen' => 23, 'moveSpeed' => 24, 'difficulty' => 25, 'slug' => 26, ),
+        BasePeer::TYPE_COLNAME => array (HeroPeer::ID => 0, HeroPeer::HERO_ID => 1, HeroPeer::NAME => 2, HeroPeer::TEAM => 3, HeroPeer::ROLE => 4, HeroPeer::ATTACKTYPE => 5, HeroPeer::ATTACKRANGE => 6, HeroPeer::ATTACKSPEED => 7, HeroPeer::HP => 8, HeroPeer::MANA => 9, HeroPeer::DMG => 10, HeroPeer::DMGMIN => 11, HeroPeer::DMGMAX => 12, HeroPeer::ARMOR => 13, HeroPeer::MAGICARMOR => 14, HeroPeer::STAT => 15, HeroPeer::STRENGTH => 16, HeroPeer::STRPERLVL => 17, HeroPeer::AGILITY => 18, HeroPeer::AGIPERLVL => 19, HeroPeer::INTELLIGENCE => 20, HeroPeer::INTPERLVL => 21, HeroPeer::HPREGEN => 22, HeroPeer::MANAREGEN => 23, HeroPeer::MOVESPEED => 24, HeroPeer::DIFFICULTY => 25, HeroPeer::SLUG => 26, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'HERO_ID' => 1, 'NAME' => 2, 'TEAM' => 3, 'ROLE' => 4, 'ATTACKTYPE' => 5, 'ATTACKRANGE' => 6, 'ATTACKSPEED' => 7, 'HP' => 8, 'MANA' => 9, 'DMG' => 10, 'DMGMIN' => 11, 'DMGMAX' => 12, 'ARMOR' => 13, 'MAGICARMOR' => 14, 'STAT' => 15, 'STRENGTH' => 16, 'STRPERLVL' => 17, 'AGILITY' => 18, 'AGIPERLVL' => 19, 'INTELLIGENCE' => 20, 'INTPERLVL' => 21, 'HPREGEN' => 22, 'MANAREGEN' => 23, 'MOVESPEED' => 24, 'DIFFICULTY' => 25, 'SLUG' => 26, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'hero_id' => 1, 'name' => 2, 'team' => 3, 'role' => 4, 'attacktype' => 5, 'attackrange' => 6, 'attackspeed' => 7, 'hp' => 8, 'mana' => 9, 'dmg' => 10, 'dmgmin' => 11, 'dmgmax' => 12, 'armor' => 13, 'magicarmor' => 14, 'stat' => 15, 'strength' => 16, 'strperlvl' => 17, 'agility' => 18, 'agiperlvl' => 19, 'intelligence' => 20, 'intperlvl' => 21, 'hpregen' => 22, 'manaregen' => 23, 'movespeed' => 24, 'difficulty' => 25, 'slug' => 26, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
     );
 
     /**
@@ -197,31 +239,59 @@ abstract class BaseHeroPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(HeroPeer::ID);
+            $criteria->addSelectColumn(HeroPeer::HERO_ID);
             $criteria->addSelectColumn(HeroPeer::NAME);
+            $criteria->addSelectColumn(HeroPeer::TEAM);
             $criteria->addSelectColumn(HeroPeer::ROLE);
+            $criteria->addSelectColumn(HeroPeer::ATTACKTYPE);
+            $criteria->addSelectColumn(HeroPeer::ATTACKRANGE);
+            $criteria->addSelectColumn(HeroPeer::ATTACKSPEED);
             $criteria->addSelectColumn(HeroPeer::HP);
+            $criteria->addSelectColumn(HeroPeer::MANA);
             $criteria->addSelectColumn(HeroPeer::DMG);
+            $criteria->addSelectColumn(HeroPeer::DMGMIN);
+            $criteria->addSelectColumn(HeroPeer::DMGMAX);
             $criteria->addSelectColumn(HeroPeer::ARMOR);
-            $criteria->addSelectColumn(HeroPeer::DIFFICULTY);
-            $criteria->addSelectColumn(HeroPeer::RANGE);
-            $criteria->addSelectColumn(HeroPeer::SPEED);
-            $criteria->addSelectColumn(HeroPeer::STUNS);
-            $criteria->addSelectColumn(HeroPeer::SIDE);
+            $criteria->addSelectColumn(HeroPeer::MAGICARMOR);
             $criteria->addSelectColumn(HeroPeer::STAT);
+            $criteria->addSelectColumn(HeroPeer::STRENGTH);
+            $criteria->addSelectColumn(HeroPeer::STRPERLVL);
+            $criteria->addSelectColumn(HeroPeer::AGILITY);
+            $criteria->addSelectColumn(HeroPeer::AGIPERLVL);
+            $criteria->addSelectColumn(HeroPeer::INTELLIGENCE);
+            $criteria->addSelectColumn(HeroPeer::INTPERLVL);
+            $criteria->addSelectColumn(HeroPeer::HPREGEN);
+            $criteria->addSelectColumn(HeroPeer::MANAREGEN);
+            $criteria->addSelectColumn(HeroPeer::MOVESPEED);
+            $criteria->addSelectColumn(HeroPeer::DIFFICULTY);
             $criteria->addSelectColumn(HeroPeer::SLUG);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.hero_id');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.team');
             $criteria->addSelectColumn($alias . '.role');
+            $criteria->addSelectColumn($alias . '.attacktype');
+            $criteria->addSelectColumn($alias . '.attackrange');
+            $criteria->addSelectColumn($alias . '.attackspeed');
             $criteria->addSelectColumn($alias . '.hp');
+            $criteria->addSelectColumn($alias . '.mana');
             $criteria->addSelectColumn($alias . '.dmg');
+            $criteria->addSelectColumn($alias . '.dmgmin');
+            $criteria->addSelectColumn($alias . '.dmgmax');
             $criteria->addSelectColumn($alias . '.armor');
-            $criteria->addSelectColumn($alias . '.difficulty');
-            $criteria->addSelectColumn($alias . '.range');
-            $criteria->addSelectColumn($alias . '.speed');
-            $criteria->addSelectColumn($alias . '.stuns');
-            $criteria->addSelectColumn($alias . '.side');
+            $criteria->addSelectColumn($alias . '.magicarmor');
             $criteria->addSelectColumn($alias . '.stat');
+            $criteria->addSelectColumn($alias . '.strength');
+            $criteria->addSelectColumn($alias . '.strperlvl');
+            $criteria->addSelectColumn($alias . '.agility');
+            $criteria->addSelectColumn($alias . '.agiperlvl');
+            $criteria->addSelectColumn($alias . '.intelligence');
+            $criteria->addSelectColumn($alias . '.intperlvl');
+            $criteria->addSelectColumn($alias . '.hpregen');
+            $criteria->addSelectColumn($alias . '.manaregen');
+            $criteria->addSelectColumn($alias . '.movespeed');
+            $criteria->addSelectColumn($alias . '.difficulty');
             $criteria->addSelectColumn($alias . '.slug');
         }
     }

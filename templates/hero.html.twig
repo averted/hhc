@@ -19,6 +19,7 @@
         <div class="hero-box">
             <ul>
             {% for counter in counters %}
+                {% if counter.votes %}
                 <li>
                     <div class="hero-img left">
                         <a href="/hero/{{ counter.slug }}"><img class="hero-icon-70px left" src="{{ img ~ counter.slug ~ ext }}" /></a>
@@ -28,13 +29,14 @@
                         <!-- TODO: fix responsive-ness -->
                         <div class="votes">
                             <div class="button">{{ counter.votes }}</div>
-                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up">&#9650; {{ counter.up }}</a></div>
-                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down">&#9660; {{ counter.down }}</a></div>
+                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/up">&#9650;</a></div>
+                            <div><a class="button" href="/hero/{{ hero.getSlug }}/counter/{{ counter.slug }}/down">&#9660;</a></div>
                             <div class="clear"></div>
                         </div>
                     </div>
                     <div class="clear"></div>
                 </li>
+                {% endif %}
             {% endfor %}
                 <li>
                     <a class="button center add" href="{% if user %}/counter/{{ hero.getSlug }}{% else %}/login{% endif %}">add a counter</a>
@@ -50,6 +52,7 @@
         <div class="hero-box">
             <ul>
             {% for pro in pros %}
+                {% if pro.votes %}
                 <li>
                     <div class="hero-img left">
                         <a href="/hero/{{ pro.slug }}"><img class="hero-icon-70px left" src="{{ img ~ pro.slug ~ ext }}" /></a>
@@ -59,13 +62,14 @@
                         <!-- TODO: fix responsive-ness -->
                         <div class="votes">
                             <div class="button">{{ pro.votes }}</div>
-                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/up">&#9650; {{ pro.up }}</a></div>
-                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/down">&#9660; {{ pro.down }}</a></div>
+                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/up">&#9650;</a></div>
+                            <div><a class="button" href="/hero/{{ pro.slug }}/counter/{{ hero.getSlug }}/down">&#9660;</a></div>
                             <div class="clear"></div>
                         </div>
                     </div>
                     <div class="clear"></div>
                 </li>
+                {% endif %}
             {% endfor %}
             </ul>
             <div class="clear"></div>

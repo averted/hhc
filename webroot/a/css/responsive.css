@@ -8,6 +8,9 @@
     .big { font-size:17px; }
 
     .hero .hero-counters ul li .button { margin:4px 4px 0 0; }
+    .hero .hero-counters .hero-info .name { height:auto; padding: 5px 0; }
+    .hero .hero-counters .hero-info { width:100%; }
+    .hero .hero-counters .hero-info .votes .button { height:12px; }
     form { width:100%; }
     form textarea { width:100%; }
 

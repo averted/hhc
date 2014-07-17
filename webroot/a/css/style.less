@@ -56,7 +56,7 @@ a:hover { .bg(@main); color:#000; }
 /* ---- end GENERAL ---- */
 
 /* ------ BODY ------ */
-.hero, .account, .login { width:80%; .border(1px; @light); .bg(darken(@bg,16%)); padding:20px; margin:100px auto; }
+.hero, .account, .login { width:74%; .border(1px; @light); .bg(darken(@bg,16%)); padding:20px; margin:100px auto; }
 
 .button { .bg(darken(@bg,20%)); color:@main; .border(1px; @light); display:block; cursor:pointer; text-decoration:none;
     &:hover { .bg(@main); color:@hover; .border; }
@@ -70,7 +70,7 @@ a:hover { .bg(@main); color:#000; }
     .bar, .bar-max { height:16px; display:inline-block; .border-radius; }
     .bar { .bg(#000); margin:0; padding:0 0 0 5px; color:@main; }
     .bar-max { .bg(@light); margin:4px 0 0 0; font-size:12px; padding:1px; }
-    .button { padding:4px 6px; margin:0 0 0 2px; }
+    .button { padding:4px 6px; margin:0 2px 0 0; }
 
     h2 { margin:15px 0 8px 0; }
     img.hero-icon-70px { width:60px; height:60px; .border; }
@@ -95,16 +95,23 @@ a:hover { .bg(@main); color:#000; }
     }
 }
 
-.ui-tooltip { font-size:14px; position:absolute; max-width:270px; z-index:9999; padding:5px; .bg(darken(@bg,19%));  color:@main; box-shadow:0 0 5px #000; .border(1px, darken(@main,10%));}
-.hero-counters { width:30%; .border(1px; @light); .bg(darken(@bg,19%)); padding:20px; margin:0;
-    .name { font-size:15px; margin-left:5px; }
-    .vote { position:absolute; bottom:0; }
-    ul { list-style:none; .clear-metrics;
-        li { margin:0 0 15px 0; position:relative;
-            .add { margin:15px 0 0 0; text-decoration:none; }
+.hero-counters, .hero-pros { width:45%; }
+
+.hero-box { width:auto; .border(1px; @light); .bg(darken(@bg,19%)); padding:20px;
+    .hero-img { margin-right:5px; }
+    .hero-info { width:70%;
+        .name { height:38px; }
+        .votes { font-size:12px; 
+            .button { float:left; display:inline-block; height:14px; margin:0 5px 0 0; }
         }
     }
+    .name { font-size:15px; }
+    ul { list-style:none; .clear-metrics;
+        li { margin:0 0 15px 0; position:relative; &:last-child { margin:0; } }
+    }
 }
+
+.ui-tooltip { font-size:14px; position:absolute; max-width:270px; z-index:9999; padding:5px; .bg(darken(@bg,19%));  color:@main; box-shadow:0 0 5px #000; .border(1px, darken(@main,10%));}
 
 /* --- account --- */
 .account {

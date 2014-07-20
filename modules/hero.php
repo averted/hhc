@@ -1,5 +1,6 @@
 <?php 
 
+use hhc\Util\HeroSearch;
 use hhc\DB\Hero;
 use hhc\DB\HeroQuery;
 use hhc\DB\User;

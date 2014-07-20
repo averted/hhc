@@ -1,5 +1,7 @@
 <?php
 
+namespace hhc\Util;
+
 use hhc\DB\Hero;
 use hhc\DB\HeroQuery;
 

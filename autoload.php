@@ -22,6 +22,9 @@ $loader->add('hhc', __DIR__.'/src');
 
 $loader->register();
 
+// config.inc
+require_once __DIR__.'/config/config.inc';
+
 // Include the main Propel script
 require_once __DIR__.'/vendor/propel/runtime/lib/Propel.php';
 

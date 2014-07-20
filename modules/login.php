@@ -6,7 +6,7 @@ use hhc\DB\Vote;
 use hhc\DB\VoteQuery;
 use Symfony\Component\HttpFoundation\Request;
 
-require dirname(__DIR__).'/lib/password.php';
+require dirname(__DIR__).'/src/password.php';
 
 /**
  * ----------------------

@@ -269,7 +269,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      *
      * @return int
      */
-    public function getHeroId()
+    public function getHeroID()
     {
 
         return $this->hero_id;
@@ -313,7 +313,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      *
      * @return string
      */
-    public function getAttacktype()
+    public function getAttackType()
     {
 
         return $this->attacktype;
@@ -324,7 +324,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      *
      * @return int
      */
-    public function getAttackrange()
+    public function getAttackRange()
     {
 
         return $this->attackrange;
@@ -335,7 +335,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      *
      * @return double
      */
-    public function getAttackspeed()
+    public function getAttackSpeed()
     {
 
         return $this->attackspeed;
@@ -577,7 +577,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      * @param  int $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setHeroId($v)
+    public function setHeroID($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
@@ -590,7 +590,7 @@ abstract class BaseHero extends BaseObject implements Persistent
 
 
         return $this;
-    } // setHeroId()
+    } // setHeroID()
 
     /**
      * Set the value of [name] column.
@@ -661,7 +661,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      * @param  string $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setAttacktype($v)
+    public function setAttackType($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
@@ -674,7 +674,7 @@ abstract class BaseHero extends BaseObject implements Persistent
 
 
         return $this;
-    } // setAttacktype()
+    } // setAttackType()
 
     /**
      * Set the value of [attackrange] column.
@@ -682,7 +682,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      * @param  int $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setAttackrange($v)
+    public function setAttackRange($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
@@ -695,7 +695,7 @@ abstract class BaseHero extends BaseObject implements Persistent
 
 
         return $this;
-    } // setAttackrange()
+    } // setAttackRange()
 
     /**
      * Set the value of [attackspeed] column.
@@ -703,7 +703,7 @@ abstract class BaseHero extends BaseObject implements Persistent
      * @param  double $v new value
      * @return Hero The current object (for fluent API support)
      */
-    public function setAttackspeed($v)
+    public function setAttackSpeed($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (double) $v;
@@ -716,7 +716,7 @@ abstract class BaseHero extends BaseObject implements Persistent
 
 
         return $this;
-    } // setAttackspeed()
+    } // setAttackSpeed()
 
     /**
      * Set the value of [hp] column.
@@ -1762,7 +1762,7 @@ abstract class BaseHero extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getHeroId();
+                return $this->getHeroID();
                 break;
             case 2:
                 return $this->getName();
@@ -1774,13 +1774,13 @@ abstract class BaseHero extends BaseObject implements Persistent
                 return $this->getRole();
                 break;
             case 5:
-                return $this->getAttacktype();
+                return $this->getAttackType();
                 break;
             case 6:
-                return $this->getAttackrange();
+                return $this->getAttackRange();
                 break;
             case 7:
-                return $this->getAttackspeed();
+                return $this->getAttackSpeed();
                 break;
             case 8:
                 return $this->getHP();
@@ -1869,13 +1869,13 @@ abstract class BaseHero extends BaseObject implements Persistent
         $keys = HeroPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getHeroId(),
+            $keys[1] => $this->getHeroID(),
             $keys[2] => $this->getName(),
             $keys[3] => $this->getTeam(),
             $keys[4] => $this->getRole(),
-            $keys[5] => $this->getAttacktype(),
-            $keys[6] => $this->getAttackrange(),
-            $keys[7] => $this->getAttackspeed(),
+            $keys[5] => $this->getAttackType(),
+            $keys[6] => $this->getAttackRange(),
+            $keys[7] => $this->getAttackSpeed(),
             $keys[8] => $this->getHP(),
             $keys[9] => $this->getMana(),
             $keys[10] => $this->getDmg(),
@@ -1947,7 +1947,7 @@ abstract class BaseHero extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setHeroId($value);
+                $this->setHeroID($value);
                 break;
             case 2:
                 $this->setName($value);
@@ -1959,13 +1959,13 @@ abstract class BaseHero extends BaseObject implements Persistent
                 $this->setRole($value);
                 break;
             case 5:
-                $this->setAttacktype($value);
+                $this->setAttackType($value);
                 break;
             case 6:
-                $this->setAttackrange($value);
+                $this->setAttackRange($value);
                 break;
             case 7:
-                $this->setAttackspeed($value);
+                $this->setAttackSpeed($value);
                 break;
             case 8:
                 $this->setHP($value);
@@ -2049,13 +2049,13 @@ abstract class BaseHero extends BaseObject implements Persistent
         $keys = HeroPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setHeroId($arr[$keys[1]]);
+        if (array_key_exists($keys[1], $arr)) $this->setHeroID($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setTeam($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setRole($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setAttacktype($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setAttackrange($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setAttackspeed($arr[$keys[7]]);
+        if (array_key_exists($keys[5], $arr)) $this->setAttackType($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setAttackRange($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setAttackSpeed($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setHP($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setMana($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setDmg($arr[$keys[10]]);
@@ -2176,13 +2176,13 @@ abstract class BaseHero extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setHeroId($this->getHeroId());
+        $copyObj->setHeroID($this->getHeroID());
         $copyObj->setName($this->getName());
         $copyObj->setTeam($this->getTeam());
         $copyObj->setRole($this->getRole());
-        $copyObj->setAttacktype($this->getAttacktype());
-        $copyObj->setAttackrange($this->getAttackrange());
-        $copyObj->setAttackspeed($this->getAttackspeed());
+        $copyObj->setAttackType($this->getAttackType());
+        $copyObj->setAttackRange($this->getAttackRange());
+        $copyObj->setAttackSpeed($this->getAttackSpeed());
         $copyObj->setHP($this->getHP());
         $copyObj->setMana($this->getMana());
         $copyObj->setDmg($this->getDmg());

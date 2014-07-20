@@ -2,19 +2,19 @@
 <database name="hhc" defaultIdMethod="native" namespace="hhc\DB">
   <table name="hero" phpName="Hero">
     <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-    <column name="hero_id" type="integer" required="false" />
+    <column name="hero_id" type="integer" required="false" phpName="HeroID" />
     <column name="name" type="varchar" size="50" required="true" />
     <column name="team" type="varchar" size="50" required="true" />
     <column name="role" type="varchar" size="200" required="false" />
-    <column name="attacktype" type="varchar" size="100" required="false" />
-    <column name="attackrange" type="integer" required="false" />
-    <column name="attackspeed" type="float" size="4" scale="2" required="false" />
+    <column name="attacktype" type="varchar" size="100" required="false" phpName="AttackType" />
+    <column name="attackrange" type="integer" required="false" phpName="AttackRange" />
+    <column name="attackspeed" type="float" size="4" scale="2" required="false" phpName="AttackSpeed" />
     <column name="hp" type="integer" required="false" phpName="HP" />
     <column name="mana" type="integer" required="false" />
-    <column name="dmg" type="varchar" size="20" required="true" />
+    <column name="dmg" type="varchar" size="20" required="false" />
     <column name="dmgmin" type="integer" required="false" phpName="DmgMin" />
     <column name="dmgmax" type="integer" required="false" phpName="DmgMax" />
-    <column name="armor" type="float" size="4" scale="2" required="true" />
+    <column name="armor" type="float" size="4" scale="2" required="false" />
     <column name="magicarmor" type="float" size="4" scale="2" required="false" phpName="MagicArmor" />
     <column name="stat" type="varchar" size="20" required="true" />
     <column name="strength" type="integer" required="false" />
@@ -25,7 +25,7 @@
     <column name="intperlvl" type="float" size="4" scale="2" required="false" />
     <column name="hpregen" type="float" size="4" scale="2" required="false" phpName="HpRegen" />
     <column name="manaregen" type="float" size="4" scale="2" required="false" phpName="ManaRegen" />
-    <column name="movespeed" type="integer" required="true" phpName="MoveSpeed" />
+    <column name="movespeed" type="integer" required="false" phpName="MoveSpeed" />
     <column name="difficulty" type="float" size="3" scale="1" required="false" />
     <column name="slug" type="varchar" size="50" required="false" />
   </table>

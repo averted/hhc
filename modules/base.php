@@ -1,5 +1,6 @@
 <?php
 
+use hhc\Util\HeroSearch;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,21 +13,6 @@ $app->get('/', function() use($app) {
         'user' => $app['session']->get('user'), 
         'link' => '/hero',
         'message' => 'Hero list'
-    ));
-});
-
-/**
- * ----------------------
- * route /load
- * ----------------------
- */
-$app->get('/load', function() use($app) {
-    include_once dirname(__DIR__).'/load-heroes.php';
-
-    return $app['twig']->render('index.html.twig', array(
-        'user' => $app['session']->get('user'), 
-        'link' => '/hero',
-        'message' => 'Everything loaded fine.'
     ));
 });
 

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/autoload.php';
+require dirname(__DIR__).'/autoload.php';
 
 use hhc\DB\Hero;
 use hhc\DB\HeroQuery;

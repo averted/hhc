@@ -60,7 +60,7 @@
         class="tooltip 
         {% if hero.getAttackRange > 150 %}range{% else %}melee{% endif %}
         {% if hero.getTeam == 'Legion' %}le{% else %}hb{% endif %}
-        {% if hero.getStat == 'AGI' %}agi{% elseif hero.getStat == 'INT' %}int{% else %}str{% endif %}">
+        {% if hero.getStat == 'Agility' %}agi{% elseif hero.getStat == 'Intelligence' %}int{% else %}str{% endif %}">
             <a href="/hero/{{ hero.getSlug }}">
                 <img class='hero-icon-70px' src="{{ img ~ hero.getSlug ~ ext }}" />
                 <div class="overlay"></div>

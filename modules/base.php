@@ -1,6 +1,10 @@
 <?php
 
 use hhc\Util\HeroSearch;
+use hhc\DB\Hero;
+use hhc\DB\HeroQuery;
+use hhc\DB\User;
+use hhc\DB\UserQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +16,9 @@ $app->get('/', function() use($app) {
     return $app['twig']->render('index.html.twig', array(
         'user' => $app['session']->get('user'), 
         'link' => '/hero',
-        'message' => 'Hero list'
+        'message' => 'Hero list',
+        'topusers' => UserQuery::create()->limit(5)->find(),
+        'topheroes' => HeroQuery::create()->limit(5)->find()
     ));
 });
 

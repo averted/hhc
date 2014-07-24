@@ -4,7 +4,19 @@
 
 {% block content %} 
 <div class="hero">
-    <p><a href="{{ link }}">{{ message }}</a></p>
+    <h1>Top Contributors:</h1>
+    <ul class="user-list">
+    {% for user in topusers %}
+        <li>{{ user.getUsername }}</li>
+    {% endfor %}
+    </ul>
+
+    <h1>Most Popular Heroes:</h1>
+    <ul class="hero-list">
+    {% for hero in topheroes %}
+        <li><a href="/hero/{{ hero.getSlug }}"><img class="hero-icon-70px" src="/a/img/heroes/{{ hero.getName }}.jpg" /></a></li>
+    {% endfor %}
+    </ul>
 </div>
 {% endblock %}
 

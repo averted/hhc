@@ -7,11 +7,11 @@
 {% block content %} 
 <div class="hero">
     <img class="hero-icon-100px" src='{{ img ~ hero.getSlug ~ ext }}' />
-        <span class="name">{{ hero.getName }}</span><span class="role"> - {{ hero.getRole }}</span><br/>
-        <span class="bar-max hp"><span class="bar" style="width:{{ hero.getHP/3.5 }}px;">{{ hero.getHP }}</span></span><br/> 
-        <span class="bar-max dmg"><span class="bar" style="width:{{ hero.getDmg*2.5 }}px;">{{ hero.getDmg }}</span></span><br/> 
-        <span class="bar-max armor"><span class="bar" style="width:{{ hero.getArmor*20 }}px;">{{ hero.getArmor }}</span></span><br/> 
-        <span class="bar-max diff"><span class="bar" style="width:{{ hero.getDifficulty*30 }}px;">{{ hero.getDifficulty }}</span></span><br/> 
+        <span class="name">{{ hero.getName }}</span><span class="role"> - {{ hero.getRole|title }}</span><br/>
+        <span class="bar-desc">Health:</span><span class="bar-max hp"><span class="bar" style="width:{{ hero.getHP/3.5 }}px;">{{ hero.getHP }}</span></span><br/> 
+        <span class="bar-desc">Damage:</span><span class="bar-max dmg"><span class="bar" style="width:{{ hero.getDmg*2.5 }}px;">{{ hero.getDmg }}</span></span><br/> 
+        <span class="bar-desc">Armor:</span><span class="bar-max armor"><span class="bar" style="width:{{ hero.getArmor*20 }}px;">{{ hero.getArmor }}</span></span><br/> 
+        <span class="bar-desc">M.Armor</span><span class="bar-max armor"><span class="bar" style="width:{{ hero.getMagicArmor*20 }}px;">{{ hero.getMagicArmor }}</span></span><br/> 
     <div class="clear"></div>
 
     <div class="hero-counters left">

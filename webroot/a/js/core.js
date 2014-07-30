@@ -3,13 +3,14 @@
  * Sorting
  * ----------------
  */
-var _ra = $('.fRange');
-var _me = $('.fMelee');
-var _le = $('.fLegion');
-var _hb = $('.fHellbourne');
-var _ag = $('.fAgi');
-var _in = $('.fInt');
-var _st = $('.fStr');
+var filters = '.sHP, .sARMOR, .sDMG',
+    _ra     = $('.fRange'),
+    _me     = $('.fMelee'),
+    _le     = $('.fLegion'),
+    _hb     = $('.fHellbourne'),
+    _ag     = $('.fAgi'),
+    _in     = $('.fInt'),
+    _st     = $('.fStr');
 
 _ra.on('click', function() { _ra.toggleClass('selected'); _me.removeClass('selected'); });
 _me.on('click', function() { _me.toggleClass('selected'); _ra.removeClass('selected'); });
@@ -48,57 +49,49 @@ $('.filter').on('click', function() {
 });
 
 // sorts
-$('.sHP').on('click', function() {
-    select('.sHP');
+$(filters).on('click', function() {
+    // if filter is already on, remove all sorts and re-sort by Name
+    if ($(this).hasClass('selected')) return sortDefault();
+
+    // sort by hp
+    var attr = ($(this).hasClass('sHP')) ? 'data-hp' : ($(this).hasClass('sDMG') ? 'data-dmg' : 'data-armor');
     var sorted = $('ul.hero-list li').toArray().sort(function(a, b) {
-        return b.getAttribute('data-hp') - a.getAttribute('data-hp');
+        // if attr is the same, add another sort (title)
+        if (b.getAttribute(attr) - a.getAttribute(attr) == 0)  {
+            if (a.getAttribute('title') > b.getAttribute('title')) return 1;
+            if (a.getAttribute('title') < b.getAttribute('title')) return -1;
+            return 0;
+        }
+        return b.getAttribute(attr) - a.getAttribute(attr);
     });
+
     $.each(sorted, function(index, value) {
         $('ul.hero-list').append(value);
     });
+
+    // pre-select
+    $(filters).removeClass('selected');
+    $(this).addClass('selected');
 });
 
-$('.sDMG').on('click', function() {
-    select('.sDMG');
-    var sorted = $('ul.hero-list li').toArray().sort(function(a, b) {
-        return b.getAttribute('data-dmg') - a.getAttribute('data-dmg');
-    });
-    $.each(sorted, function(index, value) {
-        $('ul.hero-list').append(value);
-    });
-});
-
-$('.sARMOR').on('click', function() {
-    select('.sARMOR');
-    var sorted = $('ul.hero-list li').toArray().sort(function(a, b) {
-        return b.getAttribute('data-armor') - a.getAttribute('data-armor');
-    });
-    $.each(sorted, function(index, value) {
-        $('ul.hero-list').append(value);
-    });
-});
-
-$('.sDIFF').on('click', function() {
-    select('.sDIFF');
-    var sorted = $('ul.hero-list li').toArray().sort(function(a, b) {
-        return b.getAttribute('data-diff') - a.getAttribute('data-diff');
-    });
-    $.each(sorted, function(index, value) {
-        $('ul.hero-list').append(value);
-    });
-});
 
 /**
  * ----------------
  * helper functions 
  * ----------------
  */
-function select(sort) {
-    $('.sHP').removeClass('selected');
-    $('.sDMG').removeClass('selected');
-    $('.sARMOR').removeClass('selected');
-    $('.sDIFF').removeClass('selected');
-    $(sort).addClass('selected');
+function sortDefault() {
+    var sorted = $('ul.hero-list li').toArray().sort(function(a, b) {
+        if (a.getAttribute('title') > b.getAttribute('title')) return 1;
+        if (a.getAttribute('title') < b.getAttribute('title')) return -1;
+        return 0;
+    });
+
+    $.each(sorted, function(index, value) {
+        $('ul.hero-list').append(value);
+    });
+
+    return $(filters).removeClass('selected');
 }
 
 function getFilters() {

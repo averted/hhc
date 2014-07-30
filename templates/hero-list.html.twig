@@ -54,7 +54,7 @@
     <ul class='hero-list'>
     {% for hero in heroes %}
         <li style='position:relative;' 
-        data-hp="{{ hero.getHP }}" data-dmg="{{ hero.getDmg|slice(3,2) }}" data-armor="{{ hero.getArmor }}" data-diff="{{ hero.getDifficulty }}" 
+        data-hp="{{ hero.getHP }}" data-dmg="{{ hero.getDmgMax }}" data-armor="{{ hero.getArmor }}" data-diff="{{ hero.getDifficulty }}" 
         title="{{ hero.getName }}" 
         class="tooltip 
         {% if hero.getAttackRange > 150 %}range{% else %}melee{% endif %}

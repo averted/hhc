@@ -20,28 +20,28 @@
     });
 </script>
 <div class="hero">
-    <div class="sort left">
+    <div class="srt left">
         <div class="unselectable">
             <span>Sort:</span>
-            <span class="button sHP">HP</span>
-            <span class="button sDMG">DMG</span>
-            <span class="button sARMOR">ARMOR</span>
+            <span class="button sort sHP">HP</span>
+            <span class="button sort sDMG">DMG</span>
+            <span class="button sort sARMOR">ARMOR</span>
         </div>
         <div class="unselectable">
             <span>Type:</span>
-            <span class="button filter fRange">RANGE</span>
-            <span class="button filter fMelee">MELEE</span>
+            <span class="button filter fRange" data-name="range">RANGE</span>
+            <span class="button filter fMelee" data-name="melee">MELEE</span>
         </div>
         <div class="unselectable">
             <span>Side:</span>
-            <span class="button filter fLegion">LEGION</span>
-            <span class="button filter fHellbourne">HELLBOURNE</span>
+            <span class="button filter fLegion" data-name="le">LEGION</span>
+            <span class="button filter fHellbourne" data-name="hb">HELLBOURNE</span>
         </div>
         <div class="unselectable">
             <span>Stat:</span>
-            <span class="button filter fAgi">AGI</span>
-            <span class="button filter fInt">INT</span>
-            <span class="button filter fStr">STR</span>
+            <span class="button filter fAgi" data-name="agi">AGI</span>
+            <span class="button filter fInt" data-name="int">INT</span>
+            <span class="button filter fStr" data-name="str">STR</span>
         </div>
     </div>
     <div class="search right">
@@ -68,7 +68,6 @@
     {% endfor %}
     </ul>
 </div>
-<script type="text/javascript" src="/a/js/core.js"></script>
 {% endblock %}
 
 {% block footer parent() %}

@@ -11,6 +11,7 @@ var HHC = {
     initialize: function() {
         HHC.Filters.init();
         HHC.Sorts.init();
+        HHC.Tooltips.init();
     },
 };
 
@@ -117,3 +118,18 @@ HHC.Sorts = {
         return $('.sort').removeClass('selected');
     }
 };
+
+HHC.Tooltips = {
+    init: function() {
+        // init ui-tooltip
+        $('.hero-list').tooltip({
+            position: { my: "center top-31", at: "center top" },
+            show: { effect: "fade", delay: 100, }
+        });
+
+        $('.search').tooltip({
+            position: { my: "center top-51", at: "center top" },
+            show: { effect: "fade", delay: 100, }
+        });
+    },
+}

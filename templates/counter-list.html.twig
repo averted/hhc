@@ -7,21 +7,123 @@
 {% set ext = '.jpg' %}
 <div class="hero">
     <h1>Choose a Counter for {{ hero.getName }}:</h1>
-    <ul class='hero-list'>
-    {% for counter in heroes %}
-        <li style='position:relative;'>
-            {% if counter.slug == hero.getSlug %}
-            <div class="overlay-dark"></div>
+    <div class="team left">
+        <h1>Agility</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Legion' and counter.getStat == 'Agility' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
             {% endif %}
-            <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
-                <img class='hero-icon-70px' src="{{ img ~ counter.getSlug ~ ext }}" />
-                {% if counter.slug != hero.getSlug %}
-                <div class="overlay"></div>
-                {% endif %}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+        {% endfor %}
+        </ul>
+
+        <h1>Intelligence</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Legion' and counter.getStat == 'Intelligence' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h1>Strength</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Legion' and counter.getStat == 'Strength' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="team right">
+        <h1>Agility</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Hellbourne' and counter.getStat == 'Agility' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h1>Intelligence</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Hellbourne' and counter.getStat == 'Intelligence' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+        <h1>Strength</h1>
+        <ul class='hero-list'>
+        {% for counter in heroes %}
+            {% if counter.getTeam == 'Hellbourne' and counter.getStat == 'Strength' %}
+                <li style='position:relative;'>
+                    {% if counter.slug == hero.getSlug %}
+                    <div class="overlay-dark"></div>
+                    {% endif %}
+                    <a href="/hero/{{ hero.getSlug }}/counter/{{ counter.getSlug }}/up">
+                        <img class='hero-icon-50px' src="{{ img ~ counter.getSlug ~ ext }}" />
+                        {% if counter.slug != hero.getSlug %}
+                        <div class="overlay"></div>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="clear"></div>
 </div>
 {% endblock %}
 

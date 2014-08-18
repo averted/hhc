@@ -30,7 +30,7 @@ $app->match('/login', function (Request $request) use ($app) {
         if (!$error) {
             $u = UserQuery::create()->filterByUsername($username)->findOne();
             
-            // needs hashing
+            // password hashing
             if (strtolower($username) === strtolower($u->getUsername()) && password_verify($password, $u->getPassword())) {
                 $app['session']->start();
                 $app['session']->set('user', $u->getUsername());
